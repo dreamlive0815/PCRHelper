@@ -28,14 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "tesseract.exe|tesseract.exe";
             // 
             // Frm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(619, 390);
+            this.ClientSize = new System.Drawing.Size(546, 376);
             this.Name = "Frm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Frm_Load);
             this.ResumeLayout(false);
@@ -43,6 +50,8 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 
