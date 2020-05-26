@@ -9,6 +9,8 @@ namespace PCRHelper
 
         private static ConfigMgr instance;
 
+        private static readonly string cacheDir = "./cache";
+
         public static ConfigMgr GetInstance()
         {
             if (instance == null)
@@ -49,6 +51,18 @@ namespace PCRHelper
             {
                 PCRHelper.Properties.Settings.Default.TesseractPath = value;
                 PCRHelper.Properties.Settings.Default.Save();
+            }
+        }
+
+        public string CacheDir
+        {
+            get
+            {
+                if (!Directory.Exists(cacheDir))
+                {
+                    Directory.CreateDirectory(cacheDir);
+                }
+                return cacheDir;
             }
         }
     }

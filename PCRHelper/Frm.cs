@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using ThreadingTimer = System.Threading.Timer;
+using System.IO;
 
 namespace PCRHelper
 {
@@ -17,6 +18,7 @@ namespace PCRHelper
     {
 
         Tools tools = Tools.GetInstance();
+        readonly string imgPath = "1.png";
 
         public Frm()
         {
@@ -25,24 +27,36 @@ namespace PCRHelper
 
         private void Frm_Load(object sender, EventArgs e)
         {
-
             ConfigMgr.GetInstance().Init();
-            
-            ThreadingTimer timer = null;
-            timer = new System.Threading.Timer(new TimerCallback((arg) => {
-                DoJob();
-                timer.Dispose();
-            }), null, 2000, Timeout.Infinite);
-            //DoJob();
+
+            if (File.Exists(imgPath))
+            {
+                ProcessImage();
+            }
+            else
+            {
+                ThreadingTimer timer = null;
+                timer = new System.Threading.Timer(new TimerCallback((arg) =>
+                {
+                    CaptureWindow();
+                    timer.Dispose();
+                    ProcessImage();
+                }), null, 2000, Timeout.Infinite);
+            }
 
         }
 
-        void DoJob()
+        void CaptureWindow()
         {
-            var storePath = "1.png";
+            var storePath = imgPath;
             var img = tools.CaptureMumuWindow();
-            img.Save(storePath);
+            img.Save(storePath, ImageFormat.Png);
             tools.OpenFileInExplorer(storePath);
+        }
+
+        void ProcessImage()
+        {
+            GraphicsTools.GetInstance().ToBinary(imgPath, 50);
         }
     }
 }

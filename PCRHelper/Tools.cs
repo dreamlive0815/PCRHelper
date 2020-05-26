@@ -68,6 +68,11 @@ namespace PCRHelper
         {
             Process.Start("Explorer.exe", filePath);
         }
+
+        public string JoinPath(params string[] names)
+        {
+            return string.Join("/", names);
+        }
     }
 
     struct RECT
