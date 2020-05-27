@@ -18,7 +18,7 @@ namespace PCRHelper
     {
 
         Tools tools = Tools.GetInstance();
-        readonly string imgPath = "1.png";
+        readonly string imgName = "1.png";
 
         public Frm()
         {
@@ -29,34 +29,27 @@ namespace PCRHelper
         {
             ConfigMgr.GetInstance().Init();
 
-            if (File.Exists(imgPath))
+            ThreadingTimer timer = null;
+            timer = new System.Threading.Timer(new TimerCallback((arg) =>
             {
+                CaptureWindow();
+                timer.Dispose();
                 ProcessImage();
-            }
-            else
-            {
-                ThreadingTimer timer = null;
-                timer = new System.Threading.Timer(new TimerCallback((arg) =>
-                {
-                    CaptureWindow();
-                    timer.Dispose();
-                    ProcessImage();
-                }), null, 2000, Timeout.Infinite);
-            }
+            }), null, 2000, Timeout.Infinite);
 
         }
 
         void CaptureWindow()
         {
-            var storePath = imgPath;
-            var img = tools.CaptureMumuWindow();
+            var storePath = Tools.GetInstance().JoinPath(ConfigMgr.GetInstance().CacheDir, imgName);
+            var img = MumuState.Create().GetRealTimeCaptureAndAnalyze();
             img.Save(storePath, ImageFormat.Png);
             tools.OpenFileInExplorer(storePath);
         }
 
         void ProcessImage()
         {
-            GraphicsTools.GetInstance().ToBinary(imgPath, 50);
+            //GraphicsTools.GetInstance().ToBinary(imgPath, 50);
         }
     }
 }

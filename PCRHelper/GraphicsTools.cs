@@ -1,6 +1,8 @@
 ﻿using System;
 using OpenCvSharp;
 using System.Collections.Generic;
+using System.Drawing;
+using OpenCvSharp.Extensions;
 
 namespace PCRHelper
 {
@@ -35,6 +37,17 @@ namespace PCRHelper
             return Cv2.ImRead(filePath, ImreadModes.Color);
         }
 
+        public Mat ToMat(Image image)
+        {
+            var bitmap = image as Bitmap;
+            return bitmap.ToMat();
+        }
+
+        public Image ToImage(Mat mat)
+        {
+            return mat.ToBitmap();
+        }
+
         public Mat ToGray(string filePath)
         {
             var mat = ReadImageFromFile(filePath);
@@ -49,19 +62,24 @@ namespace PCRHelper
             return gray;
         }
 
-        public Mat ToBinary(string filePath, int threshold)
+        public Mat ToGrayBinary(string filePath, int threshold)
         {
             var mat = ReadImageFromFile(filePath);
-            var gray = ToGray(mat);
+            return ToGrayBinary(mat, threshold);
+        }
+
+        public Mat ToGrayBinary(Mat source, int threshold)
+        {
+            var gray = ToGray(source);
             return ToBinary(gray, threshold);
         }
 
-        public Mat ToBinary(Mat source, int threshold)
+        public Mat ToBinary(Mat gray, int threshold)
         {
             var bin = new Mat();
-            Cv2.Threshold(source, bin, threshold, 255, ThresholdTypes.Binary);
+            Cv2.Threshold(gray, bin, threshold, 255, ThresholdTypes.Binary);
             ShowImage("ToBinary-Bin", bin);
-            return null;
+            return bin;
         }
 
         public List<LineSegmentPolar> GetHoughLines(string filePath)

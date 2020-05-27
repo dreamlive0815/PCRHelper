@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace PCRHelper
 {
@@ -42,17 +43,15 @@ namespace PCRHelper
             throw new Exception("无法找到Mumu模拟器进程");
         }
 
-        public RECT GetMumuWindowRect()
+        public RECT GetWindowRect(Process proc)
         {
-            var proc = GetMumuProcess();
             var rect = new RECT();
             Win32ApiHelper.GetWindowRect(proc.MainWindowHandle, out rect);
             return rect;
         }
 
-        public Image CaptureMumuWindow()
+        public Image CaptureWindow(RECT rect)
         {
-            var rect = GetMumuWindowRect();
             if (rect.x1 < 0 || rect.y1 < 0) throw new Exception("左上角坐标不合法");
             if (rect.x2 < 0 || rect.y2 < 0) throw new Exception("右下角坐标不合法");
             var width = Math.Abs(rect.x1 - rect.x2);
@@ -66,7 +65,9 @@ namespace PCRHelper
 
         public void OpenFileInExplorer(string filePath)
         {
-            Process.Start("Explorer.exe", filePath);
+            var fileInfo = new FileInfo(filePath);
+            var fullPath = fileInfo.FullName;
+            Process.Start("Explorer.exe", $"/select,{fullPath}");
         }
 
         public string JoinPath(params string[] names)
@@ -81,6 +82,16 @@ namespace PCRHelper
         public int y1;
         public int x2;
         public int y2;
+
+        public int Width
+        {
+            get { return Math.Abs(x1 - x2); }
+        }
+
+        public int Height
+        {
+            get { return Math.Abs(y1 - y2); }
+        }
     }
 
     class Win32ApiHelper
