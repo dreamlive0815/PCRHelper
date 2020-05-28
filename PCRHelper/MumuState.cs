@@ -175,6 +175,30 @@ namespace PCRHelper
                 }
                 preSum = sum;
             }
+
+
+
+            if (checkTopBottomBounds)
+            {
+                var height = width * 0.5;
+
+                var validTopY = 36;
+                var validTopYOff = 10;
+
+                var validBottomY = height + 36;
+                var validBottomYOff = 10;
+
+                var topYOff = Math.Abs(TopY - validTopY);
+                if (topYOff > validTopYOff)
+                {
+                    throw new Exception("无法检测到Mumu模拟器上边界");
+                }
+                var bottomYOff = Math.Abs(BottomY - validBottomY);
+                if (bottomYOff > validBottomYOff)
+                {
+                    throw new Exception("无法检测到Mumu模拟器下边界");
+                }
+            }
         }
 
         public Image GetCaptureRect(Vec4<float> rectRate)
