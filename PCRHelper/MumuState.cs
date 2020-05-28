@@ -13,6 +13,8 @@ namespace PCRHelper
             return new MumuState();
         }
 
+        bool checkTopBottomBounds = true;
+
         private Process process;
         private RECT rect;
         private RECT viewportRect;
@@ -54,13 +56,17 @@ namespace PCRHelper
             }
         }
 
+
+        /// <summary>
+        /// getCapture -> Analyse -> return
+        /// </summary>
         public RECT ViewportRect
         {
             get
             {
                 if (!UseCache || TopY == 0 || BottomY == 0)
                 {
-                    GetRealTimeCaptureAndAnalyze();
+                    DoRealTimeCaptureAndAnalyze();
                     var rect = Rect;
                     viewportRect = new RECT() {
                         x1 = rect.x1,
@@ -73,36 +79,52 @@ namespace PCRHelper
             }
         }
 
-        public Image GetRealTimeCaptureAndAnalyze()
+        public Image DoCapture(RECT rect)
         {
-            var capture = GetRealTimeCapture();
+            var capture = Tools.GetInstance().CaptureWindow(rect);
+            GraphicsTools.GetInstance().ShowImage("DoCapture", capture);
+            return capture;
+        }
+
+        public Image DoRealTimeCaptureAndAnalyze()
+        {
+            var capture = DoRealTimeCapture();
             GetViewportTopBottomBounds(capture);
             return capture;
         }
 
-        public Image GetRealTimeCapture()
+        public Image DoRealTimeCapture()
         {
             var rect = Rect;
-            var capture = Tools.GetInstance().CaptureWindow(rect);
+            var capture = DoCapture(rect);
             return capture;
         }
 
-        public Image GetRealTimeViewportCapture()
+        public Image DoRealTimeViewportCapture()
         {
             var viewportRect = ViewportRect;
-            var capture = Tools.GetInstance().CaptureWindow(viewportRect);
-            GraphicsTools.GetInstance().ShowImage("GetRealTimeViewportCapture", capture);
+            var capture = DoCapture(viewportRect);
             return capture;
         }
 
+        float topY;
         public float TopY
         {
-            get; private set;
+            get { return topY; }
+            private set
+            {
+                topY = value;
+            }
         }
 
+        float bottomY;
         public float BottomY
         {
-            get; private set;
+            get { return bottomY; }
+            private set
+            {
+                bottomY = value;
+            }
         }
 
         public void GetViewportTopBottomBounds(Image image)
@@ -155,11 +177,44 @@ namespace PCRHelper
             }
         }
 
+        public Image GetCaptureRect(Vec4<float> rectRate)
+        {
+            var viewportRect = ViewportRect;
+            var viewportCapture = DoCapture(viewportRect);
+            return GetCaptureRect(viewportCapture, viewportRect, rectRate);
+        }
+
+        public Image GetCaptureRect(Image capture, RECT captureRect, Vec4<float> rectRate)
+        {
+            var mat = GraphicsTools.GetInstance().ToMat(capture);
+            return GetCaptureRect(mat, captureRect, rectRate);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="capture">完整的截图捕获</param>
+        /// <param name="captureRect">完整的截图捕获矩形 相对于屏幕</param>
+        /// <param name="rectRate">子矩形的比率 相对于capture</param>
+        /// <returns></returns>
+        public Image GetCaptureRect(Mat mat, RECT captureRect, Vec4<float> rectRate)
+        {
+            var relativeRect = captureRect.Mult(rectRate);
+            var childMat = GraphicsTools.GetInstance().GetChildMatByRECT(mat, relativeRect);
+            return GraphicsTools.GetInstance().ToImage(childMat);
+        }
+
+
         Vec4<float>[] jjcNameRectRateArr = new Vec4<float>[] {
             new Vec4<float>(0.5000f, 0.2396f, 0.6567f, 0.2912f),
             new Vec4<float>(0.5000f, 0.4559f, 0.6567f, 0.5058f),
             new Vec4<float>(0.5000f, 0.6689f, 0.6567f, 0.7205f),
         };
+
+        public Vec4<float> GetJJCNameRectRate(int index)
+        {
+            return jjcNameRectRateArr[index];
+        }
 
         /// <summary>
         /// 相对坐标
@@ -169,31 +224,73 @@ namespace PCRHelper
         public RECT GetJJCNameRect(int index)
         {
             var viewportRect = ViewportRect;
-            var rectRate = jjcNameRectRateArr[index];
+            var rectRate = GetJJCNameRectRate(index);
             var jjcNameRect = viewportRect.Mult(rectRate);
             return jjcNameRect;
         }
 
-        public Image CaptureJJCNameRect(int index)
+        public Image GetJJCNameCaptureRect(int index)
         {
-            var capture = GetRealTimeViewportCapture();
-            return CaptureJJCNameRect(capture, index);
+            var viewportRect = ViewportRect;
+            var viewportCapture = DoCapture(viewportRect);
+            return GetJJCNameCaptureRect(viewportCapture, viewportRect, index);
+        }
+
+        public Image GetJJCNameCaptureRect(Image viewportCapture, RECT viewportRect, int index)
+        {
+            var viewportMat = GraphicsTools.GetInstance().ToMat(viewportCapture);
+            return GetJJCNameCaptureRect(viewportMat, viewportRect, index);
+        }
+
+        public Image GetJJCNameCaptureRect(Mat viewportMat, RECT viewportRect, int index)
+        {
+            var jjcNameRectRate = GetJJCNameRectRate(index);
+            return GetCaptureRect(viewportMat, viewportRect, jjcNameRectRate);
         }
 
 
-        public Image CaptureJJCNameRect(Image capture, int index)
+        Vec4<float>[] jjcRankRectRateArr = new Vec4<float>[] {
+            new Vec4<float>(0.7493f, 0.2099f, 0.8201f, 0.2723f),
+            new Vec4<float>(0.7493f, 0.4270f, 0.8201f, 0.4865f),
+            new Vec4<float>(0.7514f, 0.6440f, 0.8215f, 0.7035f),
+        };
+
+        public Vec4<float> GetJJCRankRectRate(int index)
         {
-            var mat = GraphicsTools.GetInstance().ToMat(capture);
-            return CaptureJJCNameRect(mat, index);
+            return jjcRankRectRateArr[index];
         }
 
-        public Image CaptureJJCNameRect(Mat mat, int index)
+        /// <summary>
+        /// 相对坐标
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public RECT GetJJCRankRect(int index)
         {
-            var jjcNameRect = GetJJCNameRect(index);
-            var nameMat = GraphicsTools.GetInstance().GetChildMatByRECT(mat, jjcNameRect);
-            return GraphicsTools.GetInstance().ToImage(nameMat);
+            var viewportRect = ViewportRect;
+            var rectRate = GetJJCRankRectRate(index);
+            var jjcRankRect = viewportRect.Mult(rectRate);
+            return jjcRankRect;
         }
 
+        public Image GetJJCRankCaptureRect(int index)
+        {
+            var viewportRect = ViewportRect;
+            var viewportCapture = DoCapture(viewportRect);
+            return GetJJCRankCaptureRect(viewportCapture, viewportRect, index);
+        }
 
+        public Image GetJJCRankCaptureRect(Image viewportCapture, RECT viewportRect, int index)
+        {
+            var viewportMat = GraphicsTools.GetInstance().ToMat(viewportCapture);
+            return GetJJCRankCaptureRect(viewportMat, viewportRect, index);
+        }
+
+        public Image GetJJCRankCaptureRect(Mat viewportMat, RECT viewportRect, int index)
+        {
+            var jjcRankRectRate = GetJJCRankRectRate(index);
+            return GetCaptureRect(viewportMat, viewportRect, jjcRankRectRate);
+        }
+        
     }
 }

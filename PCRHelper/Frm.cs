@@ -18,6 +18,7 @@ namespace PCRHelper
     {
 
         Tools tools = Tools.GetInstance();
+        GraphicsTools graphicsTools = GraphicsTools.GetInstance();
         readonly string imgName = "1.png";
 
         public Frm()
@@ -32,22 +33,23 @@ namespace PCRHelper
             ThreadingTimer timer = null;
             timer = new System.Threading.Timer(new TimerCallback((arg) =>
             {
-                CaptureWindow();
+                DoCapture();
                 timer.Dispose();
-                ProcessImage();
             }), null, 2000, Timeout.Infinite);
         }
 
-        void CaptureWindow()
+        void DoCapture()
         {
-            var storePath = Tools.GetInstance().JoinPath(ConfigMgr.GetInstance().CacheDir, imgName);
-            var img = MumuState.Create().CaptureJJCNameRect(1);
-            img.Save(storePath, ImageFormat.Png);
-        }
-
-        void ProcessImage()
-        {
-            //GraphicsTools.GetInstance().ToBinary(imgPath, 50);
+            var state = MumuState.Create();
+            var viewportRect = state.ViewportRect;
+            var viewportCapture = state.DoCapture(viewportRect);
+            for (int i = 0; i < 3; i++)
+            {
+                var nameCR = state.GetJJCNameCaptureRect(viewportCapture, viewportRect, i);
+                graphicsTools.ShowImage("JJCNameCaptureRect" + i, nameCR);
+                var rankCR = state.GetJJCRankCaptureRect(viewportCapture, viewportRect, i);
+                graphicsTools.ShowImage("JJCRankCaptureRect" + i, rankCR);
+            }
         }
 
         private void menuGetRectRate_Click(object sender, EventArgs e)

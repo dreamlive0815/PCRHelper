@@ -26,9 +26,8 @@ namespace PCRHelper
 
         internal void ShowImage(string key, Image img)
         {
-            var cacheDir = ConfigMgr.GetInstance().CacheDir;
-            var storePath = Tools.GetInstance().JoinPath(cacheDir, $"{key}.png");
-            img.Save(storePath);
+            var mat = ToMat(img);
+            ShowImage(key, mat);
         }
 
         internal void ShowImage(string key, Mat mat)
