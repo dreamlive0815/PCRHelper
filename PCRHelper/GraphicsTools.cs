@@ -24,12 +24,19 @@ namespace PCRHelper
             
         }
 
-        private void ShowImage(string key, Mat img)
+        internal void ShowImage(string key, Image img)
+        {
+            var cacheDir = ConfigMgr.GetInstance().CacheDir;
+            var storePath = Tools.GetInstance().JoinPath(cacheDir, $"{key}.png");
+            img.Save(storePath);
+        }
+
+        internal void ShowImage(string key, Mat mat)
         {
             //Cv2.ImShow(key, img);
             var cacheDir = ConfigMgr.GetInstance().CacheDir;
             var storePath = Tools.GetInstance().JoinPath(cacheDir, $"{key}.png");
-            img.SaveImage(storePath);
+            mat.SaveImage(storePath);
         }
 
         private Mat ReadImageFromFile(string filePath)
@@ -46,6 +53,14 @@ namespace PCRHelper
         public Image ToImage(Mat mat)
         {
             return mat.ToBitmap();
+        }
+
+        public Mat GetChildMatByRECT(Mat mat, RECT rect)
+        {
+            var xRange = new Range(rect.x1, rect.x2);
+            var yRange = new Range(rect.y1, rect.y2);
+            var child = mat[yRange, xRange];
+            return child;
         }
 
         public Mat ToGray(string filePath)

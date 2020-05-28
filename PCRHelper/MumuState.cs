@@ -1,11 +1,7 @@
 ﻿using OpenCvSharp;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PCRHelper
 {
@@ -19,6 +15,7 @@ namespace PCRHelper
 
         private Process process;
         private RECT rect;
+        private RECT viewportRect;
 
         private MumuState()
         {
@@ -57,6 +54,25 @@ namespace PCRHelper
             }
         }
 
+        public RECT ViewportRect
+        {
+            get
+            {
+                if (!UseCache || TopY == 0 || BottomY == 0)
+                {
+                    GetRealTimeCaptureAndAnalyze();
+                    var rect = Rect;
+                    viewportRect = new RECT() {
+                        x1 = rect.x1,
+                        y1 = rect.y1 + (int)TopY,
+                        x2 = rect.x2,
+                        y2 = rect.y1 + (int)BottomY,
+                    };
+                }
+                return viewportRect;
+            }
+        }
+
         public Image GetRealTimeCaptureAndAnalyze()
         {
             var capture = GetRealTimeCapture();
@@ -68,6 +84,14 @@ namespace PCRHelper
         {
             var rect = Rect;
             var capture = Tools.GetInstance().CaptureWindow(rect);
+            return capture;
+        }
+
+        public Image GetRealTimeViewportCapture()
+        {
+            var viewportRect = ViewportRect;
+            var capture = Tools.GetInstance().CaptureWindow(viewportRect);
+            GraphicsTools.GetInstance().ShowImage("GetRealTimeViewportCapture", capture);
             return capture;
         }
 
@@ -89,8 +113,7 @@ namespace PCRHelper
 
             var width = image.Width;
             var samplingWidthRate = 0.22;
-            var samplingX = (int) Math.Floor(width * samplingWidthRate);
-
+            var samplingX = (int)Math.Floor(width * samplingWidthRate);
 
             var threshold = (int)(255 * bin.Rows * 0.5);
             var preSum = 0;
@@ -106,7 +129,7 @@ namespace PCRHelper
                 var diff = Math.Abs(sum - preSum);
                 if (diff > threshold)
                 {
-                    TopY = r - 1;
+                    TopY = r;
                     break;
                 }
                 preSum = sum;
@@ -125,13 +148,52 @@ namespace PCRHelper
                 var diff = Math.Abs(sum - preSum);
                 if (diff > threshold)
                 {
-                    BottomY = r + 1;
+                    BottomY = r;
                     break;
                 }
                 preSum = sum;
             }
-
-
         }
+
+        Vec4<float>[] jjcNameRectRateArr = new Vec4<float>[] {
+            new Vec4<float>(0.5000f, 0.2396f, 0.6567f, 0.2912f),
+            new Vec4<float>(0.5000f, 0.4559f, 0.6567f, 0.5058f),
+            new Vec4<float>(0.5000f, 0.6689f, 0.6567f, 0.7205f),
+        };
+
+        /// <summary>
+        /// 相对坐标
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public RECT GetJJCNameRect(int index)
+        {
+            var viewportRect = ViewportRect;
+            var rectRate = jjcNameRectRateArr[index];
+            var jjcNameRect = viewportRect.Mult(rectRate);
+            return jjcNameRect;
+        }
+
+        public Image CaptureJJCNameRect(int index)
+        {
+            var capture = GetRealTimeViewportCapture();
+            return CaptureJJCNameRect(capture, index);
+        }
+
+
+        public Image CaptureJJCNameRect(Image capture, int index)
+        {
+            var mat = GraphicsTools.GetInstance().ToMat(capture);
+            return CaptureJJCNameRect(mat, index);
+        }
+
+        public Image CaptureJJCNameRect(Mat mat, int index)
+        {
+            var jjcNameRect = GetJJCNameRect(index);
+            var nameMat = GraphicsTools.GetInstance().GetChildMatByRECT(mat, jjcNameRect);
+            return GraphicsTools.GetInstance().ToImage(nameMat);
+        }
+
+
     }
 }

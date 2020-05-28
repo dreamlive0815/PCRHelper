@@ -36,20 +36,29 @@ namespace PCRHelper
                 timer.Dispose();
                 ProcessImage();
             }), null, 2000, Timeout.Infinite);
-
         }
 
         void CaptureWindow()
         {
             var storePath = Tools.GetInstance().JoinPath(ConfigMgr.GetInstance().CacheDir, imgName);
-            var img = MumuState.Create().GetRealTimeCaptureAndAnalyze();
+            var img = MumuState.Create().CaptureJJCNameRect(1);
             img.Save(storePath, ImageFormat.Png);
-            tools.OpenFileInExplorer(storePath);
         }
 
         void ProcessImage()
         {
             //GraphicsTools.GetInstance().ToBinary(imgPath, 50);
+        }
+
+        private void menuGetRectRate_Click(object sender, EventArgs e)
+        {
+            new FrmGetRectRate().Show();
+        }
+
+        private void menuOpenCacheDir_Click(object sender, EventArgs e)
+        {
+            var cacheDir = ConfigMgr.GetInstance().CacheDir;
+            tools.OpenDirInExplorer(cacheDir);
         }
     }
 }

@@ -28,22 +28,60 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuGetRectRate = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOpenCacheDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuGetRectRate,
+            this.menuOpenCacheDir});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(776, 25);
+            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // menuGetRectRate
+            // 
+            this.menuGetRectRate.Name = "menuGetRectRate";
+            this.menuGetRectRate.Size = new System.Drawing.Size(91, 21);
+            this.menuGetRectRate.Text = "GetRectRate";
+            this.menuGetRectRate.Click += new System.EventHandler(this.menuGetRectRate_Click);
+            // 
+            // menuOpenCacheDir
+            // 
+            this.menuOpenCacheDir.Name = "menuOpenCacheDir";
+            this.menuOpenCacheDir.Size = new System.Drawing.Size(104, 21);
+            this.menuOpenCacheDir.Text = "OpenCacheDir";
+            this.menuOpenCacheDir.Click += new System.EventHandler(this.menuOpenCacheDir_Click);
             // 
             // Frm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(546, 376);
+            this.ClientSize = new System.Drawing.Size(776, 445);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Frm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Frm_Load);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem menuGetRectRate;
+        private System.Windows.Forms.ToolStripMenuItem menuOpenCacheDir;
     }
 }
 
