@@ -13,6 +13,7 @@ namespace PCRHelper
             return new MumuState();
         }
 
+        bool checkResolution = false;//分辨率
         bool checkTopBottomBounds = true;
 
         private Process process;
@@ -64,10 +65,15 @@ namespace PCRHelper
         {
             get
             {
-                if (!UseCache || TopY == 0 || BottomY == 0)
+                //if (!UseCache || TopY == 0 || BottomY == 0)
+                if (true)
                 {
-                    DoRealTimeCaptureAndAnalyze();
-                    var rect = Rect;
+                    var capture = DoRealTimeCaptureAndAnalyze();
+                    if (checkResolution)
+                    {
+                        CheckResolution(capture);
+                    }
+                    var crect = Rect;
                     viewportRect = new RECT() {
                         x1 = rect.x1,
                         y1 = rect.y1 + (int)TopY,
@@ -76,6 +82,17 @@ namespace PCRHelper
                     };
                 }
                 return viewportRect;
+            }
+        }
+
+        public void CheckResolution(Image capture)
+        {
+            var wdivhCap = 1.0 * capture.Height / capture.Width;
+            var wdivh = 0.5625;
+            var validWdivhOff = 0.01;
+            if (Math.Abs(wdivhCap - wdivh) > validWdivhOff)
+            {
+                throw new Exception("请使用1920*1080的分辨率");
             }
         }
 
@@ -176,8 +193,6 @@ namespace PCRHelper
                 preSum = sum;
             }
 
-
-
             if (checkTopBottomBounds)
             {
                 var height = width * 0.5;
@@ -200,6 +215,8 @@ namespace PCRHelper
                 }
             }
         }
+
+        
 
         public Image GetCaptureRect(Vec4<float> rectRate)
         {
@@ -228,11 +245,63 @@ namespace PCRHelper
             return GraphicsTools.GetInstance().ToImage(childMat);
         }
 
+        /// <summary>
+        /// 相对坐标
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="pointRate"></param>
+        /// <returns></returns>
+        public System.Drawing.Point GetRelativePoint(RECT rect, Vec2<float> pointRate)
+        {
+            var wid = rect.Width;
+            var hei = rect.Height;
+            wid = 1920;
+            hei = 1080;
+            return new System.Drawing.Point((int)(wid * pointRate.item1), (int)(hei * pointRate.item2));
+        }
 
-        Vec4<float>[] jjcNameRectRateArr = new Vec4<float>[] {
-            new Vec4<float>(0.5000f, 0.2396f, 0.6567f, 0.2912f),
-            new Vec4<float>(0.5000f, 0.4559f, 0.6567f, 0.5058f),
-            new Vec4<float>(0.5000f, 0.6689f, 0.6567f, 0.7205f),
+
+        public void DoClick(System.Drawing.Point point)
+        {
+            //Win32ApiHelper.MoveToAndClick(point.X, point.Y);
+            var startInfo = new ProcessStartInfo()
+            {
+                FileName = "adb_server.exe",
+                Arguments = $"shell input tap {point.X} {point.Y}",
+                WindowStyle = ProcessWindowStyle.Hidden,
+            };
+            Process.Start(startInfo);
+        }
+
+        Vec2<float>[] jjcRectPointRateArr = new Vec2<float>[]
+        {
+            new Vec2<float>(0.7500f, 0.3100f),
+            new Vec2<float>(0.7500f, 0.5300f),
+            new Vec2<float>(0.7500f, 0.7300f),
+        };
+
+
+        public void ClickJJCRect(RECT viewportRect, int index)
+        {
+            var point = GetRelativePoint(viewportRect, jjcRectPointRateArr[index]);
+            DoClick(point);
+        }
+
+
+        Vec2<float> jjcRefreshButtonPointRate = new Vec2<float>(0.97f, 0.1625f);
+
+        public void ClickJJCRefreshButton(RECT viewportRect)
+        {
+            var point = GetRelativePoint(viewportRect, jjcRefreshButtonPointRate);
+            DoClick(point);
+        }
+
+
+        Vec4<float>[] jjcNameRectRateArr = new Vec4<float>[]
+        {
+            new Vec4<float>(0.5135f, 0.2511f, 0.6608f, 0.2823f),
+            new Vec4<float>(0.5135f, 0.4638f, 0.6608f, 0.4980f),
+            new Vec4<float>(0.5135f, 0.6766f, 0.6608f, 0.7116f),
         };
 
         public Vec4<float> GetJJCNameRectRate(int index)
@@ -273,10 +342,11 @@ namespace PCRHelper
         }
 
 
-        Vec4<float>[] jjcRankRectRateArr = new Vec4<float>[] {
-            new Vec4<float>(0.7493f, 0.2099f, 0.8201f, 0.2723f),
-            new Vec4<float>(0.7493f, 0.4270f, 0.8201f, 0.4865f),
-            new Vec4<float>(0.7514f, 0.6440f, 0.8215f, 0.7035f),
+        Vec4<float>[] jjcRankRectRateArr = new Vec4<float>[]
+        {
+            new Vec4<float>(0.7450f, 0.2227f, 0.8258f, 0.2582f),
+            new Vec4<float>(0.7450f, 0.4369f, 0.8258f, 0.4723f),
+	        new Vec4<float>(0.7450f, 0.6496f, 0.8258f, 0.6879f),
         };
 
         public Vec4<float> GetJJCRankRectRate(int index)

@@ -83,6 +83,30 @@ namespace PCRHelper
         }
     }
 
+    struct Vec2<T>
+    {
+        /// <summary>
+        /// x1
+        /// </summary>
+        public T item1;
+        /// <summary>
+        /// y1
+        /// </summary>
+        public T item2;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item1">x1</param>
+        /// <param name="item2">y1</param>
+        public Vec2(T item1, T item2)
+        {
+            this.item1 = item1;
+            this.item2 = item2;
+        }
+
+    }
+
     struct Vec4<T>
     {
         /// <summary>
@@ -168,6 +192,16 @@ namespace PCRHelper
             return rect;
         }
 
+        public Point Mult(Vec2<float> rate)
+        {
+            var point = new Point();
+            var width = Width;
+            var height = Height;
+            point.X = (int)(x1 + width * rate.item1);
+            point.Y = (int)(y1 + height * rate.item2);
+            return point;
+        }
+
         public RECT Mult(Vec4<float> rate)
         {
             RECT rect = this;
@@ -190,8 +224,38 @@ namespace PCRHelper
         public static readonly int SW_SHOWNORMAL = 1;
         public static readonly int SW_SHOWMINIMIZED = 2;
         public static readonly int SW_SHOWMAXIMIZED = 3;
-        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int ShowWindow(IntPtr hwnd, int nCmdShow);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int SetCursorPos(int x, int y);
+
+        [DllImport("user32", CharSet = CharSet.Auto)]
+        public static extern int mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
+
+        //移动鼠标
+        public const int MOUSEEVENTF_MOVE = 0x0001;
+        //模拟鼠标左键按下
+        public const int MOUSEEVENTF_LEFTDOWN = 0x0002;
+        //模拟鼠标左键抬起
+        public const int MOUSEEVENTF_LEFTUP = 0x0004;
+        //模拟鼠标右键按下
+        public const int MOUSEEVENTF_RIGHTDOWN = 0x0008;
+        //模拟鼠标右键抬起
+        public const int MOUSEEVENTF_RIGHTUP = 0x0010;
+        //模拟鼠标中键按下
+        public const int MOUSEEVENTF_MIDDLEDOWN = 0x0020;
+        //模拟鼠标中键抬起
+        public const int MOUSEEVENTF_MIDDLEUP = 0x0040;
+        //标示是否采用绝对坐标
+        public const int MOUSEEVENTF_ABSOLUTE = 0x8000;
+
+        public static void MoveToAndClick(int x, int y)
+        {
+            SetCursorPos(x, y);
+            mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+            mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        }
     }
 
 }

@@ -114,8 +114,8 @@ namespace PCRHelper
                 for (int j = 0; j < gray.Cols; j++)
                 {
                     var clr = gray.Get<Vec3b>(i, j);
-                    //Console.WriteLine($"{i},{j} {clr.Item0}");
-                    var v = clr.Item1 > threshold ? higher : lower;
+                    Console.WriteLine($"{i},{j} {clr.Item0}");
+                    var v = clr.Item0 > threshold ? higher : lower;
                     var newClr = new Vec3b((byte)v, (byte)v, (byte)v);
                     r.Set<Vec3b>(i, j, newClr);
                 }
@@ -123,59 +123,27 @@ namespace PCRHelper
             return r;
         }
 
-        private int[] dx = { -1, 0, 1, 0 };
-        private int[] dy = { 0, 1, 0, -1 };
-
-        private bool InBounds(Bitmap bitmap, int x, int y)
+        public void DFS()
         {
-            if (x < 0 || x >= bitmap.Width) return false;
-            if (y < 0 || y >= bitmap.Height) return false;
-            return true;
+
         }
 
-        private void CleanBinCornerDFS(Bitmap bitmap, bool[,] vis, int x, int y)
+        public Mat CleanBinCorner(Mat bin)
         {
-            bitmap.SetPixel(x, y, Color.White);
-            vis[x, y] = true;
-            for (int k = 0; k < 4; k++)
+            var r = bin.Clone();
+            var vis = new bool[bin.Rows, bin.Cols];
+            for (int i = 0; i < gray.Rows; i++)
             {
-                var nx = x + dx[k];
-                var ny = y + dy[k];
-                if (InBounds(bitmap, nx, ny) && !vis[nx, ny])
+                for (int j = 0; j < gray.Cols; j++)
                 {
-                    var pix = bitmap.GetPixel(nx, ny);               
-                    if (pix.G == 0)
-                    {
-                        CleanBinCornerDFS(bitmap, vis, nx, ny);
-                    }
+                    var clr = gray.Get<Vec3b>(i, j);
+                    Console.WriteLine($"{i},{j} {clr.Item0}");
+                    var v = clr.Item0 > threshold ? higher : lower;
+                    var newClr = new Vec3b((byte)v, (byte)v, (byte)v);
+                    r.Set<Vec3b>(i, j, newClr);
                 }
             }
-        }
-
-        public Bitmap CleanBinCorner(Bitmap bitmap)
-        {
-            var vis = new bool[bitmap.Width, bitmap.Height];
-            //CleanBinCornerDFS(bitmap, vis, 0, 0);
-            //CleanBinCornerDFS(bitmap, vis, 0, bitmap.Height - 1);
-            //CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, 0);
-            //CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, bitmap.Height - 1);
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                CleanBinCornerDFS(bitmap, vis, x, 0);
-            }
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                CleanBinCornerDFS(bitmap, vis, x, bitmap.Height - 1);
-            }
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                CleanBinCornerDFS(bitmap, vis, 0, y);
-            }
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, y);
-            }
-            return bitmap;
+            return r;
         }
 
         public Mat ToReverse(Image img)

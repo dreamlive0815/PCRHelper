@@ -26,6 +26,14 @@ namespace PCRHelper
 
         public void Init()
         {
+            if (OCRTools.UsingTesseractExe)
+            {
+                InitOCRConfig();
+            }
+        }
+
+        private void InitOCRConfig()
+        {
             var tesseractPath = TesseractPath;
             if (!File.Exists(tesseractPath))
             {
@@ -64,6 +72,13 @@ namespace PCRHelper
                 }
                 return cacheDir;
             }
+        }
+
+        public string GetCacheFileFullPath(string relativePath)
+        {
+            var cacheDir = new DirectoryInfo(this.CacheDir).FullName;
+            var path = Tools.GetInstance().JoinPath(cacheDir, relativePath);
+            return path;
         }
     }
 }
