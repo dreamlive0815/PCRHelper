@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Tesseract;
 using OpenCvSharp;
+using System.Text.RegularExpressions;
 
 namespace PCRHelper
 {
@@ -63,9 +64,11 @@ namespace PCRHelper
             return s;
         }
 
+        private Regex filterTail = new Regex("[\\r\\n\\f]+$");
         private string FilterTesseractResult(string result)
         {
             result = result.Replace(" ", "");
+            result = filterTail.Replace(result, "");
             return result;
         }
 

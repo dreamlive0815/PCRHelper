@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace PCRHelper
 {
@@ -33,57 +34,14 @@ namespace PCRHelper
             richText = richTextBox;
         }
 
-        void AppendLine(string s)
-        {
-            Append(string.Format("{0}{1}", s, Environment.NewLine));
-        }
-
-        void Append(string s)
-        {
-            var txt = richText;
-            if (txt == null)
-            {
-                return;
-            }
-            if (txt.InvokeRequired)
-            {
-                if (txt.IsDisposed) return;
-                txt.Invoke(new Action<string>(Append), s);
-            }
-            else
-            {
-                txt.AppendText(s);
-
-                txt.SelectionStart = txt.TextLength;
-                txt.ScrollToCaret();
-            }
-        }
-
-        public string FilterMsg(string msg)
-        {
-            msg = msg.Replace("\n", "");
-            msg = msg.Replace("\r", "");
-            msg = msg.Replace("\f", "");
-            return msg;
-        }
-
         public void Error(string msg)
         {
-            msg = FilterMsg(msg);
-            if (richText != null && !richText.IsDisposed)
-            {
-                AppendLine(msg);
-            }
-
+            richText?.AppendLineThreadSafe(msg, Color.Red);
         }
 
         public void Info(string msg)
         {
-            msg = FilterMsg(msg);
-            if (richText != null && !richText.IsDisposed)
-            {
-                AppendLine(msg);
-            }
+            richText?.AppendLineThreadSafe(msg, Color.Black);
         }
     }
 }
