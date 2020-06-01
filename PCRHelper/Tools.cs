@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.IO;
+using OpenCvSharp;
 
 namespace PCRHelper
 {
@@ -58,7 +59,7 @@ namespace PCRHelper
             var height = Math.Abs(rect.y1 - rect.y2);
             var bitmap = new Bitmap(width, height);
             var g = Graphics.FromImage(bitmap);
-            g.CopyFromScreen(rect.x1, rect.y1, 0, 0, new Size(width, height));
+            g.CopyFromScreen(rect.x1, rect.y1, 0, 0, new System.Drawing.Size(width, height));
             g.Dispose();
             return bitmap;
         }
@@ -83,66 +84,6 @@ namespace PCRHelper
         }
     }
 
-    struct Vec2<T>
-    {
-        /// <summary>
-        /// x1
-        /// </summary>
-        public T item1;
-        /// <summary>
-        /// y1
-        /// </summary>
-        public T item2;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item1">x1</param>
-        /// <param name="item2">y1</param>
-        public Vec2(T item1, T item2)
-        {
-            this.item1 = item1;
-            this.item2 = item2;
-        }
-
-    }
-
-    struct Vec4<T>
-    {
-        /// <summary>
-        /// x1
-        /// </summary>
-        public T item1;
-        /// <summary>
-        /// y1
-        /// </summary>
-        public T item2;
-        /// <summary>
-        /// x2
-        /// </summary>
-        public T item3;
-        /// <summary>
-        /// y2
-        /// </summary>
-        public T item4;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item1">x1</param>
-        /// <param name="item2">y1</param>
-        /// <param name="item3">x2</param>
-        /// <param name="item4">y2</param>
-        public Vec4(T item1, T item2, T item3, T item4)
-        {
-            this.item1 = item1;
-            this.item2 = item2;
-            this.item3 = item3;
-            this.item4 = item4;
-        }
-
-    }
-
     struct RECT
     {
         public int x1;
@@ -163,54 +104,32 @@ namespace PCRHelper
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="other">相对this的坐标</param>
+        /// <param name="rate">两个数字分别是横坐标 纵坐标相对于父矩形的比率</param>
         /// <returns></returns>
-        public RECT Add(RECT other)
+        public System.Drawing.Point GetChildPointByRate(Vec2f rate)
         {
-            RECT rect = this;
-            rect.x1 += other.x1;
-            rect.y1 += other.y1;
-            rect.x2 += other.x2;
-            rect.y2 += other.y2;
-            return rect;
+            var point = new System.Drawing.Point();
+            var width = Width;
+            var height = Height;
+            point.X = (int)(x1 + width * rate.Item0);
+            point.Y = (int)(y1 + height * rate.Item1);
+            return point;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="rate">基于width和height的比率</param>
+        /// <param name="rate">四个数字分别是左上角横坐标 左上角纵坐标 右下角横坐标 右下角纵坐标相对于父矩形的比率</param>
         /// <returns></returns>
-        public RECT Add(Vec4<float> rate)
+        public RECT GetChildRectByRate(Vec4f rate)
         {
             RECT rect = this;
             var width = Width;
             var height = Height;
-            rect.x1 += (int)(Width * rate.item1);
-            rect.y1 += (int)(Height * rate.item2);
-            rect.x2 += (int)(Width * rate.item3);
-            rect.y2 += (int)(Height * rate.item4);
-            return rect;
-        }
-
-        public Point Mult(Vec2<float> rate)
-        {
-            var point = new Point();
-            var width = Width;
-            var height = Height;
-            point.X = (int)(x1 + width * rate.item1);
-            point.Y = (int)(y1 + height * rate.item2);
-            return point;
-        }
-
-        public RECT Mult(Vec4<float> rate)
-        {
-            RECT rect = this;
-            var width = Width;
-            var height = Height;
-            rect.x1 = (int)(Width * rate.item1);
-            rect.y1 = (int)(Height * rate.item2);
-            rect.x2 = (int)(Width * rate.item3);
-            rect.y2 = (int)(Height * rate.item4);
+            rect.x1 = (int)(Width * rate.Item0);
+            rect.y1 = (int)(Height * rate.Item1);
+            rect.x2 = (int)(Width * rate.Item2);
+            rect.y2 = (int)(Height * rate.Item3);
             return rect;
         }
     }

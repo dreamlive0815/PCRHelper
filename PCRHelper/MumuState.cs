@@ -218,14 +218,14 @@ namespace PCRHelper
 
         
 
-        public Image GetCaptureRect(Vec4<float> rectRate)
+        public Image GetCaptureRect(Vec4f rectRate)
         {
             var viewportRect = ViewportRect;
             var viewportCapture = DoCapture(viewportRect);
             return GetCaptureRect(viewportCapture, viewportRect, rectRate);
         }
 
-        public Image GetCaptureRect(Image capture, RECT captureRect, Vec4<float> rectRate)
+        public Image GetCaptureRect(Image capture, RECT captureRect, Vec4f rectRate)
         {
             var mat = GraphicsTools.GetInstance().ToMat(capture);
             return GetCaptureRect(mat, captureRect, rectRate);
@@ -238,9 +238,9 @@ namespace PCRHelper
         /// <param name="captureRect">完整的截图捕获矩形 相对于屏幕</param>
         /// <param name="rectRate">子矩形的比率 相对于capture</param>
         /// <returns></returns>
-        public Image GetCaptureRect(Mat mat, RECT captureRect, Vec4<float> rectRate)
+        public Image GetCaptureRect(Mat mat, RECT captureRect, Vec4f rectRate)
         {
-            var relativeRect = captureRect.Mult(rectRate);
+            var relativeRect = captureRect.GetChildRectByRate(rectRate);
             var childMat = GraphicsTools.GetInstance().GetChildMatByRECT(mat, relativeRect);
             return GraphicsTools.GetInstance().ToImage(childMat);
         }
@@ -251,13 +251,13 @@ namespace PCRHelper
         /// <param name="rect"></param>
         /// <param name="pointRate"></param>
         /// <returns></returns>
-        public System.Drawing.Point GetRelativePoint(RECT rect, Vec2<float> pointRate)
+        public System.Drawing.Point GetRelativePoint(RECT rect, Vec2f pointRate)
         {
             var wid = rect.Width;
             var hei = rect.Height;
             wid = 1920;
             hei = 1080;
-            return new System.Drawing.Point((int)(wid * pointRate.item1), (int)(hei * pointRate.item2));
+            return new System.Drawing.Point((int)(wid * pointRate.Item0), (int)(hei * pointRate.Item1));
         }
 
 
@@ -273,11 +273,11 @@ namespace PCRHelper
             Process.Start(startInfo);
         }
 
-        Vec2<float>[] jjcRectPointRateArr = new Vec2<float>[]
+        Vec2f[] jjcRectPointRateArr = new Vec2f[]
         {
-            new Vec2<float>(0.7500f, 0.3100f),
-            new Vec2<float>(0.7500f, 0.5300f),
-            new Vec2<float>(0.7500f, 0.7300f),
+            new Vec2f(0.7500f, 0.3100f),
+            new Vec2f(0.7500f, 0.5300f),
+            new Vec2f(0.7500f, 0.7300f),
         };
 
 
@@ -288,7 +288,7 @@ namespace PCRHelper
         }
 
 
-        Vec2<float> jjcRefreshButtonPointRate = new Vec2<float>(0.97f, 0.1625f);
+        Vec2f jjcRefreshButtonPointRate = new Vec2f(0.9700f, 0.1625f);
 
         public void ClickJJCRefreshButton(RECT viewportRect)
         {
@@ -297,14 +297,14 @@ namespace PCRHelper
         }
 
 
-        Vec4<float>[] jjcNameRectRateArr = new Vec4<float>[]
+        Vec4f[] jjcNameRectRateArr = new Vec4f[]
         {
-            new Vec4<float>(0.5135f, 0.2511f, 0.6608f, 0.2823f),
-            new Vec4<float>(0.5135f, 0.4638f, 0.6608f, 0.4980f),
-            new Vec4<float>(0.5135f, 0.6766f, 0.6608f, 0.7116f),
+            new Vec4f(0.5135f, 0.2511f, 0.6608f, 0.2823f),
+            new Vec4f(0.5135f, 0.4638f, 0.6608f, 0.4980f),
+            new Vec4f(0.5135f, 0.6766f, 0.6608f, 0.7116f),
         };
 
-        public Vec4<float> GetJJCNameRectRate(int index)
+        public Vec4f GetJJCNameRectRate(int index)
         {
             return jjcNameRectRateArr[index];
         }
@@ -318,7 +318,7 @@ namespace PCRHelper
         {
             var viewportRect = ViewportRect;
             var rectRate = GetJJCNameRectRate(index);
-            var jjcNameRect = viewportRect.Mult(rectRate);
+            var jjcNameRect = viewportRect.GetChildRectByRate(rectRate);
             return jjcNameRect;
         }
 
@@ -342,14 +342,14 @@ namespace PCRHelper
         }
 
 
-        Vec4<float>[] jjcRankRectRateArr = new Vec4<float>[]
+        Vec4f[] jjcRankRectRateArr = new Vec4f[]
         {
-            new Vec4<float>(0.7450f, 0.2227f, 0.8258f, 0.2582f),
-            new Vec4<float>(0.7450f, 0.4369f, 0.8258f, 0.4723f),
-	        new Vec4<float>(0.7450f, 0.6496f, 0.8258f, 0.6879f),
+            new Vec4f(0.7450f, 0.2227f, 0.8258f, 0.2582f),
+            new Vec4f(0.7450f, 0.4369f, 0.8258f, 0.4723f),
+	        new Vec4f(0.7450f, 0.6496f, 0.8258f, 0.6879f),
         };
 
-        public Vec4<float> GetJJCRankRectRate(int index)
+        public Vec4f GetJJCRankRectRate(int index)
         {
             return jjcRankRectRateArr[index];
         }
@@ -363,7 +363,7 @@ namespace PCRHelper
         {
             var viewportRect = ViewportRect;
             var rectRate = GetJJCRankRectRate(index);
-            var jjcRankRect = viewportRect.Mult(rectRate);
+            var jjcRankRect = viewportRect.GetChildRectByRate(rectRate);
             return jjcRankRect;
         }
 

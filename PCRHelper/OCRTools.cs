@@ -15,7 +15,7 @@ namespace PCRHelper
     class OCRTools
     {
 
-        public static bool UsingTesseractExe
+        public static bool UsingTesseract
         {
             get { return true; }
         }
@@ -40,11 +40,17 @@ namespace PCRHelper
             //engine = new TesseractEngine(tessdataDir, "eng", EngineMode.Default);
         }
 
-        private string OCRUsingTesseractExe(Image img)
+        public string OCRWithTesseract(Image img)
+        {
+            return OCRWithTesseract(img, "chi_sim+eng");
+        }
+
+        public string OCRWithTesseract(Image img, string lans)
         {
             var configMgr = ConfigMgr.GetInstance();
-            var tempImgStorePath = configMgr.GetCacheFileFullPath("tesseract-temp.png");
-            var resName = "tesseract-result";
+            var randStr = DateTime.Now.ToString("yyMMddHHmmss") + new Random().Next(0, 99).ToString("D2");
+            var tempImgStorePath = configMgr.GetCacheFileFullPath($"tesseract_{randStr}.png");
+            var resName = $"tesseract_result_{randStr}";
             var tempResPathForTess = configMgr.GetCacheFileFullPath($"{resName}");
             var tempResStorePath = configMgr.GetCacheFileFullPath($"{resName}.txt");
             img.Save(tempImgStorePath);
@@ -52,7 +58,7 @@ namespace PCRHelper
             var startInfo = new ProcessStartInfo()
             {
                 FileName = tesseratPath,
-                Arguments = string.Format("{0} {1} -l chi_sim+eng --psm 6", tempImgStorePath, tempResPathForTess),
+                Arguments = string.Format("{0} {1} -l {2} --psm 6", tempImgStorePath, tempResPathForTess, lans),
                 WindowStyle = ProcessWindowStyle.Hidden,
             };
             var proc = Process.Start(startInfo);
@@ -60,7 +66,7 @@ namespace PCRHelper
             var s = File.ReadAllText(tempResStorePath);
             s = FilterTesseractResult(s);
             File.Delete(tempImgStorePath);
-            File.WriteAllText(tempResStorePath, "");
+            File.Delete(tempResStorePath);
             return s;
         }
 
@@ -79,9 +85,9 @@ namespace PCRHelper
 
         public string OCR(Image img)
         {
-            if (UsingTesseractExe)
+            if (UsingTesseract)
             {
-                return OCRUsingTesseractExe(img);
+                return OCRWithTesseract(img);
             }
             return "";
         }

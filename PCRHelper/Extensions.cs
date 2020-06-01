@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using OpenCvSharp.Extensions;
+using OpenCvSharp;
+
 namespace PCRHelper
 {
     static class RichTextBoxExtension
@@ -49,6 +52,19 @@ namespace PCRHelper
                 richTextBox.AppendText(s);
                 richTextBox.ScrollToEnd();
             }
+        }
+    }
+
+    static class OpenCvExtension
+    {
+        public static Mat ToOpenCvMat(this Bitmap bitmap)
+        {
+            return bitmap.ToMat();
+        }
+
+        public static Bitmap ToRawBitmap(this Mat mat)
+        {
+            return mat.ToBitmap();
         }
     }
 }

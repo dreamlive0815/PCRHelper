@@ -26,7 +26,7 @@ namespace PCRHelper
 
         public void Init()
         {
-            if (OCRTools.UsingTesseractExe)
+            if (OCRTools.UsingTesseract)
             {
                 InitOCRConfig();
             }
