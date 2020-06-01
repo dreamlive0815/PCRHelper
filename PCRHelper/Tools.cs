@@ -51,7 +51,7 @@ namespace PCRHelper
             return rect;
         }
 
-        public Image CaptureWindow(RECT rect)
+        public Bitmap CaptureWindow(RECT rect)
         {
             if (rect.x1 < 0 || rect.y1 < 0) throw new Exception("左上角坐标不合法");
             if (rect.x2 < 0 || rect.y2 < 0) throw new Exception("右下角坐标不合法");

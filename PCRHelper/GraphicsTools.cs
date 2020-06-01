@@ -24,15 +24,13 @@ namespace PCRHelper
             
         }
 
-        internal void ShowImage(string key, Image img)
+        public void DisplayImage(string key, Bitmap img)
         {
-            var mat = ToMat(img);
-            ShowImage(key, mat);
+            DisplayImage(key, img.ToOpenCvMat());
         }
 
-        internal void ShowImage(string key, Mat mat)
+        public void DisplayImage(string key, Mat mat)
         {
-            //Cv2.ImShow(key, img);
             var cacheDir = ConfigMgr.GetInstance().CacheDir;
             var storePath = Tools.GetInstance().JoinPath(cacheDir, $"{key}.png");
             mat.SaveImage(storePath);
@@ -40,18 +38,7 @@ namespace PCRHelper
 
         private Mat ReadImageFromFile(string filePath)
         {
-            return Cv2.ImRead(filePath, ImreadModes.Color);
-        }
-
-        public Mat ToMat(Image image)
-        {
-            var bitmap = image as Bitmap;
-            return bitmap.ToMat();
-        }
-
-        public Image ToImage(Mat mat)
-        {
-            return mat.ToBitmap();
+            return Cv2.ImRead(filePath);
         }
 
         public Mat GetChildMatByRECT(Mat mat, RECT rect)
@@ -71,14 +58,15 @@ namespace PCRHelper
         public Mat ToGray(Mat source)
         {
             var gray = new Mat();
-            Cv2.CvtColor(source, gray, ColorConversionCodes.BGR2GRAY);
-            //ShowImage("ToGray-Gray", gray);
+            var channels = source.Channels();
+            var code = channels == 4 ? ColorConversionCodes.BGRA2GRAY : ColorConversionCodes.BGR2GRAY;
+            Cv2.CvtColor(source, gray, code);
             return gray;
         }
 
-        public Mat ToGray(Image img)
+        public Mat ToGray(Bitmap bitmap)
         {
-            return ToGray(ToMat(img));
+            return ToGray(bitmap.ToOpenCvMat());
         }
 
         public Mat ToGrayBinary(string filePath, int threshold)
@@ -97,7 +85,6 @@ namespace PCRHelper
         {
             var bin = new Mat();
             Cv2.Threshold(gray, bin, threshold, 255, ThresholdTypes.Binary);
-            //ShowImage("ToBinary-Bin", bin);
             return bin;
         }
 
@@ -159,33 +146,23 @@ namespace PCRHelper
             //CleanBinCornerDFS(bitmap, vis, 0, bitmap.Height - 1);
             //CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, 0);
             //CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, bitmap.Height - 1);
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                CleanBinCornerDFS(bitmap, vis, x, 0);
-            }
-            for (int x = 0; x < bitmap.Width; x++)
-            {
-                CleanBinCornerDFS(bitmap, vis, x, bitmap.Height - 1);
-            }
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                CleanBinCornerDFS(bitmap, vis, 0, y);
-            }
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, y);
-            }
+            for (int x = 0; x < bitmap.Width; x++) CleanBinCornerDFS(bitmap, vis, x, 0);
+            for (int x = 0; x < bitmap.Width; x++) CleanBinCornerDFS(bitmap, vis, x, bitmap.Height - 1);
+            for (int y = 0; y < bitmap.Height; y++) CleanBinCornerDFS(bitmap, vis, 0, y);
+            for (int y = 0; y < bitmap.Height; y++) CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, y);
             return bitmap;
         }
 
-        public Mat ToReverse(Image img)
+        public Mat ToReverse(Bitmap bitmap)
         {
-            return ToReverse(ToMat(img));
+            return ToReverse(bitmap.ToOpenCvMat());
         }
 
         public Mat ToReverse(Mat mat)
         {
-            var r = mat.Clone();
+            
+            var r = new Mat();
+            mat.CopyTo(r);
             for (int i = 0; i < mat.Rows; i++)
             {
                 for (int j = 0; j < mat.Cols; j++)
@@ -199,24 +176,6 @@ namespace PCRHelper
             return r;
         }
 
-        public List<LineSegmentPolar> GetHoughLines(string filePath)
-        {
-            var mat = ReadImageFromFile(filePath);
-            return GetHoughLines(mat);
-        }
-
-        public List<LineSegmentPolar> GetHoughLines(Mat source)
-        {
-            var temp = new Mat();
-            var gray = new Mat();
-            //边缘检测
-            Cv2.Canny(source, temp, 50, 200, 3);
-            ShowImage("GetHoughLines-Canny", temp);
-            //灰化
-            Cv2.CvtColor(source, gray, ColorConversionCodes.BGR2GRAY);
-            ShowImage("GetHoughLines-Gray", temp);
-            var r = Cv2.HoughLines(gray, 1, Cv2.PI, 150, 0, 0);
-            return new List<LineSegmentPolar>(r);
-        }
+        
     }
 }

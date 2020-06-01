@@ -40,7 +40,7 @@ namespace PCRHelper
         }
 
         RECT viewportRect;
-        Image viewportCapture;
+        Bitmap viewportCapture;
         MumuState mumuState;
         string name = "";
         string rank = "";
@@ -76,6 +76,7 @@ namespace PCRHelper
                         viewportRect = mumuState.ViewportRect;
                         viewportCapture = mumuState.DoCapture(viewportRect);
                         idx = CaptureLoopFunc();
+                        mumuState.ClickJJCRefreshButton(viewportRect);
                     }
                     catch (Exception e)
                     {
@@ -86,10 +87,6 @@ namespace PCRHelper
                     {
                         mumuState.ClickJJCRect(viewportRect, idx);
                         break;
-                    }
-                    else
-                    {
-                        mumuState.ClickJJCRefreshButton(viewportRect);
                     }
                 }
             });
@@ -130,19 +127,19 @@ namespace PCRHelper
             for (int i = 0; i < 3; i++)
             {
                 var nameCR = mumuState.GetJJCNameCaptureRect(viewportCapture, viewportRect, i);
-                graphicsTools.ShowImage("NameToOCR" + i, nameCR);
-                var name = ocr.ToGrayAndOCR(nameCR);
+                graphicsTools.DisplayImage("NameToOCR" + i, nameCR);
+                var name = ocr.ToGrayAndOCR((Bitmap)nameCR);
                 logTools.Info($"Name{i}: {name}");
                 var rankCR = mumuState.GetJJCRankCaptureRect(viewportCapture, viewportRect, i);
                 var gray = graphicsTools.ToGray(rankCR);
                 var reverse = graphicsTools.ToReverse(gray);
-                graphicsTools.ShowImage("RankReverse" + i, reverse);
+                graphicsTools.DisplayImage("RankReverse" + i, reverse);
                 var bin = graphicsTools.ToBinaryPlus(reverse, 90);
                 //graphicsTools.ShowImage("RankBin" + i, bin);
                 var binStorePath = configMgr.GetCacheFileFullPath($"RankBin{i}.png");
                 bin.SaveImage(binStorePath);
                 var bitmap = graphicsTools.CleanBinCorner((Bitmap)Bitmap.FromFile(binStorePath));
-                graphicsTools.ShowImage("RankToOCR" + i, bitmap);
+                graphicsTools.DisplayImage("RankToOCR" + i, bitmap);
                 var rank = ocr.OCR(bitmap);
                 logTools.Info($"Rank{i}: {rank}");
                 r.Add(new CaptureResult() { index = 1, Name = name, Rank = rank });

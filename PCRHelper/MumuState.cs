@@ -13,7 +13,7 @@ namespace PCRHelper
             return new MumuState();
         }
 
-        bool checkResolution = false;//分辨率
+        bool checkResolution = true;//分辨率
         bool checkTopBottomBounds = true;
 
         private Process process;
@@ -85,39 +85,39 @@ namespace PCRHelper
             }
         }
 
-        public void CheckResolution(Image capture)
+        public void CheckResolution(Bitmap capture)
         {
             var wdivhCap = 1.0 * capture.Height / capture.Width;
             var wdivh = 0.5625;
-            var validWdivhOff = 0.01;
+            var validWdivhOff = 0.05;
             if (Math.Abs(wdivhCap - wdivh) > validWdivhOff)
             {
                 throw new Exception("请使用1920*1080的分辨率");
             }
         }
 
-        public Image DoCapture(RECT rect)
+        public Bitmap DoCapture(RECT rect)
         {
             var capture = Tools.GetInstance().CaptureWindow(rect);
-            GraphicsTools.GetInstance().ShowImage("DoCapture", capture);
+            //GraphicsTools.GetInstance().DisplayImage("DoCapture", capture);
             return capture;
         }
 
-        public Image DoRealTimeCaptureAndAnalyze()
-        {
-            var capture = DoRealTimeCapture();
-            GetViewportTopBottomBounds(capture);
-            return capture;
-        }
-
-        public Image DoRealTimeCapture()
+        public Bitmap DoRealTimeCapture()
         {
             var rect = Rect;
             var capture = DoCapture(rect);
             return capture;
         }
 
-        public Image DoRealTimeViewportCapture()
+        public Bitmap DoRealTimeCaptureAndAnalyze()
+        {
+            var capture = DoRealTimeCapture();
+            GetViewportTopBottomBounds(capture);
+            return capture;
+        }
+
+        public Bitmap DoRealTimeViewportCapture()
         {
             var viewportRect = ViewportRect;
             var capture = DoCapture(viewportRect);
@@ -144,15 +144,13 @@ namespace PCRHelper
             }
         }
 
-        public void GetViewportTopBottomBounds(Image image)
+        public void GetViewportTopBottomBounds(Bitmap bitmap)
         {
             var graphicsTools = GraphicsTools.GetInstance();
-            var mat = graphicsTools.ToMat(image);
+            var mat = bitmap.ToOpenCvMat();
             var bin = graphicsTools.ToGrayBinary(mat, 50);
 
-            var width = image.Width;
-            var samplingWidthRate = 0.22;
-            var samplingX = (int)Math.Floor(width * samplingWidthRate);
+            var width = bitmap.Width;
 
             var threshold = (int)(255 * bin.Rows * 0.5);
             var preSum = 0;
@@ -218,16 +216,16 @@ namespace PCRHelper
 
         
 
-        public Image GetCaptureRect(Vec4f rectRate)
+        public Bitmap GetCaptureRect(Vec4f rectRate)
         {
             var viewportRect = ViewportRect;
             var viewportCapture = DoCapture(viewportRect);
             return GetCaptureRect(viewportCapture, viewportRect, rectRate);
         }
 
-        public Image GetCaptureRect(Image capture, RECT captureRect, Vec4f rectRate)
+        public Bitmap GetCaptureRect(Bitmap capture, RECT captureRect, Vec4f rectRate)
         {
-            var mat = GraphicsTools.GetInstance().ToMat(capture);
+            var mat = capture.ToOpenCvMat();
             return GetCaptureRect(mat, captureRect, rectRate);
         }
 
@@ -238,11 +236,11 @@ namespace PCRHelper
         /// <param name="captureRect">完整的截图捕获矩形 相对于屏幕</param>
         /// <param name="rectRate">子矩形的比率 相对于capture</param>
         /// <returns></returns>
-        public Image GetCaptureRect(Mat mat, RECT captureRect, Vec4f rectRate)
+        public Bitmap GetCaptureRect(Mat mat, RECT captureRect, Vec4f rectRate)
         {
             var relativeRect = captureRect.GetChildRectByRate(rectRate);
             var childMat = GraphicsTools.GetInstance().GetChildMatByRECT(mat, relativeRect);
-            return GraphicsTools.GetInstance().ToImage(childMat);
+            return childMat.ToRawBitmap();
         }
 
         /// <summary>
@@ -322,20 +320,20 @@ namespace PCRHelper
             return jjcNameRect;
         }
 
-        public Image GetJJCNameCaptureRect(int index)
+        public Bitmap GetJJCNameCaptureRect(int index)
         {
             var viewportRect = ViewportRect;
             var viewportCapture = DoCapture(viewportRect);
             return GetJJCNameCaptureRect(viewportCapture, viewportRect, index);
         }
 
-        public Image GetJJCNameCaptureRect(Image viewportCapture, RECT viewportRect, int index)
+        public Bitmap GetJJCNameCaptureRect(Bitmap viewportCapture, RECT viewportRect, int index)
         {
-            var viewportMat = GraphicsTools.GetInstance().ToMat(viewportCapture);
+            var viewportMat = viewportCapture.ToOpenCvMat();
             return GetJJCNameCaptureRect(viewportMat, viewportRect, index);
         }
 
-        public Image GetJJCNameCaptureRect(Mat viewportMat, RECT viewportRect, int index)
+        public Bitmap GetJJCNameCaptureRect(Mat viewportMat, RECT viewportRect, int index)
         {
             var jjcNameRectRate = GetJJCNameRectRate(index);
             return GetCaptureRect(viewportMat, viewportRect, jjcNameRectRate);
@@ -367,20 +365,20 @@ namespace PCRHelper
             return jjcRankRect;
         }
 
-        public Image GetJJCRankCaptureRect(int index)
+        public Bitmap GetJJCRankCaptureRect(int index)
         {
             var viewportRect = ViewportRect;
             var viewportCapture = DoCapture(viewportRect);
             return GetJJCRankCaptureRect(viewportCapture, viewportRect, index);
         }
 
-        public Image GetJJCRankCaptureRect(Image viewportCapture, RECT viewportRect, int index)
+        public Bitmap GetJJCRankCaptureRect(Bitmap viewportCapture, RECT viewportRect, int index)
         {
-            var viewportMat = GraphicsTools.GetInstance().ToMat(viewportCapture);
+            var viewportMat = viewportCapture.ToOpenCvMat();
             return GetJJCRankCaptureRect(viewportMat, viewportRect, index);
         }
 
-        public Image GetJJCRankCaptureRect(Mat viewportMat, RECT viewportRect, int index)
+        public Bitmap GetJJCRankCaptureRect(Mat viewportMat, RECT viewportRect, int index)
         {
             var jjcRankRectRate = GetJJCRankRectRate(index);
             return GetCaptureRect(viewportMat, viewportRect, jjcRankRectRate);

@@ -40,12 +40,12 @@ namespace PCRHelper
             //engine = new TesseractEngine(tessdataDir, "eng", EngineMode.Default);
         }
 
-        public string OCRWithTesseract(Image img)
+        public string OCRWithTesseract(Bitmap bitmap)
         {
-            return OCRWithTesseract(img, "chi_sim+eng");
+            return OCRWithTesseract(bitmap, "chi_sim+eng");
         }
 
-        public string OCRWithTesseract(Image img, string lans)
+        public string OCRWithTesseract(Bitmap bitmap, string lans)
         {
             var configMgr = ConfigMgr.GetInstance();
             var randStr = DateTime.Now.ToString("yyMMddHHmmss") + new Random().Next(0, 99).ToString("D2");
@@ -53,7 +53,7 @@ namespace PCRHelper
             var resName = $"tesseract_result_{randStr}";
             var tempResPathForTess = configMgr.GetCacheFileFullPath($"{resName}");
             var tempResStorePath = configMgr.GetCacheFileFullPath($"{resName}.txt");
-            img.Save(tempImgStorePath);
+            bitmap.Save(tempImgStorePath);
             var tesseratPath = ConfigMgr.GetInstance().TesseractPath;
             var startInfo = new ProcessStartInfo()
             {
@@ -80,14 +80,14 @@ namespace PCRHelper
 
         public string OCR(Mat mat)
         {
-            return OCR(GraphicsTools.GetInstance().ToImage(mat));
+            return OCR(mat.ToRawBitmap());
         }
 
-        public string OCR(Image img)
+        public string OCR(Bitmap bitmap)
         {
             if (UsingTesseract)
             {
-                return OCRWithTesseract(img);
+                return OCRWithTesseract(bitmap);
             }
             return "";
         }
@@ -96,30 +96,25 @@ namespace PCRHelper
         {
             var graphicsTools = GraphicsTools.GetInstance();
             var gray = graphicsTools.ToGray(mat);
-            //graphicsTools.ShowImage("OCR-Gray", gray);
-            return OCR(graphicsTools.ToImage(gray));
+            return OCR(mat.ToRawBitmap());
         }
 
-        public string ToGrayAndOCR(Image img)
+        public string ToGrayAndOCR(Bitmap bitmap)
         {
-            var graphicsTools = GraphicsTools.GetInstance();
-            return ToGrayAndOCR(graphicsTools.ToMat(img));
+            return ToGrayAndOCR(bitmap.ToOpenCvMat());
         }
 
         public string ToBinAndOCR(Mat mat, int threshold)
         {
             var graphicsTools = GraphicsTools.GetInstance();
             var gray = graphicsTools.ToGray(mat);
-            //graphicsTools.ShowImage("OCR-Gray", gray);
             var bin = graphicsTools.ToBinary(gray, threshold);
-            //graphicsTools.ShowImage("OCR-Bin", bin);
-            return OCR(graphicsTools.ToImage(bin));
+            return OCR(bin.ToRawBitmap());
         }
 
-        public string ToBinAndOCR(Image img, int threshold)
+        public string ToBinAndOCR(Bitmap bitmap, int threshold)
         {
-            var graphicsTools = GraphicsTools.GetInstance();
-            return ToBinAndOCR(graphicsTools.ToMat(img), threshold);
+            return ToBinAndOCR(bitmap.ToOpenCvMat(), threshold);
         }
 
     }

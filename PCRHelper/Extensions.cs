@@ -66,5 +66,41 @@ namespace PCRHelper
         {
             return mat.ToBitmap();
         }
+
+        public static Color GetPixel(this Mat mat, int r, int c)
+        {
+            var channels = mat.Channels();
+            Color clr;
+            if (mat.Channels() == 1)
+            {
+                var v = mat.Get<byte>(r, c);
+                clr = Color.FromArgb(v, v, v);
+            }
+            else
+            {
+                var vec3b = mat.Get<Vec3b>(r, c);
+                clr = Color.FromArgb(vec3b.Item0, vec3b.Item1, vec3b.Item2);
+            }
+            return clr;
+        }
+
+        public static void SetPixel(this Mat mat, int r, int c, params byte[] rbga)
+        {
+            var channels = mat.Channels();
+            var getV = new Func<int, byte>((int index) =>
+            {
+                return index < rbga.Length ? rbga[index] : (byte)0;
+            });
+            if (mat.Channels() == 1)
+            {
+                var v = mat.Get<byte>(r, c);
+                mat.Set(r, c, getV(0));
+            }
+            else
+            {
+                var vec3b = new Vec3b(getV(0), getV(1), getV(2));
+                mat.Set(r, c, vec3b);
+            }
+        }
     }
 }
