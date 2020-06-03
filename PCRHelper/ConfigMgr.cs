@@ -30,6 +30,7 @@ namespace PCRHelper
             {
                 InitOCRConfig();
             }
+            InitAdbConfig();
         }
 
         private void InitOCRConfig()
@@ -49,6 +50,23 @@ namespace PCRHelper
             }
         }
 
+        private void InitAdbConfig()
+        {
+            var adbServerPath = AdbServerExePath;
+            if (!File.Exists(adbServerPath))
+            {
+                var openDialog = new OpenFileDialog();
+                openDialog.Title = "请选择AdbServer程序所在的目录";
+                openDialog.FileName = "adb_server.exe";
+                openDialog.Filter = "adb_server.exe|adb_server.exe";
+                if (openDialog.ShowDialog() != DialogResult.OK)
+                {
+                    Application.Exit();
+                }
+                AdbServerExePath = openDialog.FileName;
+            }
+        }
+
         public string TesseractPath
         {
             get
@@ -61,6 +79,20 @@ namespace PCRHelper
                 PCRHelper.Properties.Settings.Default.Save();
             }
         }
+
+        public string AdbServerExePath
+        {
+            get
+            {
+                return PCRHelper.Properties.Settings.Default.AdbServerExePath;
+            }
+            set
+            {
+                PCRHelper.Properties.Settings.Default.AdbServerExePath = value;
+                PCRHelper.Properties.Settings.Default.Save();
+            }
+        }
+
 
         public string CacheDir
         {

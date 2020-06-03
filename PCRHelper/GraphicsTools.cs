@@ -95,16 +95,15 @@ namespace PCRHelper
 
         public Mat ToBinaryPlus(Mat gray, int threshold, int lower, int higher)
         {
-            var r = gray.Clone();
+            var r = new Mat();
+            gray.CopyTo(r);
             for (int i = 0; i < gray.Rows; i++)
             {
                 for (int j = 0; j < gray.Cols; j++)
                 {
-                    var clr = gray.Get<Vec3b>(i, j);
-                    //Console.WriteLine($"{i},{j} {clr.Item0}");
-                    var v = clr.Item1 > threshold ? higher : lower;
-                    var newClr = new Vec3b((byte)v, (byte)v, (byte)v);
-                    r.Set<Vec3b>(i, j, newClr);
+                    var clr = gray.GetPixel(i, j);
+                    var v = clr.R > threshold ? higher : lower;
+                    r.SetPixel(i, j, v);
                 }
             }
             return r;
@@ -160,20 +159,18 @@ namespace PCRHelper
 
         public Mat ToReverse(Mat mat)
         {
-            
-            var r = new Mat();
-            mat.CopyTo(r);
-            for (int i = 0; i < mat.Rows; i++)
-            {
-                for (int j = 0; j < mat.Cols; j++)
-                {
-                    var clr = mat.Get<Vec3b>(i, j);
-                    var newClr = new Vec3b((byte)(256 - clr.Item0), (byte)(256 - clr.Item1), (byte)(256 - clr.Item2));
-                    //Console.WriteLine("{0},{1} {2} {3} {4}", i, j, newClr.Item0, newClr.Item1, newClr.Item2);
-                    r.Set<Vec3b>(i, j, newClr);
-                }
-            }
-            return r;
+            //var r = new Mat();
+            //mat.CopyTo(r);
+            //for (int i = 0; i < mat.Rows; i++)
+            //{
+            //    for (int j = 0; j < mat.Cols; j++)
+            //    {
+            //        var clr = mat.GetPixel(i, j);
+            //        r.SetPixel(i, j, 255 - clr.R, 255 - clr.G, 255 - clr.B);
+            //    }
+            //}
+            //return r;
+            return (~mat).ToMat();
         }
 
         

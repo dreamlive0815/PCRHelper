@@ -50,7 +50,7 @@ namespace PCRHelper
             {
                 richTextBox.SelectionColor = color;
                 richTextBox.AppendText(s);
-                richTextBox.ScrollToEnd();
+                ScrollToEnd(richTextBox);
             }
         }
     }
@@ -101,6 +101,15 @@ namespace PCRHelper
                 var vec3b = new Vec3b(getV(0), getV(1), getV(2));
                 mat.Set(r, c, vec3b);
             }
+        }
+
+        public static void SetPixel(this Mat mat, int r, int c, params int[] rbga)
+        {
+            var getV = new Func<int, byte>((int index) =>
+            {
+                return index < rbga.Length ? (byte)rbga[index] : (byte)0;
+            });
+            SetPixel(mat, r, c, getV(0), getV(1), getV(2));
         }
     }
 }

@@ -99,7 +99,7 @@ namespace PCRHelper
         public Bitmap DoCapture(RECT rect)
         {
             var capture = Tools.GetInstance().CaptureWindow(rect);
-            //GraphicsTools.GetInstance().DisplayImage("DoCapture", capture);
+            GraphicsTools.GetInstance().DisplayImage("DoCapture", capture);
             return capture;
         }
 
@@ -261,14 +261,7 @@ namespace PCRHelper
 
         public void DoClick(System.Drawing.Point point)
         {
-            //Win32ApiHelper.MoveToAndClick(point.X, point.Y);
-            var startInfo = new ProcessStartInfo()
-            {
-                FileName = "adb_server.exe",
-                Arguments = $"shell input tap {point.X} {point.Y}",
-                WindowStyle = ProcessWindowStyle.Hidden,
-            };
-            Process.Start(startInfo);
+            AdbTools.GetInstance().DoTap(point);
         }
 
         Vec2f[] jjcRectPointRateArr = new Vec2f[]

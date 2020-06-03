@@ -34,5 +34,17 @@ namespace PCRHelper.Properties {
                 this["TesseractPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdbServerExePath {
+            get {
+                return ((string)(this["AdbServerExePath"]));
+            }
+            set {
+                this["AdbServerExePath"] = value;
+            }
+        }
     }
 }

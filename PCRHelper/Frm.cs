@@ -23,7 +23,6 @@ namespace PCRHelper
         Tools tools = Tools.GetInstance();
         GraphicsTools graphicsTools = GraphicsTools.GetInstance();
         LogTools logTools = LogTools.GetInstance();
-        readonly string imgName = "1.png";
 
         public Frm()
         {
@@ -45,6 +44,8 @@ namespace PCRHelper
         string name = "";
         string rank = "";
         Task captureTask;
+        CancellationTokenSource tokenSource;
+        CancellationToken ct;
 
         void DelayStartCaptureLoop()
         {
@@ -64,30 +65,51 @@ namespace PCRHelper
             logTools.Info("StartCaptureLoop...");
             mumuState = MumuState.Create();
 
+            tokenSource = new CancellationTokenSource();
+            ct = tokenSource.Token;
             captureTask = new Task(() =>
             {
 
                 while (true)
                 {
+                    if (ct.IsCancellationRequested)
+                    {
+                        ct.ThrowIfCancellationRequested();
+                    }
                     Thread.Sleep(2000);
-                    int idx = 0;
+                    int idx = -1;
+                    bool hasError = false;
                     try
                     {
                         viewportRect = mumuState.ViewportRect;
                         viewportCapture = mumuState.DoCapture(viewportRect);
                         idx = CaptureLoopFunc();
-                        mumuState.ClickJJCRefreshButton(viewportRect);
                     }
                     catch (Exception e)
                     {
+                        hasError = true;
                         logTools.Error(e.Message);
                     }
                     logTools.Info("INDEX: " + idx);
-                    if (idx != 0)
+                    if (idx != -1)
                     {
                         mumuState.ClickJJCRect(viewportRect, idx);
                         break;
                     }
+                    else if (!hasError)
+                    {
+                        mumuState.ClickJJCRefreshButton(viewportRect);//不要移动到try里面
+                    }
+                }
+            }, tokenSource.Token);
+            captureTask.ContinueWith((t) => {
+                if (t.IsFaulted)
+                {
+                    logTools.Error(t.Exception.Message);
+                }
+                else if (t.IsCanceled)
+                {
+                    logTools.Error("Canceld");
                 }
             });
             captureTask.Start();
@@ -110,7 +132,7 @@ namespace PCRHelper
                     return i;
                 }
             }
-            return 0;
+            return -1;
         }
 
         struct CaptureResult
@@ -177,6 +199,11 @@ namespace PCRHelper
         private void menuClearConsole_Click(object sender, EventArgs e)
         {
             txtConsole.Clear();
+        }
+
+        private void menuStopCaptureLoop_Click(object sender, EventArgs e)
+        {
+            tokenSource?.Cancel();
         }
     }
 }

@@ -32,14 +32,15 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuGetRectRate = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOpenCacheDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuClearConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.txtName = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtRank = new System.Windows.Forms.RichTextBox();
-            this.menuStartCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.menuClearConsole = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStopCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,6 +50,7 @@
             this.menuGetRectRate,
             this.menuOpenCacheDir,
             this.menuStartCaptureLoop,
+            this.menuStopCaptureLoop,
             this.menuClearConsole});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -71,10 +73,24 @@
             this.menuOpenCacheDir.Text = "OpenCacheDir";
             this.menuOpenCacheDir.Click += new System.EventHandler(this.menuOpenCacheDir_Click);
             // 
+            // menuStartCaptureLoop
+            // 
+            this.menuStartCaptureLoop.Name = "menuStartCaptureLoop";
+            this.menuStartCaptureLoop.Size = new System.Drawing.Size(93, 21);
+            this.menuStartCaptureLoop.Text = "StartCapture";
+            this.menuStartCaptureLoop.Click += new System.EventHandler(this.menuStartCaptureLoop_Click);
+            // 
+            // menuClearConsole
+            // 
+            this.menuClearConsole.Name = "menuClearConsole";
+            this.menuClearConsole.Size = new System.Drawing.Size(97, 21);
+            this.menuClearConsole.Text = "ClearConsole";
+            this.menuClearConsole.Click += new System.EventHandler(this.menuClearConsole_Click);
+            // 
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(100, 71);
-            this.txtName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtName.Margin = new System.Windows.Forms.Padding(4);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(233, 38);
             this.txtName.TabIndex = 1;
@@ -109,13 +125,6 @@
             this.txtRank.TabIndex = 3;
             this.txtRank.Text = "";
             // 
-            // menuStartCaptureLoop
-            // 
-            this.menuStartCaptureLoop.Name = "menuStartCaptureLoop";
-            this.menuStartCaptureLoop.Size = new System.Drawing.Size(93, 21);
-            this.menuStartCaptureLoop.Text = "StartCapture";
-            this.menuStartCaptureLoop.Click += new System.EventHandler(this.menuStartCaptureLoop_Click);
-            // 
             // txtConsole
             // 
             this.txtConsole.Location = new System.Drawing.Point(12, 201);
@@ -131,12 +140,12 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // menuClearConsole
+            // menuStopCaptureLoop
             // 
-            this.menuClearConsole.Name = "menuClearConsole";
-            this.menuClearConsole.Size = new System.Drawing.Size(97, 21);
-            this.menuClearConsole.Text = "ClearConsole";
-            this.menuClearConsole.Click += new System.EventHandler(this.menuClearConsole_Click);
+            this.menuStopCaptureLoop.Name = "menuStopCaptureLoop";
+            this.menuStopCaptureLoop.Size = new System.Drawing.Size(93, 21);
+            this.menuStopCaptureLoop.Text = "StopCapture";
+            this.menuStopCaptureLoop.Click += new System.EventHandler(this.menuStopCaptureLoop_Click);
             // 
             // Frm
             // 
@@ -151,7 +160,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Frm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form1";
@@ -176,6 +185,7 @@
         private System.Windows.Forms.RichTextBox txtConsole;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStripMenuItem menuClearConsole;
+        private System.Windows.Forms.ToolStripMenuItem menuStopCaptureLoop;
     }
 }
 
