@@ -259,12 +259,17 @@ namespace PCRHelper
             return new RawPoint((int)(wid * pointRate.Item0), (int)(hei * pointRate.Item1));
         }
 
-
         public void DoClick(RawPoint point)
         {
             AdbTools.GetInstance().DoTap(point);
         }
 
+        Vec2f[] mainlandArenaRectPointRateArr = new Vec2f[]
+        {
+            new Vec2f(0.6669f, 0.3312f),
+            new Vec2f(0.6653f, 0.5357f),
+            new Vec2f(0.6448f, 0.7433f),
+        };
         
         Vec2f[] jjcRectPointRateArr = new Vec2f[]
         {
