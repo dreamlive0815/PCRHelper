@@ -22,8 +22,6 @@ namespace PCRHelper
 
         private void FrmGetRectRate_Load(object sender, EventArgs e)
         {
-            imgPath = ChooseImage();
-            LoadImage(imgPath);
             Show();
         }
 
@@ -41,14 +39,19 @@ namespace PCRHelper
             return openDialog.FileName;
         }
 
-        void LoadImage(string imgPath)
+        public void LoadImage(Image img)
+        {
+            pictureBox1.Image = img;
+            Size = pictureBox1.Size + new Size(0, 50);
+        }
+
+        public void LoadImage(string imgPath)
         {
             if (!File.Exists(imgPath))
             {
                 return;
             }
-            pictureBox1.Image = Image.FromFile(imgPath);
-            Size = pictureBox1.Size + new Size(0, 50); 
+            LoadImage(Image.FromFile(imgPath));
         }
 
         bool press = false;
@@ -57,6 +60,7 @@ namespace PCRHelper
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
+            rectangle = new Rectangle();
             press = true;
             startX = e.X;
             startY = e.Y;
@@ -88,17 +92,28 @@ namespace PCRHelper
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             press = false;
-            var width = pictureBox1.Image.Width;
-            var height = pictureBox1.Image.Height;
+            var width = pictureBox1.Width;
+            var height = pictureBox1.Height;
 
             var rect = rectangle;
-            var r1 = FormatFloat(1.0 * rectangle.X / width);
-            var r2 = FormatFloat(1.0 * rectangle.Y / height);
-            var r3 = FormatFloat(1.0 * (rectangle.X + rectangle.Width) / width);
-            var r4 = FormatFloat(1.0 * (rectangle.Y + rectangle.Height) / height);
-
-            var s = string.Format("new Vec4<float>({0}f, {1}f, {2}f, {3}f);", r1, r2, r3, r4);
-            Clipboard.SetText(s);
+            if (rect.Width > 5 && rect.Height > 5)
+            {
+                var rx1 = 1.0 * rectangle.X / width; var r1 = FormatFloat(rx1);
+                var ry1 = 1.0 * rectangle.Y / height; var r2 = FormatFloat(ry1);
+                var rx2 = 1.0 * (rectangle.X + rectangle.Width) / width; var r3 = FormatFloat(rx2);
+                var ry2 = 1.0 * (rectangle.Y + rectangle.Height) / height; var r4 = FormatFloat(ry2);
+                var s = string.Format("new Vec4f({0}f, {1}f, {2}f, {3}f)", r1, r2, r3, r4);
+                Clipboard.SetText(s);
+                Text = s;
+            }
+            else
+            {
+                var midrx = 1.0 * e.X / width; var r5 = FormatFloat(midrx);
+                var midry = 1.0 * e.Y / height; var r6 = FormatFloat(midry);
+                var s = string.Format("new Vec2f({0}f, {1}f)", r5, r6);
+                Clipboard.SetText(s);
+                Text = s;
+            }
         }
         
     }

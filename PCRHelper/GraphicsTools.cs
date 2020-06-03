@@ -103,7 +103,7 @@ namespace PCRHelper
                 {
                     var clr = gray.GetPixel(i, j);
                     var v = clr.R > threshold ? higher : lower;
-                    r.SetPixel(i, j, v);
+                    r.SetPixel(i, j, v, v, v);
                 }
             }
             return r;
@@ -111,11 +111,20 @@ namespace PCRHelper
 
         private int[] dx = { -1, 0, 1, 0 };
         private int[] dy = { 0, 1, 0, -1 };
+        private int[] dr = { -1, 0, 1, 0 };
+        private int[] dc = { 0, 1, 0, -1 };
 
         private bool InBounds(Bitmap bitmap, int x, int y)
         {
             if (x < 0 || x >= bitmap.Width) return false;
             if (y < 0 || y >= bitmap.Height) return false;
+            return true;
+        }
+
+        private bool InBounds(Mat mat, int r, int c)
+        {
+            if (r < 0 || r >= mat.Rows) return false;
+            if (c < 0 || c >= mat.Cols) return false;
             return true;
         }
 
@@ -138,18 +147,46 @@ namespace PCRHelper
             }
         }
 
+        private void CleanBinCornerDFS(Mat mat, bool[,] vis, int r, int c)
+        {
+            mat.SetPixel(r, c, 255, 255, 255);
+            vis[r, c] = true;
+            for (int k = 0; k < 4; k++)
+            {
+                var nr = r + dr[k];
+                var nc = c + dc[k];
+                if (InBounds(mat, nr, nc) && !vis[nr, nc])
+                {
+                    var pix = mat.GetPixel(nr, nc);
+                    if (pix.R == 0)
+                    {
+                        CleanBinCornerDFS(mat, vis, nr, nc);
+                    }
+                }
+            }
+        }
+
         public Bitmap CleanBinCorner(Bitmap bitmap)
         {
-            var vis = new bool[bitmap.Width, bitmap.Height];
-            //CleanBinCornerDFS(bitmap, vis, 0, 0);
-            //CleanBinCornerDFS(bitmap, vis, 0, bitmap.Height - 1);
-            //CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, 0);
-            //CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, bitmap.Height - 1);
-            for (int x = 0; x < bitmap.Width; x++) CleanBinCornerDFS(bitmap, vis, x, 0);
-            for (int x = 0; x < bitmap.Width; x++) CleanBinCornerDFS(bitmap, vis, x, bitmap.Height - 1);
-            for (int y = 0; y < bitmap.Height; y++) CleanBinCornerDFS(bitmap, vis, 0, y);
-            for (int y = 0; y < bitmap.Height; y++) CleanBinCornerDFS(bitmap, vis, bitmap.Width - 1, y);
-            return bitmap;
+            var res = new Bitmap(bitmap);
+            var vis = new bool[res.Width, res.Height];
+            for (int x = 0; x < res.Width; x++) CleanBinCornerDFS(res, vis, x, 0);
+            for (int x = 0; x < res.Width; x++) CleanBinCornerDFS(res, vis, x, res.Height - 1);
+            for (int y = 0; y < res.Height; y++) CleanBinCornerDFS(res, vis, 0, y);
+            for (int y = 0; y < res.Height; y++) CleanBinCornerDFS(res, vis, res.Width - 1, y);
+            return res;
+        }
+
+        public Mat CleanBinCorner(Mat mat)
+        {
+            var res = new Mat();
+            mat.CopyTo(res);
+            var vis = new bool[res.Rows, res.Cols];
+            for (int r = 0; r < res.Rows; r++) CleanBinCornerDFS(res, vis, r, 0);
+            for (int r = 0; r < res.Rows; r++) CleanBinCornerDFS(res, vis, r, res.Cols - 1);
+            for (int c = 0; c < res.Cols; c++) CleanBinCornerDFS(res, vis, 0, c);
+            for (int c = 0; c < res.Cols; c++) CleanBinCornerDFS(res, vis, res.Rows - 1, c);
+            return res;
         }
 
         public Mat ToReverse(Bitmap bitmap)

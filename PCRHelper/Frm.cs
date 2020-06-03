@@ -34,7 +34,13 @@ namespace PCRHelper
             configMgr.Init();
             logTools.SetRichTextBox(txtConsole);
 
-            //var im = Regex.IsMatch("初雪(6群在挖)", "6[\s\S]*群");
+            // var mumuState = GetMumuState();
+            // viewportRect = mumuState.ViewportRect;
+            // viewportCapture = mumuState.DoCapture(viewportRect);
+            // mumuState.ClickJJCRefreshButton(viewportRect);
+            // mumuState.ClickJJCRect(viewportRect, 0);
+
+            //var mat = new Mat(configMgr.GetCacheFileFullPath("RankBin0.png"));
 
         }
 
@@ -46,6 +52,15 @@ namespace PCRHelper
         Task captureTask;
         CancellationTokenSource tokenSource;
         CancellationToken ct;
+
+        MumuState GetMumuState()
+        {
+            if (mumuState == null)
+            {
+                mumuState = MumuState.Create();
+            }
+            return mumuState;
+        }
 
         void DelayStartCaptureLoop()
         {
@@ -171,7 +186,12 @@ namespace PCRHelper
 
         private void menuGetRectRate_Click(object sender, EventArgs e)
         {
-            new FrmGetRectRate().Show();
+            var mumuState = GetMumuState();
+            viewportRect = mumuState.ViewportRect;
+            viewportCapture = mumuState.DoCapture(viewportRect);
+            var getRectRateFrm = new FrmGetRectRate();
+            getRectRateFrm.LoadImage(viewportCapture);
+            getRectRateFrm.Show();
         }
 
         private void menuOpenCacheDir_Click(object sender, EventArgs e)

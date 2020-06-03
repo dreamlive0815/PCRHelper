@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using RawPoint = System.Drawing.Point;
 
 namespace PCRHelper
 {
@@ -217,6 +216,8 @@ namespace PCRHelper
             }
         }
 
+        
+
         public Bitmap GetCaptureRect(Vec4f rectRate)
         {
             var viewportRect = ViewportRect;
@@ -250,28 +251,28 @@ namespace PCRHelper
         /// <param name="rect"></param>
         /// <param name="pointRate"></param>
         /// <returns></returns>
-        public RawPoint GetRelativePoint(RECT rect, Vec2f pointRate)
+        public System.Drawing.Point GetRelativePoint(RECT rect, Vec2f pointRate)
         {
             var wid = rect.Width;
             var hei = rect.Height;
-            wid = 2160;
+            wid = 1920;
             hei = 1080;
-            return new RawPoint((int)(wid * pointRate.Item0), (int)(hei * pointRate.Item1));
+            return new System.Drawing.Point((int)(wid * pointRate.Item0), (int)(hei * pointRate.Item1));
         }
 
 
-        public void DoClick(RawPoint point)
+        public void DoClick(System.Drawing.Point point)
         {
             AdbTools.GetInstance().DoTap(point);
         }
 
-        
         Vec2f[] jjcRectPointRateArr = new Vec2f[]
         {
-            new Vec2f(0.6669f, 0.3312f),
-            new Vec2f(0.6653f, 0.5357f),
-            new Vec2f(0.6448f, 0.7433f),
+            new Vec2f(0.7500f, 0.3100f),
+            new Vec2f(0.7500f, 0.5300f),
+            new Vec2f(0.7500f, 0.7300f),
         };
+
 
         public void ClickJJCRect(RECT viewportRect, int index)
         {
@@ -279,7 +280,8 @@ namespace PCRHelper
             DoClick(point);
         }
 
-        Vec2f jjcRefreshButtonPointRate = new Vec2f(0.8663f, 0.1680f);
+
+        Vec2f jjcRefreshButtonPointRate = new Vec2f(0.9700f, 0.1625f);
 
         public void ClickJJCRefreshButton(RECT viewportRect)
         {

@@ -4,6 +4,12 @@ using System.Windows.Forms;
 
 namespace PCRHelper
 {
+    enum PCRRegion
+    {
+        Mainland = 0,
+        Taiwan = 1,
+    }
+
     class ConfigMgr
     {
 
@@ -105,6 +111,8 @@ namespace PCRHelper
                 return cacheDir;
             }
         }
+
+        public PCRRegion PCRRegion { get; set; } = PCRRegion.Mainland;
 
         public string GetCacheFileFullPath(string relativePath)
         {

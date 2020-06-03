@@ -6,6 +6,13 @@ using RawPoint = System.Drawing.Point;
 
 namespace PCRHelper
 {
+
+    enum PCRRegion
+    {
+        Mainland = 0,
+        Taiwan = 1,
+    }
+
     class MumuState
     {
 
@@ -254,7 +261,7 @@ namespace PCRHelper
         {
             var wid = rect.Width;
             var hei = rect.Height;
-            wid = 2160;
+            wid = 1920;
             hei = 1080;
             return new RawPoint((int)(wid * pointRate.Item0), (int)(hei * pointRate.Item1));
         }
@@ -265,13 +272,13 @@ namespace PCRHelper
             AdbTools.GetInstance().DoTap(point);
         }
 
-        
         Vec2f[] jjcRectPointRateArr = new Vec2f[]
         {
-            new Vec2f(0.6669f, 0.3312f),
-            new Vec2f(0.6653f, 0.5357f),
-            new Vec2f(0.6448f, 0.7433f),
+            new Vec2f(0.7500f, 0.3100f),
+            new Vec2f(0.7500f, 0.5300f),
+            new Vec2f(0.7500f, 0.7300f),
         };
+
 
         public void ClickJJCRect(RECT viewportRect, int index)
         {
@@ -279,7 +286,8 @@ namespace PCRHelper
             DoClick(point);
         }
 
-        Vec2f jjcRefreshButtonPointRate = new Vec2f(0.8663f, 0.1680f);
+
+        Vec2f jjcRefreshButtonPointRate = new Vec2f(0.9700f, 0.1625f);
 
         public void ClickJJCRefreshButton(RECT viewportRect)
         {
