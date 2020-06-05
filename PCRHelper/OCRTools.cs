@@ -53,7 +53,7 @@ namespace PCRHelper
             var resName = $"tesseract_result_{randStr}";
             var tempResPathForTess = configMgr.GetCacheFileFullPath($"{resName}");
             var tempResStorePath = configMgr.GetCacheFileFullPath($"{resName}.txt");
-            bitmap.Save(tempImgStorePath);
+            ((Bitmap)bitmap.Clone()).Save(tempImgStorePath);
             var tesseratPath = ConfigMgr.GetInstance().TesseractPath;
             var startInfo = new ProcessStartInfo()
             {

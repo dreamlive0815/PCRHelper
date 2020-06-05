@@ -229,7 +229,7 @@ namespace PCRHelper
         /// 
         /// </summary>
         /// <param name="capture">完整的截图捕获</param>
-        /// <param name="captureRect">完整的截图捕获矩形 相对于屏幕</param>
+        /// <param name="captureRect">完整的截图所对应的矩形 相对于屏幕</param>
         /// <param name="rectRate">子矩形的比率 相对于capture</param>
         /// <returns></returns>
         public Mat GetCaptureRect(Mat mat, RECT captureRect, Vec4f rectRate)
@@ -332,7 +332,6 @@ namespace PCRHelper
             throw new Exception("GetArenaPlayerNamePointRateArr" + index);
         }
 
-
         public Bitmap GetArenaPlayerNameRectCapture(Bitmap viewportCapture, RECT viewportRect, int index)
         {
             var arenaPlayerNameRectRate = GetArenaPlayerNameRectRate(index);
@@ -363,50 +362,68 @@ namespace PCRHelper
             return name;
         }
 
-
-            Vec4f[] jjcRankRectRateArr = new Vec4f[]
+        Vec4f[] mainlandArenaPlayerRankRectRateArr = new Vec4f[]
         {
             new Vec4f(0.7450f, 0.2227f, 0.8258f, 0.2582f),
             new Vec4f(0.7450f, 0.4369f, 0.8258f, 0.4723f),
-	        new Vec4f(0.7450f, 0.6496f, 0.8258f, 0.6879f),
+            new Vec4f(0.7450f, 0.6496f, 0.8258f, 0.6879f),
         };
 
-        public Vec4f GetJJCRankRectRate(int index)
+        Vec4f[] taiwanArenaPlayerRankRectRateArr = new Vec4f[]
         {
-            return jjcRankRectRateArr[index];
+        };
+
+        public Vec4f GetArenaPlayerRankRectRate(int index)
+        {
+            if (configMgr.PCRRegion == PCRRegion.Mainland)
+            {
+                return mainlandArenaPlayerRankRectRateArr[index];
+            }
+            else if (configMgr.PCRRegion == PCRRegion.Taiwan)
+            {
+                return taiwanArenaPlayerRankRectRateArr[index];
+            }
+            throw new Exception("GetArenaPlayerRankPointRateArr" + index);
         }
 
-        /// <summary>
-        /// 相对坐标
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public RECT GetJJCRankRect(int index)
+        public Bitmap GetArenaPlayerRankRectCapture(Bitmap viewportCapture, RECT viewportRect, int index)
         {
-            var viewportRect = ViewportRect;
-            var rectRate = GetJJCRankRectRate(index);
-            var jjcRankRect = viewportRect.GetChildRectByRate(rectRate);
-            return jjcRankRect;
+            var arenaPlayerRankRectRate = GetArenaPlayerRankRectRate(index);
+            return GetCaptureRect(viewportCapture, viewportRect, arenaPlayerRankRectRate);
         }
 
-        public Bitmap GetJJCRankCaptureRect(int index)
+        public Mat GetArenaPlayerRankRectCapture(Mat viewportMat, RECT viewportRect, int index)
         {
-            var viewportRect = ViewportRect;
-            var viewportCapture = DoCapture(viewportRect);
-            return GetJJCRankCaptureRect(viewportCapture, viewportRect, index);
+            var arenaPlayerRankRectRate = GetArenaPlayerRankRectRate(index);
+            return GetCaptureRect(viewportMat, viewportRect, arenaPlayerRankRectRate);
         }
 
-        public Bitmap GetJJCRankCaptureRect(Bitmap viewportCapture, RECT viewportRect, int index)
+        public string DoArenaPlayerRankOCR(Bitmap viewportCapture, RECT viewportRect, int index)
         {
-            var viewportMat = viewportCapture.ToOpenCvMat();
-            return GetJJCRankCaptureRect(viewportMat, viewportRect, index);
+            var capture = GetArenaPlayerRankRectCapture(viewportCapture, viewportRect, index);
+            var gray = graphicsTools.ToGray(capture);
+            var reverse = graphicsTools.ToReverse(gray);
+            graphicsTools.DisplayImage("RankReverse" + index, reverse);
+            var bin = graphicsTools.ToBinaryPlus(reverse, 90);
+            bin = graphicsTools.CleanBinCorner(bin);
+            graphicsTools.DisplayImage("RankToOCR" + index, bin);
+            var rank = ocrTools.OCR(bin);
+            logTools.Info($"Rank{index}: {rank}");
+            return rank;
         }
 
-        public Bitmap GetJJCRankCaptureRect(Mat viewportMat, RECT viewportRect, int index)
+        public string DoArenaPlayerRankOCR(Mat viewportMat, RECT viewportRect, int index)
         {
-            var jjcRankRectRate = GetJJCRankRectRate(index);
-            return GetCaptureRect(viewportMat, viewportRect, jjcRankRectRate);
+            var capture = GetArenaPlayerRankRectCapture(viewportMat, viewportRect, index);
+            var gray = graphicsTools.ToGray(capture);
+            var reverse = graphicsTools.ToReverse(gray);
+            graphicsTools.DisplayImage("RankReverse" + index, reverse);
+            var bin = graphicsTools.ToBinaryPlus(reverse, 90);
+            bin = graphicsTools.CleanBinCorner(bin);
+            graphicsTools.DisplayImage("RankToOCR" + index, bin);
+            var rank = ocrTools.OCR(bin);
+            logTools.Info($"Rank{index}: {rank}");
+            return rank;
         }
-        
     }
 }

@@ -35,9 +35,9 @@ namespace PCRHelper
             logTools.SetRichTextBox(txtConsole);
 
             var mumuState = GetMumuState();
-            viewportRect = mumuState.ViewportRect;
-            viewportCapture = mumuState.DoCapture(viewportRect);
-            mumuState.ClickArenaRefresh(viewportRect);
+            //viewportRect = mumuState.ViewportRect;
+            //viewportCapture = mumuState.DoCapture(viewportRect);
+            //mumuState.ClickArenaRefresh(viewportRect);
             //mumuState.ClickArenaPlayer(viewportRect, 1);
 
             //var mat = new Mat(configMgr.GetCacheFileFullPath("RankBin0.png"));
@@ -147,35 +147,39 @@ namespace PCRHelper
 
         struct CaptureResult
         {
-            public int index;
+            public int Index;
             public string Name;
             public string Rank;
         }
 
         List<CaptureResult> GetCaptureResults()
         {
-            var ocr = OCRTools.GetInstance();
             var r = new List<CaptureResult>();
             for (int i = 0; i < 3; i++)
             {
-                var nameCR = mumuState.GetArenaPlayerNameRectCapture(viewportCapture, viewportRect, i);
-                graphicsTools.DisplayImage("NameToOCR" + i, nameCR);
-                var name = ocr.ToGrayAndOCR((Bitmap)nameCR);
-                logTools.Info($"Name{i}: {name}");
-                var rankCR = mumuState.GetJJCRankCaptureRect(viewportCapture, viewportRect, i);
-                var gray = graphicsTools.ToGray(rankCR);
-                var reverse = graphicsTools.ToReverse(gray);
-                graphicsTools.DisplayImage("RankReverse" + i, reverse);
-                var bin = graphicsTools.ToBinaryPlus(reverse, 90);
-                //graphicsTools.ShowImage("RankBin" + i, bin);
-                var binStorePath = configMgr.GetCacheFileFullPath($"RankBin{i}.png");
-                bin.SaveImage(binStorePath);
-                var bitmap = graphicsTools.CleanBinCorner((Bitmap)Bitmap.FromFile(binStorePath));
-                graphicsTools.DisplayImage("RankToOCR" + i, bitmap);
-                var rank = ocr.OCR(bitmap);
-                logTools.Info($"Rank{i}: {rank}");
-                r.Add(new CaptureResult() { index = 1, Name = name, Rank = rank });
+                r.Add(new CaptureResult());
             }
+            var tasks = new Task[3];
+            var viewportCaptureClone = viewportCapture.ToOpenCvMat();
+            for (int i = 0; i < 3; i++)
+            {
+                var index = i;
+                var task = new Task(() =>
+                {
+                    
+                    var name = mumuState.DoArenaPlayerNameOCR(viewportCaptureClone, viewportRect, index);
+                    var rank = mumuState.DoArenaPlayerRankOCR(viewportCaptureClone, viewportRect, index);
+                    r[i] = new CaptureResult()
+                    {
+                        Index = index,
+                        Name = name,
+                        Rank = rank,
+                    };
+                });
+                task.Start();
+                tasks[i] = task;
+            }
+            Task.WaitAll(tasks);
             return r;
         }
 
