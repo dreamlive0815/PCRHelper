@@ -33,6 +33,7 @@
             this.menuGetRectRate = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOpenCacheDir = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStartCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStopCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuClearConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.txtName = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -40,7 +41,6 @@
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.menuStopCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,6 +80,13 @@
             this.menuStartCaptureLoop.Text = "StartCapture";
             this.menuStartCaptureLoop.Click += new System.EventHandler(this.menuStartCaptureLoop_Click);
             // 
+            // menuStopCaptureLoop
+            // 
+            this.menuStopCaptureLoop.Name = "menuStopCaptureLoop";
+            this.menuStopCaptureLoop.Size = new System.Drawing.Size(93, 21);
+            this.menuStopCaptureLoop.Text = "StopCapture";
+            this.menuStopCaptureLoop.Click += new System.EventHandler(this.menuStopCaptureLoop_Click);
+            // 
             // menuClearConsole
             // 
             this.menuClearConsole.Name = "menuClearConsole";
@@ -89,17 +96,17 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(100, 71);
+            this.txtName.Location = new System.Drawing.Point(74, 31);
             this.txtName.Margin = new System.Windows.Forms.Padding(4);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(233, 38);
+            this.txtName.Size = new System.Drawing.Size(233, 34);
             this.txtName.TabIndex = 1;
             this.txtName.Text = "";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(36, 74);
+            this.label1.Location = new System.Drawing.Point(24, 34);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 17);
@@ -109,7 +116,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(36, 148);
+            this.label2.Location = new System.Drawing.Point(24, 79);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(42, 17);
@@ -118,19 +125,19 @@
             // 
             // txtRank
             // 
-            this.txtRank.Location = new System.Drawing.Point(100, 145);
+            this.txtRank.Location = new System.Drawing.Point(74, 76);
             this.txtRank.Margin = new System.Windows.Forms.Padding(4);
             this.txtRank.Name = "txtRank";
-            this.txtRank.Size = new System.Drawing.Size(233, 38);
+            this.txtRank.Size = new System.Drawing.Size(233, 34);
             this.txtRank.TabIndex = 3;
             this.txtRank.Text = "";
             // 
             // txtConsole
             // 
-            this.txtConsole.Location = new System.Drawing.Point(12, 201);
+            this.txtConsole.Location = new System.Drawing.Point(12, 117);
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ReadOnly = true;
-            this.txtConsole.Size = new System.Drawing.Size(508, 320);
+            this.txtConsole.Size = new System.Drawing.Size(508, 338);
             this.txtConsole.TabIndex = 5;
             this.txtConsole.Text = "";
             // 
@@ -140,18 +147,11 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // menuStopCaptureLoop
-            // 
-            this.menuStopCaptureLoop.Name = "menuStopCaptureLoop";
-            this.menuStopCaptureLoop.Size = new System.Drawing.Size(93, 21);
-            this.menuStopCaptureLoop.Text = "StopCapture";
-            this.menuStopCaptureLoop.Click += new System.EventHandler(this.menuStopCaptureLoop_Click);
-            // 
             // Frm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(532, 533);
+            this.ClientSize = new System.Drawing.Size(532, 472);
             this.Controls.Add(this.txtConsole);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtRank);
@@ -159,8 +159,11 @@
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Frm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Form1";

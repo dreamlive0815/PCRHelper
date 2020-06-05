@@ -349,7 +349,6 @@ namespace PCRHelper
             var capture = GetArenaPlayerNameRectCapture(viewportCapture, viewportRect, index);
             graphicsTools.DisplayImage("NameToOCR" + index, capture);
             var name = ocrTools.ToGrayAndOCR(capture);
-            logTools.Info($"Name{index}: {name}");
             return name;
         }
 
@@ -358,7 +357,6 @@ namespace PCRHelper
             var capture = GetArenaPlayerNameRectCapture(viewportMat, viewportRect, index);
             graphicsTools.DisplayImage("NameToOCR" + index, capture);
             var name = ocrTools.ToGrayAndOCR(capture);
-            logTools.Info($"Name{index}: {name}");
             return name;
         }
 
@@ -408,7 +406,6 @@ namespace PCRHelper
             bin = graphicsTools.CleanBinCorner(bin);
             graphicsTools.DisplayImage("RankToOCR" + index, bin);
             var rank = ocrTools.OCR(bin);
-            logTools.Info($"Rank{index}: {rank}");
             return rank;
         }
 
@@ -422,7 +419,6 @@ namespace PCRHelper
             bin = graphicsTools.CleanBinCorner(bin);
             graphicsTools.DisplayImage("RankToOCR" + index, bin);
             var rank = ocrTools.OCR(bin);
-            logTools.Info($"Rank{index}: {rank}");
             return rank;
         }
     }

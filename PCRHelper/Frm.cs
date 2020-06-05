@@ -62,16 +62,11 @@ namespace PCRHelper
             return mumuState;
         }
 
-        void DelayStartCaptureLoop()
+        void StartArenaCaptureLoop()
         {
-            logTools.Info("DelayStartCaptureLoop...");
             name = txtName.Text;
             rank = txtRank.Text;
-            StartCaptureLoop();
-        }
 
-        void StartCaptureLoop()
-        {
             logTools.Info("StartCaptureLoop...");
             mumuState = MumuState.Create();
 
@@ -93,7 +88,7 @@ namespace PCRHelper
                     {
                         viewportRect = mumuState.ViewportRect;
                         viewportCapture = mumuState.DoCapture(viewportRect);
-                        idx = CaptureLoopFunc();
+                        idx = ArenaCaptureLoopFunc();
                     }
                     catch (Exception e)
                     {
@@ -125,18 +120,20 @@ namespace PCRHelper
             captureTask.Start();
         }
 
-        int CaptureLoopFunc()
+        int ArenaCaptureLoopFunc()
         {
             var list = GetCaptureResults();
+            logTools.Info($"Name Pattern: {name}");
+            logTools.Info($"Rank Pattern: {rank}");
             for (int i = 0; i < list.Count; i++)
             {
                 var item = list[i];
-                logTools.Info($"Name Pattern: {name}");
+                logTools.Info($"Name{i}: {item.Name}");
                 if (!string.IsNullOrWhiteSpace(name) && Regex.IsMatch(item.Name, name))
                 {
                     return i;
                 }
-                logTools.Info($"Rank Pattern: {rank}");
+                logTools.Info($"Rank{i}: {item.Rank}");
                 if (!string.IsNullOrWhiteSpace(rank) && Regex.IsMatch(item.Rank, rank))
                 {
                     return i;
@@ -169,7 +166,7 @@ namespace PCRHelper
                     
                     var name = mumuState.DoArenaPlayerNameOCR(viewportCaptureClone, viewportRect, index);
                     var rank = mumuState.DoArenaPlayerRankOCR(viewportCaptureClone, viewportRect, index);
-                    r[i] = new CaptureResult()
+                    r[index] = new CaptureResult()
                     {
                         Index = index,
                         Name = name,
@@ -205,7 +202,7 @@ namespace PCRHelper
                 logTools.Error("Already has one running Task");
                 return;
             }
-            DelayStartCaptureLoop();
+            StartArenaCaptureLoop();
         }
 
         private void timer1_Tick(object sender, EventArgs e)

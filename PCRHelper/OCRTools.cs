@@ -42,18 +42,23 @@ namespace PCRHelper
 
         public string OCRWithTesseract(Bitmap bitmap)
         {
-            return OCRWithTesseract(bitmap, ConfigMgr.GetInstance().OCRLans);
+            return OCRWithTesseract(bitmap.ToOpenCvMat(), ConfigMgr.GetInstance().OCRLans);
         }
 
-        public string OCRWithTesseract(Bitmap bitmap, string lans)
+        public string OCRWithTesseract(Mat mat)
+        {
+            return OCRWithTesseract(mat, ConfigMgr.GetInstance().OCRLans);
+        }
+
+        public string OCRWithTesseract(Mat mat, string lans)
         {
             var configMgr = ConfigMgr.GetInstance();
-            var randStr = DateTime.Now.ToString("yyMMddHHmmss") + new Random().Next(0, 99).ToString("D2");
+            var randStr = DateTime.Now.ToString("yyMMddHHmmssffff") + mat.GetHashCode().ToString();
             var tempImgStorePath = configMgr.GetCacheFileFullPath($"tesseract_{randStr}.png");
             var resName = $"tesseract_result_{randStr}";
             var tempResPathForTess = configMgr.GetCacheFileFullPath($"{resName}");
             var tempResStorePath = configMgr.GetCacheFileFullPath($"{resName}.txt");
-            ((Bitmap)bitmap.Clone()).Save(tempImgStorePath);
+            mat.SaveImage(tempImgStorePath);
             var tesseratPath = ConfigMgr.GetInstance().TesseractPath;
             var startInfo = new ProcessStartInfo()
             {
@@ -67,6 +72,7 @@ namespace PCRHelper
             s = FilterTesseractResult(s);
             File.Delete(tempImgStorePath);
             File.Delete(tempResStorePath);
+            LogTools.GetInstance().Info("OCR:" + s);
             return s;
         }
 
@@ -80,7 +86,11 @@ namespace PCRHelper
 
         public string OCR(Mat mat)
         {
-            return OCR(mat.ToRawBitmap());
+            if (UsingTesseract)
+            {
+                return OCRWithTesseract(mat);
+            }
+            return "";
         }
 
         public string OCR(Bitmap bitmap)
@@ -96,7 +106,7 @@ namespace PCRHelper
         {
             var graphicsTools = GraphicsTools.GetInstance();
             var gray = graphicsTools.ToGray(mat);
-            return OCR(mat.ToRawBitmap());
+            return OCR(mat);
         }
 
         public string ToGrayAndOCR(Bitmap bitmap)
