@@ -42,7 +42,7 @@ namespace PCRHelper
 
         public string OCRWithTesseract(Bitmap bitmap)
         {
-            return OCRWithTesseract(bitmap, "chi_sim+eng");
+            return OCRWithTesseract(bitmap, ConfigMgr.GetInstance().OCRLans);
         }
 
         public string OCRWithTesseract(Bitmap bitmap, string lans)

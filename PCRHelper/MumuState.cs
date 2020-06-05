@@ -20,6 +20,10 @@ namespace PCRHelper
         private Process process;
         private RECT rect;
         private RECT viewportRect;
+        private ConfigMgr configMgr = ConfigMgr.GetInstance();
+        private GraphicsTools graphicsTools = GraphicsTools.GetInstance();
+        private OCRTools ocrTools = OCRTools.GetInstance();
+        private LogTools logTools = LogTools.GetInstance();
 
         private MumuState()
         {
@@ -57,7 +61,6 @@ namespace PCRHelper
                 return rect;
             }
         }
-
 
         public RECT ViewportRect
         {
@@ -100,7 +103,6 @@ namespace PCRHelper
             GraphicsTools.GetInstance().DisplayImage("DoCapture", capture);
             return capture;
         }
-
 
         /// <summary>
         /// 包括标题栏
@@ -217,17 +219,10 @@ namespace PCRHelper
             }
         }
 
-        public Bitmap GetCaptureRect(Vec4f rectRate)
-        {
-            var viewportRect = ViewportRect;
-            var viewportCapture = DoCapture(viewportRect);
-            return GetCaptureRect(viewportCapture, viewportRect, rectRate);
-        }
-
         public Bitmap GetCaptureRect(Bitmap capture, RECT captureRect, Vec4f rectRate)
         {
             var mat = capture.ToOpenCvMat();
-            return GetCaptureRect(mat, captureRect, rectRate);
+            return GetCaptureRect(mat, captureRect, rectRate).ToRawBitmap();
         }
 
         /// <summary>
@@ -237,11 +232,11 @@ namespace PCRHelper
         /// <param name="captureRect">完整的截图捕获矩形 相对于屏幕</param>
         /// <param name="rectRate">子矩形的比率 相对于capture</param>
         /// <returns></returns>
-        public Bitmap GetCaptureRect(Mat mat, RECT captureRect, Vec4f rectRate)
+        public Mat GetCaptureRect(Mat mat, RECT captureRect, Vec4f rectRate)
         {
             var relativeRect = captureRect.GetChildRectByRate(rectRate);
             var childMat = GraphicsTools.GetInstance().GetChildMatByRECT(mat, relativeRect);
-            return childMat.ToRawBitmap();
+            return childMat;
         }
 
         /// <summary>
@@ -264,81 +259,112 @@ namespace PCRHelper
             AdbTools.GetInstance().DoTap(point);
         }
 
-        Vec2f[] mainlandArenaRectPointRateArr = new Vec2f[]
-        {
-            new Vec2f(0.6669f, 0.3312f),
-            new Vec2f(0.6653f, 0.5357f),
-            new Vec2f(0.6448f, 0.7433f),
-        };
-        
-        Vec2f[] jjcRectPointRateArr = new Vec2f[]
+        Vec2f[] mainlandArenaPlayerPointRateArr = new Vec2f[]
         {
             new Vec2f(0.6669f, 0.3312f),
             new Vec2f(0.6653f, 0.5357f),
             new Vec2f(0.6448f, 0.7433f),
         };
 
-        public void ClickJJCRect(RECT viewportRect, int index)
+        Vec2f[] taiwanArenaPlayerPointRateArr = new Vec2f[]
         {
-            var point = GetRelativePoint(viewportRect, jjcRectPointRateArr[index]);
+            new Vec2f(0.6669f, 0.3312f),
+            new Vec2f(0.6653f, 0.5357f),
+            new Vec2f(0.6448f, 0.7433f),
+        };
+
+        public Vec2f GetArenaPlayerPointRate(int index)
+        {
+            if (configMgr.PCRRegion == PCRRegion.Mainland)
+            {
+                return mainlandArenaPlayerPointRateArr[index];
+            }
+            else if (configMgr.PCRRegion == PCRRegion.Taiwan)
+            {
+                return taiwanArenaPlayerPointRateArr[index];
+            }
+            throw new Exception("GetArenaPlayerPointRateArr" + index);
+        }
+
+        public void ClickArenaPlayer(RECT viewportRect, int index)
+        {
+            var arenaPlayerPointRate = GetArenaPlayerPointRate(index);
+            var point = GetRelativePoint(viewportRect, arenaPlayerPointRate);
             DoClick(point);
         }
 
-        Vec2f jjcRefreshButtonPointRate = new Vec2f(0.8663f, 0.1680f);
+        Vec2f arenaRefreshPointRate = new Vec2f(0.8663f, 0.1680f);
 
-        public void ClickJJCRefreshButton(RECT viewportRect)
+        public Vec2f GetArenaRefreshPointRate()
         {
-            var point = GetRelativePoint(viewportRect, jjcRefreshButtonPointRate);
+            return arenaRefreshPointRate;
+        }
+
+        public void ClickArenaRefresh(RECT viewportRect)
+        {
+            var arenaRefreshPointRate = GetArenaRefreshPointRate();
+            var point = GetRelativePoint(viewportRect, arenaRefreshPointRate);
             DoClick(point);
         }
 
 
-        Vec4f[] jjcNameRectRateArr = new Vec4f[]
+        Vec4f[] mainlandArenaPlayerNameRectRateArr = new Vec4f[]
         {
             new Vec4f(0.5135f, 0.2511f, 0.6608f, 0.2823f),
             new Vec4f(0.5135f, 0.4638f, 0.6608f, 0.4980f),
             new Vec4f(0.5135f, 0.6766f, 0.6608f, 0.7116f),
         };
 
-        public Vec4f GetJJCNameRectRate(int index)
+        Vec4f[] taiwanArenaPlayerNameRectRateArr = new Vec4f[]
         {
-            return jjcNameRectRateArr[index];
-        }
+        };
 
-        /// <summary>
-        /// 相对坐标
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public RECT GetJJCNameRect(int index)
+        public Vec4f GetArenaPlayerNameRectRate(int index)
         {
-            var viewportRect = ViewportRect;
-            var rectRate = GetJJCNameRectRate(index);
-            var jjcNameRect = viewportRect.GetChildRectByRate(rectRate);
-            return jjcNameRect;
-        }
-
-        public Bitmap GetJJCNameCaptureRect(int index)
-        {
-            var viewportRect = ViewportRect;
-            var viewportCapture = DoCapture(viewportRect);
-            return GetJJCNameCaptureRect(viewportCapture, viewportRect, index);
-        }
-
-        public Bitmap GetJJCNameCaptureRect(Bitmap viewportCapture, RECT viewportRect, int index)
-        {
-            var viewportMat = viewportCapture.ToOpenCvMat();
-            return GetJJCNameCaptureRect(viewportMat, viewportRect, index);
-        }
-
-        public Bitmap GetJJCNameCaptureRect(Mat viewportMat, RECT viewportRect, int index)
-        {
-            var jjcNameRectRate = GetJJCNameRectRate(index);
-            return GetCaptureRect(viewportMat, viewportRect, jjcNameRectRate);
+            if (configMgr.PCRRegion == PCRRegion.Mainland)
+            {
+                return mainlandArenaPlayerNameRectRateArr[index];
+            }
+            else if (configMgr.PCRRegion == PCRRegion.Taiwan)
+            {
+                return taiwanArenaPlayerNameRectRateArr[index];
+            }
+            throw new Exception("GetArenaPlayerNamePointRateArr" + index);
         }
 
 
-        Vec4f[] jjcRankRectRateArr = new Vec4f[]
+        public Bitmap GetArenaPlayerNameRectCapture(Bitmap viewportCapture, RECT viewportRect, int index)
+        {
+            var arenaPlayerNameRectRate = GetArenaPlayerNameRectRate(index);
+            return GetCaptureRect(viewportCapture, viewportRect, arenaPlayerNameRectRate);
+        }
+
+        public Mat GetArenaPlayerNameRectCapture(Mat viewportMat, RECT viewportRect, int index)
+        {
+            var arenaPlayerNameRectRate = GetArenaPlayerNameRectRate(index);
+            return GetCaptureRect(viewportMat, viewportRect, arenaPlayerNameRectRate);
+        }
+
+        public string DoArenaPlayerNameOCR(Bitmap viewportCapture, RECT viewportRect, int index)
+        {
+            var capture = GetArenaPlayerNameRectCapture(viewportCapture, viewportRect, index);
+            graphicsTools.DisplayImage("NameToOCR" + index, capture);
+            var name = ocrTools.ToGrayAndOCR(capture);
+            logTools.Info($"Name{index}: {name}");
+            return name;
+        }
+
+        public string DoArenaPlayerNameOCR(Mat viewportMat, RECT viewportRect, int index)
+        {
+            var capture = GetArenaPlayerNameRectCapture(viewportMat, viewportRect, index);
+            graphicsTools.DisplayImage("NameToOCR" + index, capture);
+            var name = ocrTools.ToGrayAndOCR(capture);
+            logTools.Info($"Name{index}: {name}");
+            return name;
+        }
+
+
+            Vec4f[] jjcRankRectRateArr = new Vec4f[]
         {
             new Vec4f(0.7450f, 0.2227f, 0.8258f, 0.2582f),
             new Vec4f(0.7450f, 0.4369f, 0.8258f, 0.4723f),

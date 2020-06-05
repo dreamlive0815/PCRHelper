@@ -18,8 +18,6 @@ namespace PCRHelper
             InitializeComponent();
         }
 
-        string imgPath;
-
         private void FrmGetRectRate_Load(object sender, EventArgs e)
         {
             Show();

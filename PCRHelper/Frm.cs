@@ -34,11 +34,11 @@ namespace PCRHelper
             configMgr.Init();
             logTools.SetRichTextBox(txtConsole);
 
-            // var mumuState = GetMumuState();
-            // viewportRect = mumuState.ViewportRect;
-            // viewportCapture = mumuState.DoCapture(viewportRect);
-            // mumuState.ClickJJCRefreshButton(viewportRect);
-            // mumuState.ClickJJCRect(viewportRect, 0);
+            var mumuState = GetMumuState();
+            viewportRect = mumuState.ViewportRect;
+            viewportCapture = mumuState.DoCapture(viewportRect);
+            mumuState.ClickArenaRefresh(viewportRect);
+            //mumuState.ClickArenaPlayer(viewportRect, 1);
 
             //var mat = new Mat(configMgr.GetCacheFileFullPath("RankBin0.png"));
 
@@ -67,11 +67,6 @@ namespace PCRHelper
             logTools.Info("DelayStartCaptureLoop...");
             name = txtName.Text;
             rank = txtRank.Text;
-            //ThreadingTimer timer = null;
-            //timer = new System.Threading.Timer(new TimerCallback((arg) =>
-            //{
-            //    StartCaptureLoop();
-            //}), null, 2000, Timeout.Infinite);
             StartCaptureLoop();
         }
 
@@ -108,12 +103,12 @@ namespace PCRHelper
                     logTools.Info("INDEX: " + idx);
                     if (idx != -1)
                     {
-                        mumuState.ClickJJCRect(viewportRect, idx);
+                        mumuState.ClickArenaPlayer(viewportRect, idx);
                         break;
                     }
                     else if (!hasError)
                     {
-                        mumuState.ClickJJCRefreshButton(viewportRect);//不要移动到try里面
+                        mumuState.ClickArenaRefresh(viewportRect);//不要移动到try里面
                     }
                 }
             }, tokenSource.Token);
@@ -163,7 +158,7 @@ namespace PCRHelper
             var r = new List<CaptureResult>();
             for (int i = 0; i < 3; i++)
             {
-                var nameCR = mumuState.GetJJCNameCaptureRect(viewportCapture, viewportRect, i);
+                var nameCR = mumuState.GetArenaPlayerNameRectCapture(viewportCapture, viewportRect, i);
                 graphicsTools.DisplayImage("NameToOCR" + i, nameCR);
                 var name = ocr.ToGrayAndOCR((Bitmap)nameCR);
                 logTools.Info($"Name{i}: {name}");
@@ -196,8 +191,7 @@ namespace PCRHelper
 
         private void menuOpenCacheDir_Click(object sender, EventArgs e)
         {
-            var cacheDir = ConfigMgr.GetInstance().CacheDir;
-            tools.OpenDirInExplorer(cacheDir);
+            tools.OpenDirInExplorer(configMgr.CacheDir);
         }
 
         private void menuStartCaptureLoop_Click(object sender, EventArgs e)

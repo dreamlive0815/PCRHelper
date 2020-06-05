@@ -114,6 +114,22 @@ namespace PCRHelper
 
         public PCRRegion PCRRegion { get; set; } = PCRRegion.Mainland;
 
+        public string OCRLans
+        {
+            get
+            {
+                if (PCRRegion == PCRRegion.Mainland)
+                {
+                    return "chi_sim+eng";
+                }
+                else if (PCRRegion == PCRRegion.Taiwan)
+                {
+                    return "chi_tra+eng";
+                }
+                throw new Exception("OCRLans");
+            }
+        }
+
         public string GetCacheFileFullPath(string relativePath)
         {
             var cacheDir = new DirectoryInfo(this.CacheDir).FullName;
