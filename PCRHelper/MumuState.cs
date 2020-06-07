@@ -14,8 +14,8 @@ namespace PCRHelper
             return new MumuState();
         }
 
-        bool checkResolution = true;//分辨率
-        bool checkTopBottomBounds = true;
+        bool checkResolution = false;//分辨率
+        bool checkTopBottomBounds = false;
 
         private Process process;
         private RECT rect;
@@ -34,7 +34,7 @@ namespace PCRHelper
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
@@ -66,8 +66,7 @@ namespace PCRHelper
         {
             get
             {
-                //if (!UseCache || TopY == 0 || BottomY == 0)
-                if (true)
+                if (!UseCache || TopY == 0 || BottomY == 0)
                 {
                     var capture = DoRealTimeCaptureAndAnalyze();
                     if (checkResolution)
