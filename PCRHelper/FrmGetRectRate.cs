@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenCvSharp;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RawSize = System.Drawing.Size;
 
 namespace PCRHelper
 {
@@ -40,7 +42,7 @@ namespace PCRHelper
         public void LoadImage(Image img)
         {
             pictureBox1.Image = img;
-            Size = pictureBox1.Size + new Size(0, 50);
+            Size = pictureBox1.Size + new RawSize(0, 50);
         }
 
         public void LoadImage(string imgPath)
@@ -85,6 +87,29 @@ namespace PCRHelper
         string FormatFloat(double f)
         {
             return f.ToString("f4");
+        }
+
+        private void FrmGetRectRate_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                var pwid = pictureBox1.Width;
+                var phei = pictureBox1.Height;
+                var mat = new Bitmap(pictureBox1.Image).ToOpenCvMat();
+                var r1 = 1.0f * rectangle.X / pwid;
+                var r2 = 1.0f * rectangle.Y / phei;
+                var r3 = 1.0f * (rectangle.X + rectangle.Width) / pwid;
+                var r4 = 1.0f * (rectangle.Y + rectangle.Height) / phei;
+                var rectRate = new Vec4f(r1, r2, r3, r4);
+                var childMat = mat.GetChildMatByRectRate(rectRate);
+                var saveDialog = new SaveFileDialog();
+                saveDialog.Title = "选择图片保存路径";
+                saveDialog.Filter = "*.png|*.png";
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    childMat.SaveImage(saveDialog.FileName);
+                }
+            }
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)

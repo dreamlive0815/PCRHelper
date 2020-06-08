@@ -111,5 +111,13 @@ namespace PCRHelper
             });
             SetPixel(mat, r, c, getV(0), getV(1), getV(2));
         }
+
+        public static Mat GetChildMatByRectRate(this Mat mat, Vec4f rectRate)
+        {
+            var rect = new RECT() { x1 = 0, y1 = 0, x2 = mat.Width, y2 = mat.Height };
+            var relativeRect = rect.GetChildRectByRate(rectRate);
+            var childMat = GraphicsTools.GetInstance().GetChildMatByRECT(mat, relativeRect);
+            return childMat;
+        }
     }
 }

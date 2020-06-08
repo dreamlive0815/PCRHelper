@@ -14,6 +14,8 @@ namespace PCRHelper
             return new MumuState();
         }
 
+        int width = 2160;
+        int height = 1080;
         bool checkResolution = false;//分辨率
         bool checkTopBottomBounds = false;
 
@@ -92,7 +94,7 @@ namespace PCRHelper
             var validWdivhOff = 0.05;
             if (Math.Abs(wdivhCap - wdivh) > validWdivhOff)
             {
-                throw new Exception("请使用1920*1080的分辨率");
+                throw new Exception($"请使用{width}*{height}的分辨率");
             }
         }
 
@@ -197,7 +199,7 @@ namespace PCRHelper
 
             if (checkTopBottomBounds)
             {
-                var height = width * 0.5;
+                var height = 1.0 * width * this.height / this.width;
 
                 var validTopY = 36;
                 var validTopYOff = 10;
@@ -248,8 +250,8 @@ namespace PCRHelper
         {
             var wid = rect.Width;
             var hei = rect.Height;
-            wid = 2160;
-            hei = 1080;
+            wid = width;
+            hei = height;
             return new RawPoint((int)(wid * pointRate.Item0), (int)(hei * pointRate.Item1));
         }
 
@@ -420,5 +422,20 @@ namespace PCRHelper
             var rank = ocrTools.OCR(bin);
             return rank;
         }
+
+        Vec2f actStageExchangePointRate = new Vec2f(0.5288f, 0.7913f);
+
+        public Vec2f GetActStageExchangePointRate()
+        {
+            return actStageExchangePointRate;
+        }
+
+        public void ClickActStageExchange(RECT viewportRect)
+        {
+            var actStageExchangePointRate = GetActStageExchangePointRate();
+            var point = GetRelativePoint(viewportRect, actStageExchangePointRate);
+            DoClick(point);
+        }
+
     }
 }

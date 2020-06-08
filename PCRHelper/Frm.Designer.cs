@@ -30,10 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.menuGetRectRate = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuOpenCacheDir = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStartCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStopCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuClearConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.txtName = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,16 +37,22 @@
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.menuTools = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuGetRectRate = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOpenCacheDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuScripts = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartArenaCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStopArenaCaptureLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartActStageExchangeLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStopActStageExchangeLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuGetRectRate,
-            this.menuOpenCacheDir,
-            this.menuStartCaptureLoop,
-            this.menuStopCaptureLoop,
+            this.menuTools,
+            this.menuScripts,
             this.menuClearConsole});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -58,34 +60,6 @@
             this.menuStrip1.Size = new System.Drawing.Size(532, 27);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // menuGetRectRate
-            // 
-            this.menuGetRectRate.Name = "menuGetRectRate";
-            this.menuGetRectRate.Size = new System.Drawing.Size(91, 21);
-            this.menuGetRectRate.Text = "GetRectRate";
-            this.menuGetRectRate.Click += new System.EventHandler(this.menuGetRectRate_Click);
-            // 
-            // menuOpenCacheDir
-            // 
-            this.menuOpenCacheDir.Name = "menuOpenCacheDir";
-            this.menuOpenCacheDir.Size = new System.Drawing.Size(104, 21);
-            this.menuOpenCacheDir.Text = "OpenCacheDir";
-            this.menuOpenCacheDir.Click += new System.EventHandler(this.menuOpenCacheDir_Click);
-            // 
-            // menuStartCaptureLoop
-            // 
-            this.menuStartCaptureLoop.Name = "menuStartCaptureLoop";
-            this.menuStartCaptureLoop.Size = new System.Drawing.Size(93, 21);
-            this.menuStartCaptureLoop.Text = "StartCapture";
-            this.menuStartCaptureLoop.Click += new System.EventHandler(this.menuStartCaptureLoop_Click);
-            // 
-            // menuStopCaptureLoop
-            // 
-            this.menuStopCaptureLoop.Name = "menuStopCaptureLoop";
-            this.menuStopCaptureLoop.Size = new System.Drawing.Size(93, 21);
-            this.menuStopCaptureLoop.Text = "StopCapture";
-            this.menuStopCaptureLoop.Click += new System.EventHandler(this.menuStopCaptureLoop_Click);
             // 
             // menuClearConsole
             // 
@@ -147,6 +121,68 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // menuTools
+            // 
+            this.menuTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuGetRectRate,
+            this.menuOpenCacheDir});
+            this.menuTools.Name = "menuTools";
+            this.menuTools.Size = new System.Drawing.Size(67, 21);
+            this.menuTools.Text = "Tools(&T)";
+            // 
+            // menuGetRectRate
+            // 
+            this.menuGetRectRate.Name = "menuGetRectRate";
+            this.menuGetRectRate.Size = new System.Drawing.Size(160, 22);
+            this.menuGetRectRate.Text = "GetRectRate";
+            this.menuGetRectRate.Click += new System.EventHandler(this.menuGetRectRate_Click_1);
+            // 
+            // menuOpenCacheDir
+            // 
+            this.menuOpenCacheDir.Name = "menuOpenCacheDir";
+            this.menuOpenCacheDir.Size = new System.Drawing.Size(160, 22);
+            this.menuOpenCacheDir.Text = "OpenCacheDir";
+            this.menuOpenCacheDir.Click += new System.EventHandler(this.menuOpenCacheDir_Click_1);
+            // 
+            // menuScripts
+            // 
+            this.menuScripts.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStartArenaCaptureLoop,
+            this.menuStopArenaCaptureLoop,
+            this.menuStartActStageExchangeLoop,
+            this.menuStopActStageExchangeLoop});
+            this.menuScripts.Name = "menuScripts";
+            this.menuScripts.Size = new System.Drawing.Size(74, 21);
+            this.menuScripts.Text = "Scripts(&S)";
+            // 
+            // menuStartArenaCaptureLoop
+            // 
+            this.menuStartArenaCaptureLoop.Name = "menuStartArenaCaptureLoop";
+            this.menuStartArenaCaptureLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStartArenaCaptureLoop.Text = "StartArenaCaptureLoop";
+            this.menuStartArenaCaptureLoop.Click += new System.EventHandler(this.menuStartArenaCaptureLoop_Click);
+            // 
+            // menuStopArenaCaptureLoop
+            // 
+            this.menuStopArenaCaptureLoop.Name = "menuStopArenaCaptureLoop";
+            this.menuStopArenaCaptureLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStopArenaCaptureLoop.Text = "StopArenaCaptureLoop";
+            this.menuStopArenaCaptureLoop.Click += new System.EventHandler(this.menuStopArenaCaptureLoop_Click);
+            // 
+            // menuStartActStageExchangeLoop
+            // 
+            this.menuStartActStageExchangeLoop.Name = "menuStartActStageExchangeLoop";
+            this.menuStartActStageExchangeLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStartActStageExchangeLoop.Text = "StartActStageExchangeLoop";
+            this.menuStartActStageExchangeLoop.Click += new System.EventHandler(this.menuStartActStageExchangeLoop_Click);
+            // 
+            // menuStopActStageExchangeLoop
+            // 
+            this.menuStopActStageExchangeLoop.Name = "menuStopActStageExchangeLoop";
+            this.menuStopActStageExchangeLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStopActStageExchangeLoop.Text = "StopActStageExchangeLoop";
+            this.menuStopActStageExchangeLoop.Click += new System.EventHandler(this.menuStopActStageExchangeLoop_Click);
+            // 
             // Frm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -178,17 +214,21 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem menuGetRectRate;
-        private System.Windows.Forms.ToolStripMenuItem menuOpenCacheDir;
         private System.Windows.Forms.RichTextBox txtName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.RichTextBox txtRank;
-        private System.Windows.Forms.ToolStripMenuItem menuStartCaptureLoop;
         private System.Windows.Forms.RichTextBox txtConsole;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStripMenuItem menuClearConsole;
-        private System.Windows.Forms.ToolStripMenuItem menuStopCaptureLoop;
+        private System.Windows.Forms.ToolStripMenuItem menuTools;
+        private System.Windows.Forms.ToolStripMenuItem menuGetRectRate;
+        private System.Windows.Forms.ToolStripMenuItem menuOpenCacheDir;
+        private System.Windows.Forms.ToolStripMenuItem menuScripts;
+        private System.Windows.Forms.ToolStripMenuItem menuStartArenaCaptureLoop;
+        private System.Windows.Forms.ToolStripMenuItem menuStopArenaCaptureLoop;
+        private System.Windows.Forms.ToolStripMenuItem menuStartActStageExchangeLoop;
+        private System.Windows.Forms.ToolStripMenuItem menuStopActStageExchangeLoop;
     }
 }
 

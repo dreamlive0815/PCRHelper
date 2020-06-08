@@ -3,6 +3,7 @@ using OpenCvSharp;
 using System.Collections.Generic;
 using System.Drawing;
 using OpenCvSharp.Extensions;
+using CvPoint = OpenCvSharp.Point;
 
 namespace PCRHelper
 {
@@ -210,6 +211,15 @@ namespace PCRHelper
             return (~mat).ToMat();
         }
 
-        
+        public void MatchImage(Mat source, Mat search)
+        {
+            var res = new Mat();
+            Cv2.MatchTemplate(source, search, res, TemplateMatchModes.CCoeffNormed);
+            double minVal, maxVal;
+            CvPoint minLoc, maxLoc;
+            Cv2.MinMaxLoc(res, out minVal, out maxVal, out minLoc, out maxLoc);
+        }
+
+
     }
 }
