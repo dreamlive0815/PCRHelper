@@ -11,7 +11,7 @@ namespace PCRHelper.Scripts
 {
     class ReadStoryScript : ScriptBase
     {
-
+        private ConfigMgr configMgr = ConfigMgr.GetInstance();
         private GraphicsTools graphicsTools = GraphicsTools.GetInstance();
 
         public override string Name
@@ -27,8 +27,8 @@ namespace PCRHelper.Scripts
             var viewportMat = viewportCapture.ToOpenCvMat();
             var mainlineStoryRectRate = new Vec4f(0.5276f, 0.1054f, 0.6914f, 0.4128f);
             var mainlineStoryMat = viewportMat.GetChildMatByRectRate(mainlineStoryRectRate);
-            //var 
-            //var matchRes = graphicsTools.MatchImage(mainlineStoryMat, )
+            var newTagEx = new Mat(configMgr.GetPCRExImgFullPath("story_new_tag.png"), ImreadModes.Unchanged);
+            var matchRes = graphicsTools.MatchImage(mainlineStoryMat, newTagEx);
 
             //mainlineStoryMat.SaveImage(ConfigMgr.GetInstance().GetCacheFileFullPath("mainline_story.png"));
         }

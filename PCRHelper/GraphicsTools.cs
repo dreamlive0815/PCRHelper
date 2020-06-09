@@ -216,6 +216,8 @@ namespace PCRHelper
         public MatchImageResult MatchImage(Mat source, Mat search, double threshold)
         {
             var res = new Mat();
+            var c1 = source.Channels();
+            var c2 = search.Channels();
             //DisplayImage("source", source);
             //DisplayImage("search", search);
             Cv2.MatchTemplate(source, search, res, TemplateMatchModes.CCoeffNormed);

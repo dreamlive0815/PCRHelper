@@ -235,7 +235,7 @@ namespace PCRHelper
             var pcrRegion = configMgr.PCRRegion;
             menuMainland.Checked = pcrRegion == PCRRegion.Mainland;
             menuTaiwan.Checked = pcrRegion == PCRRegion.Taiwan;
-            menuTaiwan.Checked = pcrRegion == PCRRegion.Japan;
+            menuJapan.Checked = pcrRegion == PCRRegion.Japan;
         }
 
         private void menuMainland_Click(object sender, EventArgs e)
