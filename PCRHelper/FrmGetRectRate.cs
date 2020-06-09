@@ -96,6 +96,11 @@ namespace PCRHelper
                 var pwid = pictureBox1.Width;
                 var phei = pictureBox1.Height;
                 var mat = new Bitmap(pictureBox1.Image).ToOpenCvMat();
+                var rectangle = e.Alt ? new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height) : this.rectangle;
+                if (rectangle.Width == 0 || rectangle.Height == 0)
+                {
+                    return;
+                }
                 var r1 = 1.0f * rectangle.X / pwid;
                 var r2 = 1.0f * rectangle.Y / phei;
                 var r3 = 1.0f * (rectangle.X + rectangle.Width) / pwid;
@@ -103,7 +108,7 @@ namespace PCRHelper
                 var rectRate = new Vec4f(r1, r2, r3, r4);
                 var childMat = mat.GetChildMatByRectRate(rectRate);
                 var saveDialog = new SaveFileDialog();
-                saveDialog.Title = "选择图片保存路径";
+                saveDialog.Title = "选择图片保存路径(" + (e.Alt ? "完整" : "部分");
                 saveDialog.Filter = "*.png|*.png";
                 if (saveDialog.ShowDialog() == DialogResult.OK)
                 {

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.IO;
 using OpenCvSharp;
+using RawPoint = System.Drawing.Point;
 
 namespace PCRHelper
 {
@@ -106,9 +107,9 @@ namespace PCRHelper
         /// </summary>
         /// <param name="rate">两个数字分别是横坐标 纵坐标相对于父矩形的比率</param>
         /// <returns></returns>
-        public System.Drawing.Point GetChildPointByRate(Vec2f rate)
+        public RawPoint GetChildPointByRate(Vec2f rate)
         {
-            var point = new System.Drawing.Point();
+            var point = new RawPoint();
             var width = Width;
             var height = Height;
             point.X = (int)(x1 + width * rate.Item0);
@@ -132,6 +133,14 @@ namespace PCRHelper
             rect.y2 = (int)(Height * rate.Item3);
             return rect;
         }
+
+        public RawPoint GetCenterPos()
+        {
+            var x = (x1 + x2) / 2;
+            var y = (y1 + y2) / 2;
+            return new RawPoint(x, y);
+        }
+
     }
 
     class Win32ApiHelper

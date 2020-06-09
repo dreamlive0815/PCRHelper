@@ -119,5 +119,16 @@ namespace PCRHelper
             var childMat = GraphicsTools.GetInstance().GetChildMatByRECT(mat, relativeRect);
             return childMat;
         }
+
+        public static RECT GetRect(this Mat mat)
+        {
+            return new RECT()
+            {
+                x1 = 0,
+                y1 = 0,
+                x2 = mat.Width,
+                y2 = mat.Height,
+            };
+        }
     }
 }

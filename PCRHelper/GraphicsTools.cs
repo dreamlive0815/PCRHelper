@@ -34,7 +34,15 @@ namespace PCRHelper
         {
             var cacheDir = ConfigMgr.GetInstance().CacheDir;
             var storePath = Tools.GetInstance().JoinPath(cacheDir, $"{key}.png");
-            mat.SaveImage(storePath);
+            if (key == "DoCapture")
+            {
+                mat.SaveImage(storePath);
+            }
+            else
+            {
+                //Cv2.ImShow(key, mat);
+                mat.SaveImage(storePath);
+            }
         }
 
         private Mat ReadImageFromFile(string filePath)
@@ -197,29 +205,52 @@ namespace PCRHelper
 
         public Mat ToReverse(Mat mat)
         {
-            //var r = new Mat();
-            //mat.CopyTo(r);
-            //for (int i = 0; i < mat.Rows; i++)
-            //{
-            //    for (int j = 0; j < mat.Cols; j++)
-            //    {
-            //        var clr = mat.GetPixel(i, j);
-            //        r.SetPixel(i, j, 255 - clr.R, 255 - clr.G, 255 - clr.B);
-            //    }
-            //}
-            //return r;
             return (~mat).ToMat();
         }
 
-        public void MatchImage(Mat source, Mat search)
+        public MatchImageResult MatchImage(Mat source, Mat search)
+        {
+            return MatchImage(source, search, 0.8);
+        }
+
+        public MatchImageResult MatchImage(Mat source, Mat search, double threshold)
         {
             var res = new Mat();
+            //DisplayImage("source", source);
+            //DisplayImage("search", search);
             Cv2.MatchTemplate(source, search, res, TemplateMatchModes.CCoeffNormed);
             double minVal, maxVal;
             CvPoint minLoc, maxLoc;
             Cv2.MinMaxLoc(res, out minVal, out maxVal, out minLoc, out maxLoc);
+            LogTools.GetInstance().Info($"maxVal = {maxVal}, threshold = {threshold}");
+            if (maxVal < threshold)
+            {
+                return new MatchImageResult()
+                {
+                    Success = false,
+                };
+            }
+            Cv2.Circle(source, maxLoc.X + search.Width / 2, maxLoc.Y + search.Height / 2, 25, Scalar.Red);
+            DisplayImage("ImageMatch", source);
+            return new MatchImageResult()
+            {
+                Success = true,
+                MatchedRect = new RECT()
+                {
+                    x1 = maxLoc.X,
+                    y1 = maxLoc.Y,
+                    x2 = maxLoc.X + search.Width,
+                    y2 = maxLoc.Y + search.Height,
+                }
+            };
         }
 
 
+    }
+
+    struct MatchImageResult
+    {
+        public bool Success;
+        public RECT MatchedRect;
     }
 }

@@ -34,26 +34,32 @@ namespace PCRHelper
         {
             if (OCRTools.UsingTesseract)
             {
-                InitOCRConfig();
+                InitTesseractConfig();
             }
             InitAdbConfig();
+            InitPCRConfig();
         }
 
-        private void InitOCRConfig()
+        private void InitTesseractConfig()
         {
             var tesseractPath = TesseractPath;
             if (!File.Exists(tesseractPath))
             {
-                var openDialog = new OpenFileDialog();
-                openDialog.Title = "请选择Tesseract程序所在的目录";
-                openDialog.FileName = "tesseract.exe";
-                openDialog.Filter = "tesseract.exe|tesseract.exe";
-                if (openDialog.ShowDialog() != DialogResult.OK)
-                {
-                    Application.Exit();
-                }
-                TesseractPath = openDialog.FileName;
+                SetTesseractPath();
             }
+        }
+
+        public void SetTesseractPath()
+        {
+            var openDialog = new OpenFileDialog();
+            openDialog.Title = "请选择Tesseract程序所在的目录";
+            openDialog.FileName = "tesseract.exe";
+            openDialog.Filter = "tesseract.exe|tesseract.exe";
+            if (openDialog.ShowDialog() != DialogResult.OK)
+            {
+                Application.Exit();
+            }
+            TesseractPath = openDialog.FileName;
         }
 
         private void InitAdbConfig()
@@ -61,16 +67,41 @@ namespace PCRHelper
             var adbServerPath = AdbServerExePath;
             if (!File.Exists(adbServerPath))
             {
-                var openDialog = new OpenFileDialog();
-                openDialog.Title = "请选择AdbServer程序所在的目录";
-                openDialog.FileName = "adb_server.exe";
-                openDialog.Filter = "adb_server.exe|adb_server.exe";
-                if (openDialog.ShowDialog() != DialogResult.OK)
-                {
-                    Application.Exit();
-                }
-                AdbServerExePath = openDialog.FileName;
+                SetAdbServerExePath();
             }
+        }
+
+        public void SetAdbServerExePath()
+        {
+            var openDialog = new OpenFileDialog();
+            openDialog.Title = "请选择AdbServer程序所在的目录";
+            openDialog.FileName = "adb_server.exe";
+            openDialog.Filter = "adb_server.exe|adb_server.exe";
+            if (openDialog.ShowDialog() != DialogResult.OK)
+            {
+                Application.Exit();
+            }
+            AdbServerExePath = openDialog.FileName;
+        }
+
+        private void InitPCRConfig()
+        {
+            var pcrExImgsDir = PCRExImgsDir;
+            if (!Directory.Exists(pcrExImgsDir))
+            {
+                SetPCRExImgsDir();
+            }
+        }
+
+        public void SetPCRExImgsDir()
+        {
+            var folderDialog = new FolderBrowserDialog();
+            folderDialog.Description = "请选择保存PCR样图的目录";
+            if (folderDialog.ShowDialog() != DialogResult.OK)
+            {
+                Application.Exit();
+            }
+            PCRExImgsDir = folderDialog.SelectedPath;
         }
 
         public string TesseractPath
@@ -95,6 +126,19 @@ namespace PCRHelper
             set
             {
                 PCRHelper.Properties.Settings.Default.AdbServerExePath = value;
+                PCRHelper.Properties.Settings.Default.Save();
+            }
+        }
+
+        public string PCRExImgsDir
+        {
+            get
+            {
+                return PCRHelper.Properties.Settings.Default.PCRExImgsDir;
+            }
+            set
+            {
+                PCRHelper.Properties.Settings.Default.PCRExImgsDir = value;
                 PCRHelper.Properties.Settings.Default.Save();
             }
         }
@@ -134,6 +178,12 @@ namespace PCRHelper
         {
             var cacheDir = new DirectoryInfo(this.CacheDir).FullName;
             var path = Tools.GetInstance().JoinPath(cacheDir, relativePath);
+            return path;
+        }
+
+        public string GetPCRExImgFullPath(string imgName)
+        {
+            var path = Tools.GetInstance().JoinPath(PCRExImgsDir, PCRRegion.ToString(), imgName);
             return path;
         }
     }

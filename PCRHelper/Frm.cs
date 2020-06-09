@@ -14,6 +14,7 @@ using System.IO;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.Text.RegularExpressions;
+using PCRHelper.Scripts;
 
 namespace PCRHelper
 {
@@ -34,15 +35,9 @@ namespace PCRHelper
             configMgr.Init();
             logTools.SetRichTextBox(txtConsole);
 
-            var mumuState = GetMumuState();
-            viewportRect = mumuState.ViewportRect;
-            viewportCapture = mumuState.DoCapture(viewportRect);
-            mumuState.ClickArenaRefresh(viewportRect);
-            //mumuState.ClickArenaPlayer(viewportRect, 1);
-
-            //var mat = new Mat(configMgr.GetCacheFileFullPath("RankBin0.png"));
-
-
+            //var mumuState = GetMumuState();
+            //viewportRect = mumuState.ViewportRect;
+            //viewportCapture = mumuState.DoCapture(viewportRect);
         }
 
         RECT viewportRect;
@@ -50,6 +45,7 @@ namespace PCRHelper
         MumuState mumuState;
         string name = "";
         string rank = "";
+        ScriptBase script;
         Task scriptTask;
         CancellationTokenSource tokenSource;
         CancellationToken ct;
@@ -63,154 +59,85 @@ namespace PCRHelper
             return mumuState;
         }
 
-        void StartArenaCaptureLoop()
+        void StartArenaSearchLoop()
         {
             name = txtName.Text;
             rank = txtRank.Text;
 
             logTools.Info("StartCaptureLoop...");
-            mumuState = MumuState.Create();
+            mumuState = GetMumuState();
 
-            tokenSource = new CancellationTokenSource();
-            ct = tokenSource.Token;
-            scriptTask = new Task(() =>
+            var script = new ArenaSearchScript();
+            script.SetGetPatternNameFunc(new Func<string>(() =>
             {
-
-                while (true)
-                {
-                    if (ct.IsCancellationRequested)
-                    {
-                        ct.ThrowIfCancellationRequested();
-                    }
-                    Thread.Sleep(2000);
-                    int idx = -1;
-                    bool hasError = false;
-                    try
-                    {
-                        viewportRect = mumuState.ViewportRect;
-                        viewportCapture = mumuState.DoCapture(viewportRect);
-                        idx = ArenaCaptureLoopFunc();
-                    }
-                    catch (Exception e)
-                    {
-                        hasError = true;
-                        logTools.Error(e.Message);
-                    }
-                    logTools.Info("INDEX: " + idx);
-                    if (idx != -1)
-                    {
-                        mumuState.ClickArenaPlayer(viewportRect, idx);
-                        break;
-                    }
-                    else if (!hasError)
-                    {
-                        mumuState.ClickArenaRefresh(viewportRect);//不要移动到try里面
-                    }
-                }
-            }, tokenSource.Token);
-            scriptTask.ContinueWith((t) => {
-                if (t.IsFaulted)
-                {
-                    logTools.Error(t.Exception.Message);
-                }
-                else if (t.IsCanceled)
-                {
-                    logTools.Error("Canceld");
-                }
-            });
-            scriptTask.Start();
+                return name;
+            }));
+            script.SetGetPatternRankFunc(new Func<string>(() =>
+            {
+                return rank;
+            }));
+            this.script = script;
+            StartScriptLoop(script);
         }
 
-        void StopArenaCaptureLoop()
+        void StopArenaSearchLoop()
         {
-            tokenSource?.Cancel();
-        }
-
-        int ArenaCaptureLoopFunc()
-        {
-            var list = GetCaptureResults();
-            logTools.Info($"Name Pattern: {name}");
-            logTools.Info($"Rank Pattern: {rank}");
-            for (int i = 0; i < list.Count; i++)
-            {
-                var item = list[i];
-                logTools.Info($"Name{i}: {item.Name}");
-                if (!string.IsNullOrWhiteSpace(name) && Regex.IsMatch(item.Name, name))
-                {
-                    return i;
-                }
-                logTools.Info($"Rank{i}: {item.Rank}");
-                if (!string.IsNullOrWhiteSpace(rank) && Regex.IsMatch(item.Rank, rank))
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        struct CaptureResult
-        {
-            public int Index;
-            public string Name;
-            public string Rank;
-        }
-
-        List<CaptureResult> GetCaptureResults()
-        {
-            var r = new List<CaptureResult>();
-            for (int i = 0; i < 3; i++)
-            {
-                r.Add(new CaptureResult());
-            }
-            var tasks = new Task[3];
-            var viewportCaptureClone = viewportCapture.ToOpenCvMat();
-            for (int i = 0; i < 3; i++)
-            {
-                var index = i;
-                var task = new Task(() =>
-                {
-                    
-                    var name = mumuState.DoArenaPlayerNameOCR(viewportCaptureClone, viewportRect, index);
-                    var rank = mumuState.DoArenaPlayerRankOCR(viewportCaptureClone, viewportRect, index);
-                    r[index] = new CaptureResult()
-                    {
-                        Index = index,
-                        Name = name,
-                        Rank = rank,
-                    };
-                });
-                task.Start();
-                tasks[i] = task;
-            }
-            Task.WaitAll(tasks);
-            return r;
+            StopScriptLoop();
         }
 
         void StartActStageExchangeLoop()
         {
             logTools.Info("StartActStageExchangeLoop...");
-            mumuState = MumuState.Create();
+            mumuState = GetMumuState();
 
+            script = new ActivityStageExchangeScript();
+            StartScriptLoop(script);
+        }
+
+        void StopActStageExchangeLoop()
+        {
+            StopScriptLoop();
+        }
+
+        void StartScriptLoop(ScriptBase script)
+        {
+            if (scriptTask != null && scriptTask.Status == TaskStatus.Running)
+            {
+                logTools.Error("Already has one running Script Task");
+                return;
+            }
+            logTools.Info("StartScriptLoop...");
+            mumuState = MumuState.Create();
+            script.SetMumuState(mumuState);
             tokenSource = new CancellationTokenSource();
             ct = tokenSource.Token;
             scriptTask = new Task(() =>
             {
+                logTools.Info($"Script: {script.Name} OnStart");
+                script.OnStart();
                 while (true)
                 {
                     if (ct.IsCancellationRequested)
                     {
                         ct.ThrowIfCancellationRequested();
                     }
-                    Thread.Sleep(2000);
+                    Thread.Sleep(script.Interval);
                     viewportRect = mumuState.ViewportRect;
-                    mumuState.ClickActStageExchange(viewportRect);
+                    viewportCapture = mumuState.DoCapture(viewportRect);
+                    logTools.Info($"Script: {script.Name} Tick");
+                    script.Tick(viewportCapture, viewportRect);
                 }
             }, tokenSource.Token);
             scriptTask.ContinueWith((t) =>
             {
                 if (t.IsFaulted)
                 {
-                    logTools.Error(t.Exception.Message);
+                    var msg = t.Exception.Message;
+                    if (msg.Contains("一个或多个") && t.Exception.InnerException != null)
+                    {
+                        msg = t.Exception.InnerException.Message;
+                    }
+                    logTools.Error(msg);
                 }
                 else if (t.IsCanceled)
                 {
@@ -220,11 +147,10 @@ namespace PCRHelper
             scriptTask.Start();
         }
 
-        void StopActStageExchangeLoop()
+        void StopScriptLoop()
         {
             tokenSource?.Cancel();
         }
-
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -254,32 +180,27 @@ namespace PCRHelper
 
         private void menuStartArenaCaptureLoop_Click(object sender, EventArgs e)
         {
-            if (scriptTask != null && scriptTask.Status == TaskStatus.Running)
-            {
-                logTools.Error("Already has one running Script Task");
-                return;
-            }
-            StartArenaCaptureLoop();
+            StartArenaSearchLoop();
         }
 
         private void menuStopArenaCaptureLoop_Click(object sender, EventArgs e)
         {
-            StopArenaCaptureLoop();
+            StopArenaSearchLoop();
         }
 
         private void menuStartActStageExchangeLoop_Click(object sender, EventArgs e)
         {
-            if (scriptTask != null && scriptTask.Status == TaskStatus.Running)
-            {
-                logTools.Error("Already has one running Script Task");
-                return;
-            }
             StartActStageExchangeLoop();
         }
 
         private void menuStopActStageExchangeLoop_Click(object sender, EventArgs e)
         {
             StopActStageExchangeLoop();
+        }
+
+        private void menuTemp_Click(object sender, EventArgs e)
+        {
+            menuGetRectRate_Click_1(sender, e);
         }
     }
 }

@@ -46,5 +46,17 @@ namespace PCRHelper.Properties {
                 this["AdbServerExePath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PCRExImgsDir {
+            get {
+                return ((string)(this["PCRExImgsDir"]));
+            }
+            set {
+                this["PCRExImgsDir"] = value;
+            }
+        }
     }
 }

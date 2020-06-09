@@ -6,6 +6,10 @@ using RawPoint = System.Drawing.Point;
 
 namespace PCRHelper
 {
+
+    /// <summary>
+    /// 严格来说应该叫PCRState
+    /// </summary>
     class MumuState
     {
 
@@ -240,12 +244,6 @@ namespace PCRHelper
             return childMat;
         }
 
-        /// <summary>
-        /// 相对坐标
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="pointRate"></param>
-        /// <returns></returns>
         public RawPoint GetRelativePoint(RECT rect, Vec2f pointRate)
         {
             var wid = rect.Width;
@@ -432,10 +430,154 @@ namespace PCRHelper
 
         public void ClickActStageExchange(RECT viewportRect)
         {
-            var actStageExchangePointRate = GetActStageExchangePointRate();
-            var point = GetRelativePoint(viewportRect, actStageExchangePointRate);
+            var actStageExchangePointRateI = GetActStageExchangePointRate();
+            var point = GetRelativePoint(viewportRect, actStageExchangePointRateI);
             DoClick(point);
         }
 
+
+        Vec2f backPointRate = new Vec2f(0.0317f, 0.0526f);
+
+        public Vec2f GetBackPointRate()
+        {
+            return backPointRate;
+        }
+
+        public void ClickBack(RECT viewportRect)
+        {
+            var backPointRateI = GetBackPointRate();
+            var point = GetRelativePoint(viewportRect, backPointRateI);
+            DoClick(point);
+        }
+
+
+        Vec2f[] tabPointRateArr = new Vec2f[]
+        {
+            new Vec2f(0.1379f, 0.9465f),
+            new Vec2f(0.2552f, 0.9516f),
+            new Vec2f(0.3716f, 0.9585f),
+            new Vec2f(0.5000f, 0.9482f),
+            new Vec2f(0.6397f, 0.9534f),
+            new Vec2f(0.7491f, 0.9430f),
+            new Vec2f(0.8629f, 0.9534f),
+        };
+
+        public Vec2f GetTabPointRate(PCRTab pcrTab)
+        {
+            switch(pcrTab)
+            {
+                case PCRTab.Mainpage: return tabPointRateArr[0];
+                case PCRTab.Character: return tabPointRateArr[1];
+                case PCRTab.Story: return tabPointRateArr[2];
+                case PCRTab.Battle: return tabPointRateArr[3];
+                case PCRTab.Guildhouse: return tabPointRateArr[4];
+                case PCRTab.Pickup: return tabPointRateArr[5];
+                case PCRTab.Menu: return tabPointRateArr[6];
+            }
+            return tabPointRateArr[0];
+        }
+
+        public void ClickTab(RECT viewportRect, PCRTab pcrTab)
+        {
+            var tabPointRate = GetTabPointRate(pcrTab);
+            var point = GetRelativePoint(viewportRect, tabPointRate);
+            DoClick(point);
+        }
+
+        Vec2f[] battleEntrancePointRateArr = new Vec2f[]
+        {
+            new Vec2f(0.6328f, 0.3903f),
+            new Vec2f(0.7974f, 0.2591f),
+            new Vec2f(0.9207f, 0.2591f),
+            new Vec2f(0.7931f, 0.5095f),
+            new Vec2f(0.9233f, 0.5199f),
+            new Vec2f(0.6500f, 0.7582f),
+            new Vec2f(0.8767f, 0.7547f),
+        };
+
+        public Vec2f GetBattleEntrancePointRate(PCRBattleMode mode)
+        {
+            switch (mode)
+            {
+                case PCRBattleMode.Mainline: return battleEntrancePointRateArr[0];
+                case PCRBattleMode.Explore: return battleEntrancePointRateArr[1];
+                case PCRBattleMode.Underground: return battleEntrancePointRateArr[2];
+                case PCRBattleMode.Survey: return battleEntrancePointRateArr[3];
+                case PCRBattleMode.Team: return battleEntrancePointRateArr[4];
+                case PCRBattleMode.Arena: return battleEntrancePointRateArr[5];
+                case PCRBattleMode.PrincessArena: return battleEntrancePointRateArr[6];
+            }
+            return battleEntrancePointRateArr[0];
+        }
+
+        public void ClickBattleEntrance(RECT viewportRect, PCRBattleMode mode)
+        {
+            var battleEntracePointRate = GetBattleEntrancePointRate(mode);
+            var point = GetRelativePoint(viewportRect, battleEntracePointRate);
+            DoClick(point);
+        }
+
+        public bool IsMatchConnecting(Mat viewportMat, RECT viewportRect, out RECT matchedRect)
+        {
+            var childMat = viewportMat.GetChildMatByRectRate(new Vec4f(0.7899f, 0.0036f, 0.9810f, 0.1289f));
+            var exImgPath = configMgr.GetPCRExImgFullPath("connecting.png");
+            var exMat = new Mat(exImgPath);
+            var matchRes = graphicsTools.MatchImage(childMat, exMat);
+            matchedRect = matchRes.MatchedRect;
+            return matchRes.Success;
+        }
+
+        public PCRStateStruct GetPCRState(Bitmap viewportCapture, RECT viewportRect)
+        {
+            return GetPCRState(viewportCapture.ToOpenCvMat(), viewportRect);
+        }
+
+        public PCRStateStruct GetPCRState(Mat viewportMat, RECT viewportRect)
+        {
+            RECT matchedRect;
+            if (IsMatchConnecting(viewportMat, viewportRect, out matchedRect))
+            {
+                return new PCRStateStruct() { State = PCRState.Connecting, Param0 = matchedRect };
+            }
+            return new PCRStateStruct()
+            {
+                State = PCRState.Unknown,
+            };
+        }
+    }
+
+    struct PCRStateStruct
+    {
+        public PCRState State;
+        public object Param0;
+    }
+
+    enum PCRState
+    {
+        Unknown,
+        Connecting,
+        Loading,
+    }
+
+    enum PCRTab
+    {
+        Mainpage,
+        Character,
+        Story,
+        Battle,
+        Guildhouse,
+        Pickup,
+        Menu,
+    }
+
+    enum PCRBattleMode
+    {
+        Mainline,
+        Explore,
+        Underground,
+        Survey,
+        Team,
+        Arena,
+        PrincessArena,
     }
 }
