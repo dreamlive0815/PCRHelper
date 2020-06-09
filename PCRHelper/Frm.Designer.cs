@@ -46,6 +46,12 @@
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.menuStartStorySkipLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStopStorySkipLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuRegions = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuMainland = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuTaiwan = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuJapan = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,6 +60,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuTools,
             this.menuScripts,
+            this.menuRegions,
             this.menuClearConsole,
             this.menuTemp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -92,7 +99,9 @@
             this.menuStartArenaSearchLoop,
             this.menuStopArenaSearchLoop,
             this.menuStartActStageExchangeLoop,
-            this.menuStopActStageExchangeLoop});
+            this.menuStopActStageExchangeLoop,
+            this.menuStartStorySkipLoop,
+            this.menuStopStorySkipLoop});
             this.menuScripts.Name = "menuScripts";
             this.menuScripts.Size = new System.Drawing.Size(74, 21);
             this.menuScripts.Text = "Scripts(&S)";
@@ -192,6 +201,51 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // menuStartStorySkipLoop
+            // 
+            this.menuStartStorySkipLoop.Name = "menuStartStorySkipLoop";
+            this.menuStartStorySkipLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStartStorySkipLoop.Text = "StartStorySkipLoop";
+            this.menuStartStorySkipLoop.Click += new System.EventHandler(this.menuStartStorySkipLoop_Click);
+            // 
+            // menuStopStorySkipLoop
+            // 
+            this.menuStopStorySkipLoop.Name = "menuStopStorySkipLoop";
+            this.menuStopStorySkipLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStopStorySkipLoop.Text = "StopStorySkipLoop";
+            this.menuStopStorySkipLoop.Click += new System.EventHandler(this.menuStopStorySkipLoop_Click);
+            // 
+            // menuRegions
+            // 
+            this.menuRegions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuMainland,
+            this.menuTaiwan,
+            this.menuJapan});
+            this.menuRegions.Name = "menuRegions";
+            this.menuRegions.Size = new System.Drawing.Size(83, 21);
+            this.menuRegions.Text = "Regions(&R)";
+            // 
+            // menuMainland
+            // 
+            this.menuMainland.Name = "menuMainland";
+            this.menuMainland.Size = new System.Drawing.Size(152, 22);
+            this.menuMainland.Text = "Mainland";
+            this.menuMainland.Click += new System.EventHandler(this.menuMainland_Click);
+            // 
+            // menuTaiwan
+            // 
+            this.menuTaiwan.Name = "menuTaiwan";
+            this.menuTaiwan.Size = new System.Drawing.Size(152, 22);
+            this.menuTaiwan.Text = "Taiwan";
+            this.menuTaiwan.Click += new System.EventHandler(this.menuTaiwan_Click);
+            // 
+            // menuJapan
+            // 
+            this.menuJapan.Name = "menuJapan";
+            this.menuJapan.Size = new System.Drawing.Size(152, 22);
+            this.menuJapan.Text = "Japan";
+            this.menuJapan.Click += new System.EventHandler(this.menuJapan_Click);
+            // 
             // Frm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
@@ -239,6 +293,12 @@
         private System.Windows.Forms.ToolStripMenuItem menuStartActStageExchangeLoop;
         private System.Windows.Forms.ToolStripMenuItem menuStopActStageExchangeLoop;
         private System.Windows.Forms.ToolStripMenuItem menuTemp;
+        private System.Windows.Forms.ToolStripMenuItem menuStartStorySkipLoop;
+        private System.Windows.Forms.ToolStripMenuItem menuStopStorySkipLoop;
+        private System.Windows.Forms.ToolStripMenuItem menuRegions;
+        private System.Windows.Forms.ToolStripMenuItem menuMainland;
+        private System.Windows.Forms.ToolStripMenuItem menuTaiwan;
+        private System.Windows.Forms.ToolStripMenuItem menuJapan;
     }
 }
 

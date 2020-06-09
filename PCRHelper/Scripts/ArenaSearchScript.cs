@@ -30,7 +30,7 @@ namespace PCRHelper.Scripts
             this.getRankFunc = getRankFunc;
         }
 
-        public override void OnStart()
+        public override void OnStart(Bitmap viewportCapture, RECT viewportRect)
         {
             
         }

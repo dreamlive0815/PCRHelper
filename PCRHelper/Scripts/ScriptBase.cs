@@ -24,7 +24,7 @@ namespace PCRHelper.Scripts
 
         public abstract string Name { get; }
 
-        public abstract void OnStart();
+        public abstract void OnStart(Bitmap viewportCapture, RECT viewportRect);
 
         public abstract void Tick(Bitmap viewportCapture, RECT viewportRect);
     }

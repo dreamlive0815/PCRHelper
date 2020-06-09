@@ -34,6 +34,7 @@ namespace PCRHelper
         {
             configMgr.Init();
             logTools.SetRichTextBox(txtConsole);
+            RefreshRegions();
 
             //var mumuState = GetMumuState();
             //viewportRect = mumuState.ViewportRect;
@@ -99,6 +100,20 @@ namespace PCRHelper
             StopScriptLoop();
         }
 
+        void StartStorySkipLoop()
+        {
+            logTools.Info("StartStorySkipLoop...");
+            mumuState = GetMumuState();
+
+            script = new ReadStoryScript();
+            StartScriptLoop(script);
+        }
+
+        void StopStorySkipLoop()
+        {
+            StopScriptLoop();
+        }
+
         void StartScriptLoop(ScriptBase script)
         {
             if (scriptTask != null && scriptTask.Status == TaskStatus.Running)
@@ -113,8 +128,10 @@ namespace PCRHelper
             ct = tokenSource.Token;
             scriptTask = new Task(() =>
             {
+                viewportRect = mumuState.ViewportRect;
+                viewportCapture = mumuState.DoCapture(viewportRect);
                 logTools.Info($"Script: {script.Name} OnStart");
-                script.OnStart();
+                script.OnStart(viewportCapture, viewportRect);
                 while (true)
                 {
                     if (ct.IsCancellationRequested)
@@ -201,6 +218,42 @@ namespace PCRHelper
         private void menuTemp_Click(object sender, EventArgs e)
         {
             menuGetRectRate_Click_1(sender, e);
+        }
+
+        private void menuStartStorySkipLoop_Click(object sender, EventArgs e)
+        {
+            StartStorySkipLoop();
+        }
+
+        private void menuStopStorySkipLoop_Click(object sender, EventArgs e)
+        {
+            StopStorySkipLoop();
+        }
+
+        void RefreshRegions()
+        {
+            var pcrRegion = configMgr.PCRRegion;
+            menuMainland.Checked = pcrRegion == PCRRegion.Mainland;
+            menuTaiwan.Checked = pcrRegion == PCRRegion.Taiwan;
+            menuTaiwan.Checked = pcrRegion == PCRRegion.Japan;
+        }
+
+        private void menuMainland_Click(object sender, EventArgs e)
+        {
+            configMgr.PCRRegion = PCRRegion.Mainland;
+            RefreshRegions();
+        }
+
+        private void menuTaiwan_Click(object sender, EventArgs e)
+        {
+            configMgr.PCRRegion = PCRRegion.Taiwan;
+            RefreshRegions();
+        }
+
+        private void menuJapan_Click(object sender, EventArgs e)
+        {
+            configMgr.PCRRegion = PCRRegion.Japan;
+            RefreshRegions();
         }
     }
 }

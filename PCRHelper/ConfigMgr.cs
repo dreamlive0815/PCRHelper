@@ -6,8 +6,9 @@ namespace PCRHelper
 {
     enum PCRRegion
     {
-        Mainland = 0,
-        Taiwan = 1,
+        Mainland,
+        Taiwan,
+        Japan,
     }
 
     class ConfigMgr
@@ -156,7 +157,30 @@ namespace PCRHelper
             }
         }
 
-        public PCRRegion PCRRegion { get; set; } = PCRRegion.Mainland;
+        public PCRRegion ParsePCRRegion(string s)
+        {
+            s = s.ToLower();
+            switch(s)
+            {
+                case "mainland": return PCRRegion.Mainland;
+                case "taiwan": return PCRRegion.Taiwan;
+                case "japan": return PCRRegion.Japan;
+            }
+            return PCRRegion.Mainland;
+        }
+
+        public PCRRegion PCRRegion
+        {
+            get
+            {
+                return ParsePCRRegion(PCRHelper.Properties.Settings.Default.PCRRegionStr);
+            }
+            set
+            {
+                PCRHelper.Properties.Settings.Default.PCRRegionStr = value.ToString();
+                PCRHelper.Properties.Settings.Default.Save();
+            }
+        }
 
         public string OCRLans
         {

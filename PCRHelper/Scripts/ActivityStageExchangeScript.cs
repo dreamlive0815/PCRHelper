@@ -14,7 +14,13 @@ namespace PCRHelper.Scripts
             get { return "ActivityStageExchangeScript"; }
         }
 
-        public override void OnStart()
+        public override int Interval
+        {
+            get { return 3000; }
+            set { base.Interval = value; }
+        }
+
+        public override void OnStart(Bitmap viewportCapture, RECT viewportRect)
         {
             
         }

@@ -58,5 +58,17 @@ namespace PCRHelper.Properties {
                 this["PCRExImgsDir"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PCRRegionStr {
+            get {
+                return ((string)(this["PCRRegionStr"]));
+            }
+            set {
+                this["PCRRegionStr"] = value;
+            }
+        }
     }
 }
