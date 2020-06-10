@@ -244,13 +244,29 @@ namespace PCRHelper
             return childMat;
         }
 
-        public RawPoint GetRelativePoint(RECT rect, Vec2f pointRate)
+        /// <summary>
+        /// 获取到的是模拟器中的坐标
+        /// </summary>
+        /// <param name="rect">这个参数暂时无用 opencv坐标</param>
+        /// <param name="pointRate"></param>
+        /// <returns></returns>
+        public RawPoint GetEmulatorPoint(RECT viewportRect, Vec2f pointRate)
         {
-            var wid = rect.Width;
-            var hei = rect.Height;
-            wid = width;
-            hei = height;
+            var wid = width;
+            var hei = height;
             return new RawPoint((int)(wid * pointRate.Item0), (int)(hei * pointRate.Item1));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewportRect">opencv坐标</param>
+        /// <param name="point">opencv坐标 相对于viewport左上角</param>
+        /// <returns></returns>
+        public RawPoint GetEmulatorPoint(RECT viewportRect, RawPoint point)
+        {
+            var pointRate = new Vec2f(1.0f * point.X / viewportRect.Width, 1.0f * point.Y / viewportRect.Height);
+            return GetEmulatorPoint(viewportRect, pointRate);
         }
 
         public void DoClick(RawPoint point)
@@ -288,7 +304,7 @@ namespace PCRHelper
         public void ClickArenaPlayer(RECT viewportRect, int index)
         {
             var arenaPlayerPointRate = GetArenaPlayerPointRate(index);
-            var point = GetRelativePoint(viewportRect, arenaPlayerPointRate);
+            var point = GetEmulatorPoint(viewportRect, arenaPlayerPointRate);
             DoClick(point);
         }
 
@@ -302,7 +318,7 @@ namespace PCRHelper
         public void ClickArenaRefresh(RECT viewportRect)
         {
             var arenaRefreshPointRate = GetArenaRefreshPointRate();
-            var point = GetRelativePoint(viewportRect, arenaRefreshPointRate);
+            var point = GetEmulatorPoint(viewportRect, arenaRefreshPointRate);
             DoClick(point);
         }
 
@@ -431,7 +447,7 @@ namespace PCRHelper
         public void ClickActStageExchange(RECT viewportRect)
         {
             var actStageExchangePointRateI = GetActStageExchangePointRate();
-            var point = GetRelativePoint(viewportRect, actStageExchangePointRateI);
+            var point = GetEmulatorPoint(viewportRect, actStageExchangePointRateI);
             DoClick(point);
         }
 
@@ -446,7 +462,7 @@ namespace PCRHelper
         public void ClickBack(RECT viewportRect)
         {
             var backPointRateI = GetBackPointRate();
-            var point = GetRelativePoint(viewportRect, backPointRateI);
+            var point = GetEmulatorPoint(viewportRect, backPointRateI);
             DoClick(point);
         }
 
@@ -480,7 +496,7 @@ namespace PCRHelper
         public void ClickTab(RECT viewportRect, PCRTab pcrTab)
         {
             var tabPointRate = GetTabPointRate(pcrTab);
-            var point = GetRelativePoint(viewportRect, tabPointRate);
+            var point = GetEmulatorPoint(viewportRect, tabPointRate);
             DoClick(point);
         }
 
@@ -513,15 +529,42 @@ namespace PCRHelper
         public void ClickBattleEntrance(RECT viewportRect, PCRBattleMode mode)
         {
             var battleEntracePointRate = GetBattleEntrancePointRate(mode);
-            var point = GetRelativePoint(viewportRect, battleEntracePointRate);
+            var point = GetEmulatorPoint(viewportRect, battleEntracePointRate);
+            DoClick(point);
+        }
+
+        Vec2f[] storyEntrancePointRateArr = new Vec2f[]
+        {
+            new Vec2f(0.7686f, 0.2522f),
+            new Vec2f(0.6128f, 0.6414f),
+            new Vec2f(0.7627f, 0.6472f),
+            new Vec2f(0.9178f, 0.6443f),
+        };
+
+        public Vec2f GetStoryEntrancePointRate(PCRStory story)
+        {
+            var arr = storyEntrancePointRateArr;
+            switch (story)
+            {
+                case PCRStory.Mainline: return arr[0];
+                case PCRStory.Character: return arr[1];
+                case PCRStory.Guild: return arr[2];
+                case PCRStory.Extra: return arr[3];
+            }
+            return arr[0];
+        }
+
+        public void ClickStoryEntrance(RECT viewportRect, PCRStory story)
+        {
+            var storyEntracePointRate = GetStoryEntrancePointRate(story);
+            var point = GetEmulatorPoint(viewportRect, storyEntracePointRate);
             DoClick(point);
         }
 
         public bool IsMatchConnecting(Mat viewportMat, RECT viewportRect, out RECT matchedRect)
         {
             var childMat = viewportMat.GetChildMatByRectRate(new Vec4f(0.7899f, 0.0036f, 0.9810f, 0.1289f));
-            var exImgPath = configMgr.GetPCRExImgFullPath("connecting.png");
-            var exMat = new Mat(exImgPath);
+            var exMat = configMgr.GetPCRExImg("connecting.png", viewportMat, viewportRect);
             var matchRes = graphicsTools.MatchImage(childMat, exMat);
             matchedRect = matchRes.MatchedRect;
             return matchRes.Success;
@@ -579,5 +622,13 @@ namespace PCRHelper
         Team,
         Arena,
         PrincessArena,
+    }
+
+    enum PCRStory
+    {
+        Mainline,
+        Character,
+        Guild,
+        Extra,
     }
 }

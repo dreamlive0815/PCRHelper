@@ -48,6 +48,7 @@ namespace PCRHelper
             }
             else
             {
+                if (richTextBox.IsDisposed) return;
                 richTextBox.SelectionColor = color;
                 richTextBox.AppendText(s);
                 ScrollToEnd(richTextBox);

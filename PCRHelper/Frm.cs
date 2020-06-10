@@ -9,12 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
-using ThreadingTimer = System.Threading.Timer;
-using System.IO;
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
-using System.Text.RegularExpressions;
 using PCRHelper.Scripts;
+using RawSize = System.Drawing.Size;
+using CvSize = OpenCvSharp.Size;
+using OpenCvSharp;
 
 namespace PCRHelper
 {
@@ -158,7 +156,7 @@ namespace PCRHelper
                 }
                 else if (t.IsCanceled)
                 {
-                    logTools.Error("Canceld");
+                    logTools.Error("Script Canceled");
                 }
             });
             scriptTask.Start();
@@ -236,6 +234,7 @@ namespace PCRHelper
             menuMainland.Checked = pcrRegion == PCRRegion.Mainland;
             menuTaiwan.Checked = pcrRegion == PCRRegion.Taiwan;
             menuJapan.Checked = pcrRegion == PCRRegion.Japan;
+            Text = $"Current Region: {pcrRegion}";
         }
 
         private void menuMainland_Click(object sender, EventArgs e)

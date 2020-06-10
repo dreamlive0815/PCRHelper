@@ -1,6 +1,9 @@
-﻿using System;
+﻿using OpenCvSharp;
+using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using CvSize = OpenCvSharp.Size;
 
 namespace PCRHelper
 {
@@ -209,6 +212,31 @@ namespace PCRHelper
         {
             var path = Tools.GetInstance().JoinPath(PCRExImgsDir, PCRRegion.ToString(), imgName);
             return path;
+        }
+
+        public Mat GetRawPCRExImg(string name)
+        {
+            var fullPath = ConfigMgr.GetInstance().GetPCRExImgFullPath(name);
+            var mat = new Mat(fullPath, ImreadModes.Unchanged);
+            return mat;
+        }
+
+        public Mat GetPCRExImg(string name, Bitmap viewportCapture, RECT viewportRect)
+        {
+            var viewportMat = viewportCapture.ToOpenCvMat();
+            return GetPCRExImg(name, viewportMat, viewportRect);
+        }
+
+        public Mat GetPCRExImg(string name, Mat viewportMat, RECT viewportRect)
+        {
+            var viewportMatExPath = ConfigMgr.GetInstance().GetPCRExImgFullPath("capture.png");
+            var viewportMatEx = new Mat(viewportMatExPath, ImreadModes.Unchanged);
+            var widScale = viewportRect.Width / viewportMatEx.Width;
+            var heiScale = viewportRect.Height / viewportMatEx.Height;
+            var fullPath = ConfigMgr.GetInstance().GetPCRExImgFullPath(name);
+            var mat = new Mat(fullPath, ImreadModes.Unchanged);
+            mat = mat.Resize(new CvSize(mat.Width * widScale, mat.Height * heiScale));
+            return mat;
         }
     }
 }

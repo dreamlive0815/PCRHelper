@@ -16,7 +16,7 @@ namespace PCRHelper.Scripts
 
         public override int Interval
         {
-            get { return 3000; }
+            get { return 3500; }
             set { base.Interval = value; }
         }
 

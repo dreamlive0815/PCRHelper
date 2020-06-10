@@ -210,7 +210,7 @@ namespace PCRHelper
 
         public MatchImageResult MatchImage(Mat source, Mat search)
         {
-            return MatchImage(source, search, 0.8);
+            return MatchImage(source, search, 0.7);
         }
 
         public MatchImageResult MatchImage(Mat source, Mat search, double threshold)
@@ -218,8 +218,8 @@ namespace PCRHelper
             var res = new Mat();
             var c1 = source.Channels();
             var c2 = search.Channels();
-            //DisplayImage("source", source);
-            //DisplayImage("search", search);
+            DisplayImage("source", source);
+            DisplayImage("search", search);
             Cv2.MatchTemplate(source, search, res, TemplateMatchModes.CCoeffNormed);
             double minVal, maxVal;
             CvPoint minLoc, maxLoc;
