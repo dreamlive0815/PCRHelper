@@ -216,15 +216,15 @@ namespace PCRHelper
         public MatchImageResult MatchImage(Mat source, Mat search, double threshold)
         {
             var res = new Mat();
-            var c1 = source.Channels();
-            var c2 = search.Channels();
+            //var c1 = source.Channels();
+            //var c2 = search.Channels();
             DisplayImage("source", source);
             DisplayImage("search", search);
             Cv2.MatchTemplate(source, search, res, TemplateMatchModes.CCoeffNormed);
             double minVal, maxVal;
             CvPoint minLoc, maxLoc;
             Cv2.MinMaxLoc(res, out minVal, out maxVal, out minLoc, out maxLoc);
-            LogTools.GetInstance().Info($"maxVal = {maxVal}, threshold = {threshold}");
+            //LogTools.GetInstance().Info($"maxVal = {maxVal}, threshold = {threshold}");
             if (maxVal < threshold)
             {
                 return new MatchImageResult()

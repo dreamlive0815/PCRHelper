@@ -231,8 +231,8 @@ namespace PCRHelper
         {
             var viewportMatExPath = ConfigMgr.GetInstance().GetPCRExImgFullPath("capture.png");
             var viewportMatEx = new Mat(viewportMatExPath, ImreadModes.Unchanged);
-            var widScale = viewportRect.Width / viewportMatEx.Width;
-            var heiScale = viewportRect.Height / viewportMatEx.Height;
+            var widScale = 1.0 * viewportRect.Width / viewportMatEx.Width;
+            var heiScale = 1.0 * viewportRect.Height / viewportMatEx.Height;
             var fullPath = ConfigMgr.GetInstance().GetPCRExImgFullPath(name);
             var mat = new Mat(fullPath, ImreadModes.Unchanged);
             mat = mat.Resize(new CvSize(mat.Width * widScale, mat.Height * heiScale));
