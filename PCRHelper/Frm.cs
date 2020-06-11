@@ -140,7 +140,15 @@ namespace PCRHelper
                     viewportRect = mumuState.ViewportRect;
                     viewportCapture = mumuState.DoCapture(viewportRect);
                     logTools.Info($"Script: {script.Name} Tick");
-                    script.Tick(viewportCapture, viewportRect);
+                    try
+                    {
+                        script.Tick(viewportCapture, viewportRect);
+                    }
+                    catch (Exception e)
+                    {
+                        logTools.Info(e.Message);
+                    }
+                    
                 }
             }, tokenSource.Token);
             scriptTask.ContinueWith((t) =>

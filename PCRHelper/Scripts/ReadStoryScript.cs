@@ -29,6 +29,13 @@ namespace PCRHelper.Scripts
 
         public override void Tick(Bitmap viewportCapture, RECT viewportRect)
         {
+            if (viewportCapture.Width < 10 || viewportCapture.Height < 10)
+            {
+                logTools.Info("Capture Size Sucks, Special Process, Click Skip");
+                MumuState.ClickSkipConfirmButton(viewportRect);
+                return;
+            }
+
             var viewportMat = viewportCapture.ToOpenCvMat();
 
             if (IsStoryMainScene(viewportMat, viewportRect))
@@ -37,13 +44,38 @@ namespace PCRHelper.Scripts
             }
             else if (IsStoryListScene(viewportMat, viewportRect))
             {
-                DoListSceneThings(viewportMat, viewportRect);
+                DoListSceneThings(viewportMat, viewportRect, 1);
+            }
+            else if (IsDataDownloadWin(viewportMat, viewportRect))
+            {
+                MumuState.ClickDataDownloadButton(viewportRect, false);
+                ClickMenuButtonTimes = 0;
+            }
+            else if (HasSkipConfirmButton(viewportMat, viewportRect))
+            {
+                MumuState.ClickSkipConfirmButton(viewportRect);
+            }
+            else if (HasSkipButton(viewportMat, viewportRect))
+            {
+                MumuState.ClickSkipButton(viewportRect);
+            }
+            else if (HasMenuButton(viewportMat, viewportRect))
+            {
+                MumuState.ClickMenuButton(viewportRect);
+                ClickMenuButtonTimes += 1;
+                if (ClickMenuButtonTimes >= 5)
+                {
+                    MumuState.ClickBack(viewportRect);
+                }
             }
             else
             {
-                logTools.Info("Do Nothing");
+                logTools.Info("Found Nothing, Click Back");
+                MumuState.ClickBack(viewportRect);
             }
         }
+
+        public int ClickMenuButtonTimes { get; set; }
 
         Dictionary<PCRStory, Vec4f> mainsceneStoryTypeExMap = new Dictionary<PCRStory, Vec4f>()
         {
@@ -56,34 +88,53 @@ namespace PCRHelper.Scripts
         public PCRStory CurStory { get; set; }
 
         private int Depth { get; set; }
-        
+
+        public bool DoMainSceneThings(Mat viewportMat, RECT viewportRect, PCRStory story)
+        {
+            var rectRate = mainsceneStoryTypeExMap[story];
+            var matchRes = MatchImage(viewportMat, viewportRect, rectRate, "story_new_tag.png");
+            if (!matchRes.Success) return false;
+            logTools.Info($"Found Story New Tag: {story}");
+            CurStory = story;
+            MumuState.ClickStoryEntrance(viewportRect, story);
+            return true;
+        }
+
+
         public void DoMainSceneThings(Mat viewportMat, RECT viewportRect)
         {
             logTools.Info("DoMainSceneThings");
             foreach (var pair in mainsceneStoryTypeExMap)
             {
-                var matchRes = MatchImage(viewportMat, viewportRect, pair.Value, "story_new_tag.png");
-                if (matchRes.Success)
+                if (DoMainSceneThings(viewportMat, viewportRect, pair.Key))
                 {
-                    logTools.Info($"Found Story New Tag: {pair.Key}");
-                    CurStory = pair.Key;
-                    MumuState.ClickStoryEntrance(viewportRect, pair.Key);
                     return;
                 }
             }
         }
 
-        public void DoListSceneThings(Mat viewportMat, RECT viewportRect)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewportMat"></param>
+        /// <param name="viewportRect"></param>
+        /// <param name="depth">主线剧情界面这种算第一层</param>
+        public void DoListSceneThings(Mat viewportMat, RECT viewportRect, int depth)
         {
-            logTools.Info($"DoListSceneThings; CurStory: {CurStory}");
+            if (depth >= 3) return;
+
+            logTools.Info($"DoListSceneThings; CurStory: {CurStory}; Depth: {depth}");
 
             var listRectRate = new Vec4f(0.5342f, 0.1210f, 0.9789f, 0.8790f);
             var matchRes = MatchImage(viewportMat, viewportRect, listRectRate, "story_new_tag_inner.png");
             if (matchRes.Success)
             {
                 ClickListItem(viewportRect, listRectRate, matchRes.MatchedRect);
+                Thread.Sleep(2000);
+                var newViewportRect = MumuState.ViewportRect;
+                var newViewportCapture = MumuState.DoCapture(newViewportRect);
+                DoListSceneThings(newViewportCapture.ToOpenCvMat(), viewportRect, depth + 1);
             }
-            //new Vec4f(0.5531f, 0.1458f, 0.9483f, 0.3353f)
         }
  
         public void ClickListItem(RECT viewportRect, Vec4f listRectRate, RECT listItemNewTagRect)
@@ -114,6 +165,49 @@ namespace PCRHelper.Scripts
             var listsceneTagRectRate = new Vec4f(0.9207f, 0.0190f, 0.9840f, 0.1108f);
             var matchRes = MatchImage(viewportMat, viewportRect, listsceneTagRectRate, "story_list_scene_tag.png");
             return matchRes.Success;
+        }
+
+        public bool IsDataDownloadWin(Mat viewportMat, RECT viewportRect)
+        {
+            var dataDownloadTitleRectRate = new Vec4f(0.4105f, 0.2172f, 0.5983f, 0.3353f);
+            var matchRes = MatchImage(viewportMat, viewportRect, dataDownloadTitleRectRate, "data_download_title.png");
+            return matchRes.Success;
+        }
+
+        public bool HasMenuButton(Mat viewportMat, RECT viewportRect)
+        {
+            var menuButtonRectRate = new Vec4f(0.8523f, 0.0058f, 0.9636f, 0.1633f);
+            var matchRes = MatchImage(viewportMat, viewportRect, menuButtonRectRate, "menu_button.png");
+            return matchRes.Success;
+        }
+
+        public bool HasSkipButton(Mat viewportMat, RECT viewportRect)
+        {
+            var skipButtonRectRate = new Vec4f(0.7365f, 0.0087f, 0.8748f, 0.1487f);
+            var matchRes = MatchImage(viewportMat, viewportRect, skipButtonRectRate, "skip_button.png");
+            return matchRes.Success;
+        }
+
+        public bool HasSkipConfirmButton(Mat viewportMat, RECT viewportRect)
+        {
+            var skipConfirmButtonRectRate = new Vec4f(0.5364f, 0.6254f, 0.6674f, 0.7493f);
+            var matchRes = MatchImage(viewportMat, viewportRect, skipConfirmButtonRectRate, "skip_confirm_button.png");
+            return matchRes.Success;
+        }
+
+        public bool ClickConfrimIfHas(Mat viewportMat, RECT viewportRect)
+        {
+            var skipConfirmButtonRectRate = new Vec4f(0.5364f, 0.6254f, 0.6674f, 0.7493f);
+            var matchRes = MatchImage(viewportMat, viewportRect, skipConfirmButtonRectRate, "skip_confirm_button.png");
+            if (!matchRes.Success) return false;
+            var confirmAbsoluteRect = GetMatchedAbsoluteRect(viewportRect, skipConfirmButtonRectRate, matchRes.MatchedRect);
+            //这个是opencv中的坐标
+            var cvX = (confirmAbsoluteRect.x1 + confirmAbsoluteRect.x2) / 2;
+            var cvY = (confirmAbsoluteRect.y1 + confirmAbsoluteRect.y2) / 2;
+            var clickCvPoint = new RawPoint(cvX, cvY);
+            var emulatorPoint = MumuState.GetEmulatorPoint(viewportRect, clickCvPoint);
+            MumuState.DoClick(emulatorPoint);
+            return true;
         }
 
 

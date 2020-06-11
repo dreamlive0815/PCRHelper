@@ -22,6 +22,9 @@ namespace PCRHelper
         int height = 1080;
         bool checkResolution = false;//分辨率
         bool checkTopBottomBounds = false;
+        bool fixedTopBottomY = true;
+        int fixedTopY = 36;
+        int fixedBottomY = 722;
 
         private Process process;
         private RECT rect;
@@ -162,43 +165,50 @@ namespace PCRHelper
 
             var width = bitmap.Width;
 
-            var threshold = (int)(255 * bin.Rows * 0.5);
-            var preSum = 0;
-            for (int r = 0; r < bin.Rows; r++)
+            if (fixedTopBottomY)
             {
-                var sum = 0;
-                for (int c = 0; c < bin.Cols; c++)
-                {
-                    var clr = bin.GetPixel(r, c);
-                    sum += clr.R;
-                }
-
-                var diff = Math.Abs(sum - preSum);
-                if (diff > threshold)
-                {
-                    TopY = r;
-                    break;
-                }
-                preSum = sum;
+                TopY = fixedTopY;
+                BottomY = fixedBottomY;
             }
-
-            preSum = 0;
-            for (int r = bin.Rows - 1; r >= 0; r--)
+            else
             {
-                var sum = 0;
-                for (int c = 0; c < bin.Cols; c++)
+                var threshold = (int)(255 * bin.Rows * 0.5);
+                var preSum = 0;
+                for (int r = 0; r < bin.Rows; r++)
                 {
-                    var clr = bin.GetPixel(r, c);
-                    sum += clr.R;
-                }
+                    var sum = 0;
+                    for (int c = 0; c < bin.Cols; c++)
+                    {
+                        var clr = bin.GetPixel(r, c);
+                        sum += clr.R;
+                    }
 
-                var diff = Math.Abs(sum - preSum);
-                if (diff > threshold)
-                {
-                    BottomY = r;
-                    break;
+                    var diff = Math.Abs(sum - preSum);
+                    if (diff > threshold)
+                    {
+                        TopY = r;
+                        break;
+                    }
+                    preSum = sum;
                 }
-                preSum = sum;
+                preSum = 0;
+                for (int r = bin.Rows - 1; r >= 0; r--)
+                {
+                    var sum = 0;
+                    for (int c = 0; c < bin.Cols; c++)
+                    {
+                        var clr = bin.GetPixel(r, c);
+                        sum += clr.R;
+                    }
+
+                    var diff = Math.Abs(sum - preSum);
+                    if (diff > threshold)
+                    {
+                        BottomY = r;
+                        break;
+                    }
+                    preSum = sum;
+                }
             }
 
             if (checkTopBottomBounds)
@@ -558,6 +568,65 @@ namespace PCRHelper
         {
             var storyEntracePointRate = GetStoryEntrancePointRate(story);
             var point = GetEmulatorPoint(viewportRect, storyEntracePointRate);
+            DoClick(point);
+        }
+
+        Vec2f[] dataDownloadPointRateArr = new Vec2f[]
+        {
+            new Vec2f(0.5058f, 0.6822f),
+            new Vec2f(0.6390f, 0.6880f),
+        };
+
+        public Vec2f GetDataDownloadPointRate(bool hasVoice)
+        {
+            var arr = dataDownloadPointRateArr;
+            return hasVoice ? arr[1] : arr[0];
+        }
+
+        public void ClickDataDownloadButton(RECT viewportRect, bool hasVoice)
+        {
+            var dataDownloadPointRate = GetDataDownloadPointRate(hasVoice);
+            var point = GetEmulatorPoint(viewportRect, dataDownloadPointRate);
+            DoClick(point);
+        }
+
+        public Vec2f GetMenuButtonRectRate()
+        {
+            return new Vec2f(0.9105f, 0.0816f);
+        }
+
+        public void ClickMenuButton(RECT viewportRect)
+        {
+            var menuButtonPointRate = GetMenuButtonRectRate();
+            var point = GetEmulatorPoint(viewportRect, menuButtonPointRate);
+            DoClick(point);
+        }
+
+        public Vec2f GetSkipButtonRectRate()
+        {
+            return new Vec2f(0.8057f, 0.0831f);
+        }
+
+        public void ClickSkipButton(RECT viewportRect)
+        {
+            var skipButtonPointRate = GetSkipButtonRectRate();
+            var point = GetEmulatorPoint(viewportRect, skipButtonPointRate);
+            DoClick(point);
+        }
+        public Vec2f GetSkipConfirmButtonRectRate()
+        {
+            return new Vec2f(0.5990f, 0.6924f);
+        }
+
+
+        /// <summary>
+        /// 注意这个按钮位置是不确定的 只能在特殊情况下使用这个方法
+        /// </summary>
+        /// <param name="viewportRect"></param>
+        public void ClickSkipConfirmButton(RECT viewportRect)
+        {
+            var skipConfirmButtonPointRate = GetSkipConfirmButtonRectRate();
+            var point = GetEmulatorPoint(viewportRect, skipConfirmButtonPointRate);
             DoClick(point);
         }
 
