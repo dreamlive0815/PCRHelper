@@ -39,9 +39,10 @@ namespace PCRHelper.Scripts
         {
             var idx = -1;
             bool hasError = false;
+            List<ArenaPlayerPCRResult> list = null;
             try
             {
-                var list = GetArenaPlayerOCRResults(viewportCapture, viewportRect);
+                list = GetArenaPlayerOCRResults(viewportCapture, viewportRect);
                 idx = GetArenaPlayerIndex(list);
             }
             catch (Exception e)
@@ -53,7 +54,8 @@ namespace PCRHelper.Scripts
             if (idx != -1)
             {
                 MumuState.ClickArenaPlayer(viewportRect, idx);
-                throw new Exception("已找到目标玩家,脚本终止");
+                var res = list[idx];
+                throw new Exception($"已找到目标玩家 名字:{res.Name} 排名:{res.Rank}, 脚本终止");
             }
             else if (!hasError)
             {

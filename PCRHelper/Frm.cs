@@ -138,18 +138,18 @@ namespace PCRHelper
                         ct.ThrowIfCancellationRequested();
                     }
                     Thread.Sleep(script.Interval);
-                    try
-                    {
-                        viewportRect = mumuState.ViewportRect;
-                        viewportCapture = mumuState.DoCapture(viewportRect);
-                        logTools.Info($"Script: {script.Name} Tick");
-                        script.Tick(viewportCapture, viewportRect);
-                    }
-                    catch (Exception e)
-                    {
-                        logTools.Error(e.Message);
-                    }
-                    
+                    viewportRect = mumuState.ViewportRect;
+                    viewportCapture = mumuState.DoCapture(viewportRect);
+                    logTools.Info($"Script: {script.Name} Tick");
+                    script.Tick(viewportCapture, viewportRect);
+                    //try
+                    //{
+                        
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    logTools.Error(e.Message);
+                    //}
                 }
             }, tokenSource.Token);
             scriptTask.ContinueWith((t) =>
