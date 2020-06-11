@@ -16,6 +16,9 @@ namespace PCRHelper.Scripts
         private GraphicsTools graphicsTools = GraphicsTools.GetInstance();
         private LogTools logTools = LogTools.GetInstance();
 
+        private double listSceneTagThreshold = 0.6;
+        private double listItemNewTagThreshold = 0.45;
+
         public override string Name
         {
             get { return "ReadStoryScript"; }
@@ -41,6 +44,7 @@ namespace PCRHelper.Scripts
             if (IsStoryMainScene(viewportMat, viewportRect))
             {
                 DoMainSceneThings(viewportMat, viewportRect);
+                DragListTimes = 0;
             }
             else if (IsStoryListScene(viewportMat, viewportRect))
             {
@@ -50,6 +54,7 @@ namespace PCRHelper.Scripts
             {
                 MumuState.ClickDataDownloadButton(viewportRect, false);
                 ClickMenuButtonTimes = 0;
+                DragListTimes = 0;
             }
             else if (HasSkipConfirmButton(viewportMat, viewportRect))
             {
@@ -63,7 +68,7 @@ namespace PCRHelper.Scripts
             {
                 MumuState.ClickMenuButton(viewportRect);
                 ClickMenuButtonTimes += 1;
-                if (ClickMenuButtonTimes >= 5)
+                if (ClickMenuButtonTimes > 5)
                 {
                     MumuState.ClickBack(viewportRect);
                 }
@@ -76,6 +81,8 @@ namespace PCRHelper.Scripts
         }
 
         public int ClickMenuButtonTimes { get; set; }
+
+        public int DragListTimes { get; set; }
 
         Dictionary<PCRStory, Vec4f> mainsceneStoryTypeExMap = new Dictionary<PCRStory, Vec4f>()
         {
@@ -127,7 +134,7 @@ namespace PCRHelper.Scripts
             logTools.Info($"DoListSceneThings; CurStory: {CurStory}; Depth: {depth}");
 
             var listRectRate = new Vec4f(0.5342f, 0.1210f, 0.9789f, 0.8790f);
-            var matchRes = MatchImage(viewportMat, viewportRect, listRectRate, "story_new_tag_inner.png", 0.5);
+            var matchRes = MatchImage(viewportMat, viewportRect, listRectRate, "story_new_tag_inner.png", listItemNewTagThreshold);
             if (matchRes.Success)
             {
                 ClickListItem(viewportRect, listRectRate, matchRes.MatchedRect);
@@ -138,7 +145,15 @@ namespace PCRHelper.Scripts
             }
             else
             {
-                MumuState.DoDrag(viewportRect, new Vec2f(0.7700f, 0.7012f), new Vec2f(0.7700f, 0.2332f), 1200);
+                if (DragListTimes > 10)
+                {
+                    MumuState.ClickBack(viewportRect);
+                }
+                else
+                {
+                    MumuState.DoDrag(viewportRect, new Vec2f(0.7700f, 0.7012f), new Vec2f(0.7700f, 0.2332f), 1200);
+                    DragListTimes += 1;
+                }
             }
         }
  
@@ -168,7 +183,7 @@ namespace PCRHelper.Scripts
         public bool IsStoryListScene(Mat viewportMat, RECT viewportRect)
         {
             var listsceneTagRectRate = new Vec4f(0.9207f, 0.0190f, 0.9840f, 0.1108f);
-            var matchRes = MatchImage(viewportMat, viewportRect, listsceneTagRectRate, "story_list_scene_tag.png");
+            var matchRes = MatchImage(viewportMat, viewportRect, listsceneTagRectRate, "story_list_scene_tag.png", listSceneTagThreshold);
             return matchRes.Success;
         }
 

@@ -304,13 +304,6 @@ namespace PCRHelper
             new Vec2f(0.6448f, 0.7433f),
         };
 
-        Vec2f[] taiwanArenaPlayerPointRateArr = new Vec2f[]
-        {
-            new Vec2f(0.6669f, 0.3312f),
-            new Vec2f(0.6653f, 0.5357f),
-            new Vec2f(0.6448f, 0.7433f),
-        };
-
         public Vec2f GetArenaPlayerPointRate(int index)
         {
             if (configMgr.PCRRegion == PCRRegion.Mainland)
@@ -319,7 +312,11 @@ namespace PCRHelper
             }
             else if (configMgr.PCRRegion == PCRRegion.Taiwan)
             {
-                return taiwanArenaPlayerPointRateArr[index];
+                return mainlandArenaPlayerPointRateArr[index];
+            }
+            else if (configMgr.PCRRegion == PCRRegion.Japan)
+            {
+                return mainlandArenaPlayerPointRateArr[index];
             }
             throw new Exception("GetArenaPlayerPointRateArr" + index);
         }
@@ -355,6 +352,9 @@ namespace PCRHelper
 
         Vec4f[] taiwanArenaPlayerNameRectRateArr = new Vec4f[]
         {
+            new Vec4f(0.4934f, 0.2755f, 0.6594f, 0.3061f),
+            new Vec4f(0.4934f, 0.4883f, 0.6594f, 0.5204f),
+            new Vec4f(0.4934f, 0.7041f, 0.6594f, 0.7347f),
         };
 
         public Vec4f GetArenaPlayerNameRectRate(int index)
@@ -405,10 +405,6 @@ namespace PCRHelper
             new Vec4f(0.7450f, 0.6496f, 0.8258f, 0.6879f),
         };
 
-        Vec4f[] taiwanArenaPlayerRankRectRateArr = new Vec4f[]
-        {
-        };
-
         public Vec4f GetArenaPlayerRankRectRate(int index)
         {
             if (configMgr.PCRRegion == PCRRegion.Mainland)
@@ -417,7 +413,7 @@ namespace PCRHelper
             }
             else if (configMgr.PCRRegion == PCRRegion.Taiwan)
             {
-                return taiwanArenaPlayerRankRectRateArr[index];
+                return mainlandArenaPlayerRankRectRateArr[index];
             }
             throw new Exception("GetArenaPlayerRankPointRateArr" + index);
         }
