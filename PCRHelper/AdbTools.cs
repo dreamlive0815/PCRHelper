@@ -59,5 +59,11 @@ namespace PCRHelper
             var command = $"input tap {point.X} {point.Y}";
             DoShell(command);
         }
+
+        public void DoDrag(Point startPos, Point endPos, int milliSeconds)
+        {
+            var command = $"input swipe {startPos.X} {startPos.Y} {endPos.X} {endPos.Y} {milliSeconds}";
+            DoShell(command);
+        }
     }
 }

@@ -34,8 +34,9 @@ namespace PCRHelper
             logTools.SetRichTextBox(txtConsole);
             RefreshRegions();
 
-            //var mumuState = GetMumuState();
+            var mumuState = GetMumuState();
             //viewportRect = mumuState.ViewportRect;
+            //mumuState.ClickTab(viewportRect, PCRTab.Menu);
             //viewportCapture = mumuState.DoCapture(viewportRect);
         }
 
@@ -137,16 +138,16 @@ namespace PCRHelper
                         ct.ThrowIfCancellationRequested();
                     }
                     Thread.Sleep(script.Interval);
-                    viewportRect = mumuState.ViewportRect;
-                    viewportCapture = mumuState.DoCapture(viewportRect);
-                    logTools.Info($"Script: {script.Name} Tick");
                     try
                     {
+                        viewportRect = mumuState.ViewportRect;
+                        viewportCapture = mumuState.DoCapture(viewportRect);
+                        logTools.Info($"Script: {script.Name} Tick");
                         script.Tick(viewportCapture, viewportRect);
                     }
                     catch (Exception e)
                     {
-                        logTools.Info(e.Message);
+                        logTools.Error(e.Message);
                     }
                     
                 }

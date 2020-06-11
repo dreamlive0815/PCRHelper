@@ -53,7 +53,7 @@ namespace PCRHelper.Scripts
             if (idx != -1)
             {
                 MumuState.ClickArenaPlayer(viewportRect, idx);
-                throw new Exception("已找到目标Player,脚本终止");
+                throw new Exception("已找到目标玩家,脚本终止");
             }
             else if (!hasError)
             {

@@ -284,6 +284,19 @@ namespace PCRHelper
             AdbTools.GetInstance().DoTap(point);
         }
 
+        public void DoClick(RECT viewportRect, Vec2f pointRate)
+        {
+            var point = GetEmulatorPoint(viewportRect, pointRate);
+            AdbTools.GetInstance().DoTap(point);
+        }
+
+        public void DoDrag(RECT viewportRect, Vec2f startPointRate, Vec2f endPointRate, int dragDuration)
+        {
+            var startPoint = GetEmulatorPoint(viewportRect, startPointRate);
+            var endPoint = GetEmulatorPoint(viewportRect, endPointRate);
+            AdbTools.GetInstance().DoDrag(startPoint, endPoint, dragDuration);
+        }
+
         Vec2f[] mainlandArenaPlayerPointRateArr = new Vec2f[]
         {
             new Vec2f(0.6669f, 0.3312f),
@@ -620,7 +633,7 @@ namespace PCRHelper
 
 
         /// <summary>
-        /// 注意这个按钮位置是不确定的 只能在特殊情况下使用这个方法
+        /// 注意这个按钮位置是不确定的
         /// </summary>
         /// <param name="viewportRect"></param>
         public void ClickSkipConfirmButton(RECT viewportRect)

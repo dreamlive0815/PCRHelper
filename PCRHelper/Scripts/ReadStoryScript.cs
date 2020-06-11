@@ -106,6 +106,7 @@ namespace PCRHelper.Scripts
             logTools.Info("DoMainSceneThings");
             foreach (var pair in mainsceneStoryTypeExMap)
             {
+                //if (pair.Key == PCRStory.Mainline) continue;
                 if (DoMainSceneThings(viewportMat, viewportRect, pair.Key))
                 {
                     return;
@@ -126,7 +127,7 @@ namespace PCRHelper.Scripts
             logTools.Info($"DoListSceneThings; CurStory: {CurStory}; Depth: {depth}");
 
             var listRectRate = new Vec4f(0.5342f, 0.1210f, 0.9789f, 0.8790f);
-            var matchRes = MatchImage(viewportMat, viewportRect, listRectRate, "story_new_tag_inner.png");
+            var matchRes = MatchImage(viewportMat, viewportRect, listRectRate, "story_new_tag_inner.png", 0.5);
             if (matchRes.Success)
             {
                 ClickListItem(viewportRect, listRectRate, matchRes.MatchedRect);
@@ -134,6 +135,10 @@ namespace PCRHelper.Scripts
                 var newViewportRect = MumuState.ViewportRect;
                 var newViewportCapture = MumuState.DoCapture(newViewportRect);
                 DoListSceneThings(newViewportCapture.ToOpenCvMat(), viewportRect, depth + 1);
+            }
+            else
+            {
+                MumuState.DoDrag(viewportRect, new Vec2f(0.7700f, 0.7012f), new Vec2f(0.7700f, 0.2332f), 1200);
             }
         }
  

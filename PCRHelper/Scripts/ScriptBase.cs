@@ -30,6 +30,14 @@ namespace PCRHelper.Scripts
         public abstract void Tick(Bitmap viewportCapture, RECT viewportRect);
 
 
+        public MatchImageResult MatchImage(Mat viewportMat, RECT viewportRect, Vec4f exRectRate, string exName)
+        {
+            var exRectMat = viewportMat.GetChildMatByRectRate(exRectRate);
+            var exImgMat = ConfigMgr.GetInstance().GetPCRExImg(exName, viewportMat, viewportRect);
+            var matchRes = GraphicsTools.GetInstance().MatchImage(exRectMat, exImgMat);
+            return matchRes;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -38,11 +46,11 @@ namespace PCRHelper.Scripts
         /// <param name="exRectRate">采样区域</param>
         /// <param name="exName"></param>
         /// <returns></returns>
-        public MatchImageResult MatchImage(Mat viewportMat, RECT viewportRect, Vec4f exRectRate, string exName)
+        public MatchImageResult MatchImage(Mat viewportMat, RECT viewportRect, Vec4f exRectRate, string exName, double threshold)
         {
             var exRectMat = viewportMat.GetChildMatByRectRate(exRectRate);
             var exImgMat = ConfigMgr.GetInstance().GetPCRExImg(exName, viewportMat, viewportRect);
-            var matchRes = GraphicsTools.GetInstance().MatchImage(exRectMat, exImgMat);
+            var matchRes = GraphicsTools.GetInstance().MatchImage(exRectMat, exImgMat, threshold);
             return matchRes;
         }
 

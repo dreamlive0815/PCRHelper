@@ -224,9 +224,9 @@ namespace PCRHelper
             double minVal, maxVal;
             CvPoint minLoc, maxLoc;
             Cv2.MinMaxLoc(res, out minVal, out maxVal, out minLoc, out maxLoc);
-            //LogTools.GetInstance().Info($"maxVal = {maxVal}, threshold = {threshold}");
             if (maxVal < threshold)
             {
+                //LogTools.GetInstance().Info($"maxVal = {maxVal}, threshold = {threshold}");
                 return new MatchImageResult()
                 {
                     Success = false,
