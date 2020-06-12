@@ -195,7 +195,8 @@ namespace PCRHelper
                 }
                 else if (PCRRegion == PCRRegion.Taiwan)
                 {
-                    return "chi_tra+eng";
+                    //return "chi_tra+eng";
+                    return "chi_sim+eng";
                 }
                 throw new Exception("OCRLans");
             }

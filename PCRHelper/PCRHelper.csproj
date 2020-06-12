@@ -103,6 +103,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\ActivityStageExchangeScript.cs" />
     <Compile Include="Scripts\ArenaSearchScript.cs" />
+    <Compile Include="Scripts\AutoStageLineScript.cs" />
     <Compile Include="Scripts\ReadStoryScript.cs" />
     <Compile Include="Scripts\ScriptBase.cs" />
     <Compile Include="Tools.cs" />

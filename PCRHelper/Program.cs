@@ -14,9 +14,16 @@ namespace PCRHelper
         [STAThread]
         static void Main()
         {
+            Application.ThreadException += Application_ThreadException;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Frm());
+        }
+
+        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            LogTools.GetInstance().Error(e.Exception.Message);
         }
     }
 }
