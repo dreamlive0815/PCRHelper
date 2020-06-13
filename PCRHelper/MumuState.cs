@@ -22,9 +22,6 @@ namespace PCRHelper
         int height = 1080;
         bool checkResolution = false;//分辨率
         bool checkTopBottomBounds = false;
-        bool fixedTopBottomY = true;
-        int fixedTopY = 36;
-        int fixedBottomY = 722;
 
         private Process process;
         private RECT rect;
@@ -165,10 +162,10 @@ namespace PCRHelper
 
             var width = bitmap.Width;
 
-            if (fixedTopBottomY)
+            if (configMgr.FixedViewportTopBottomY)
             {
-                TopY = fixedTopY;
-                BottomY = fixedBottomY;
+                TopY = configMgr.FixedViewportTopY;
+                BottomY = configMgr.FixedViewportBottomY;
             }
             else
             {

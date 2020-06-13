@@ -202,6 +202,12 @@ namespace PCRHelper
             }
         }
 
+        public bool FixedViewportTopBottomY { get; set; } = false;
+
+        public int FixedViewportTopY { get; set; } = 36;
+
+        public int FixedViewportBottomY { get; set; } = 722;
+
         public string GetCacheFileFullPath(string relativePath)
         {
             var cacheDir = new DirectoryInfo(this.CacheDir).FullName;
@@ -217,7 +223,7 @@ namespace PCRHelper
 
         public Mat GetRawPCRExImg(string name)
         {
-            var fullPath = ConfigMgr.GetInstance().GetPCRExImgFullPath(name);
+            var fullPath = GetPCRExImgFullPath(name);
             var mat = new Mat(fullPath, ImreadModes.Unchanged);
             return mat;
         }
@@ -230,11 +236,11 @@ namespace PCRHelper
 
         public Mat GetPCRExImg(string name, Mat viewportMat, RECT viewportRect)
         {
-            var viewportMatExPath = ConfigMgr.GetInstance().GetPCRExImgFullPath("capture.png");
+            var viewportMatExPath = GetPCRExImgFullPath("capture.png");
             var viewportMatEx = new Mat(viewportMatExPath, ImreadModes.Unchanged);
             var widScale = 1.0 * viewportRect.Width / viewportMatEx.Width;
             var heiScale = 1.0 * viewportRect.Height / viewportMatEx.Height;
-            var fullPath = ConfigMgr.GetInstance().GetPCRExImgFullPath(name);
+            var fullPath = GetPCRExImgFullPath(name);
             var mat = new Mat(fullPath, ImreadModes.Unchanged);
             mat = mat.Resize(new CvSize(mat.Width * widScale, mat.Height * heiScale));
             return mat;

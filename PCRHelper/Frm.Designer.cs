@@ -35,9 +35,13 @@
             this.menuOpenCacheDir = new System.Windows.Forms.ToolStripMenuItem();
             this.menuScripts = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStartArenaSearchLoop = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStopArenaSearchLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStartActStageExchangeLoop = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStopActStageExchangeLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartStorySkipLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStopScriptLoop = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuRegions = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuMainland = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuTaiwan = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuJapan = new System.Windows.Forms.ToolStripMenuItem();
             this.menuClearConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.menuTemp = new System.Windows.Forms.ToolStripMenuItem();
             this.txtName = new System.Windows.Forms.RichTextBox();
@@ -46,27 +50,27 @@
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.menuStartStorySkipLoop = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStopStorySkipLoop = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuRegions = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuMainland = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuTaiwan = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuJapan = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSetTesseract = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSetPCRExImgDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSetAdbServer = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuTools,
             this.menuScripts,
             this.menuRegions,
+            this.menuSettings,
             this.menuClearConsole,
             this.menuTemp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 3, 0, 3);
-            this.menuStrip1.Size = new System.Drawing.Size(532, 27);
+            this.menuStrip1.Size = new System.Drawing.Size(675, 30);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -76,20 +80,20 @@
             this.menuGetRectRate,
             this.menuOpenCacheDir});
             this.menuTools.Name = "menuTools";
-            this.menuTools.Size = new System.Drawing.Size(67, 21);
+            this.menuTools.Size = new System.Drawing.Size(80, 24);
             this.menuTools.Text = "Tools(&T)";
             // 
             // menuGetRectRate
             // 
             this.menuGetRectRate.Name = "menuGetRectRate";
-            this.menuGetRectRate.Size = new System.Drawing.Size(160, 22);
+            this.menuGetRectRate.Size = new System.Drawing.Size(189, 26);
             this.menuGetRectRate.Text = "GetRectRate";
             this.menuGetRectRate.Click += new System.EventHandler(this.menuGetRectRate_Click_1);
             // 
             // menuOpenCacheDir
             // 
             this.menuOpenCacheDir.Name = "menuOpenCacheDir";
-            this.menuOpenCacheDir.Size = new System.Drawing.Size(160, 22);
+            this.menuOpenCacheDir.Size = new System.Drawing.Size(189, 26);
             this.menuOpenCacheDir.Text = "OpenCacheDir";
             this.menuOpenCacheDir.Click += new System.EventHandler(this.menuOpenCacheDir_Click_1);
             // 
@@ -97,54 +101,83 @@
             // 
             this.menuScripts.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuStartArenaSearchLoop,
-            this.menuStopArenaSearchLoop,
             this.menuStartActStageExchangeLoop,
-            this.menuStopActStageExchangeLoop,
             this.menuStartStorySkipLoop,
-            this.menuStopStorySkipLoop});
+            this.menuStopScriptLoop});
             this.menuScripts.Name = "menuScripts";
-            this.menuScripts.Size = new System.Drawing.Size(74, 21);
+            this.menuScripts.Size = new System.Drawing.Size(90, 24);
             this.menuScripts.Text = "Scripts(&S)";
             // 
             // menuStartArenaSearchLoop
             // 
             this.menuStartArenaSearchLoop.Name = "menuStartArenaSearchLoop";
-            this.menuStartArenaSearchLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStartArenaSearchLoop.Size = new System.Drawing.Size(293, 26);
             this.menuStartArenaSearchLoop.Text = "StartArenaSearchLoop";
             this.menuStartArenaSearchLoop.Click += new System.EventHandler(this.menuStartArenaCaptureLoop_Click);
-            // 
-            // menuStopArenaSearchLoop
-            // 
-            this.menuStopArenaSearchLoop.Name = "menuStopArenaSearchLoop";
-            this.menuStopArenaSearchLoop.Size = new System.Drawing.Size(239, 22);
-            this.menuStopArenaSearchLoop.Text = "StopArenaSearchLoop";
-            this.menuStopArenaSearchLoop.Click += new System.EventHandler(this.menuStopArenaCaptureLoop_Click);
             // 
             // menuStartActStageExchangeLoop
             // 
             this.menuStartActStageExchangeLoop.Name = "menuStartActStageExchangeLoop";
-            this.menuStartActStageExchangeLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStartActStageExchangeLoop.Size = new System.Drawing.Size(293, 26);
             this.menuStartActStageExchangeLoop.Text = "StartActStageExchangeLoop";
             this.menuStartActStageExchangeLoop.Click += new System.EventHandler(this.menuStartActStageExchangeLoop_Click);
             // 
-            // menuStopActStageExchangeLoop
+            // menuStartStorySkipLoop
             // 
-            this.menuStopActStageExchangeLoop.Name = "menuStopActStageExchangeLoop";
-            this.menuStopActStageExchangeLoop.Size = new System.Drawing.Size(239, 22);
-            this.menuStopActStageExchangeLoop.Text = "StopActStageExchangeLoop";
-            this.menuStopActStageExchangeLoop.Click += new System.EventHandler(this.menuStopActStageExchangeLoop_Click);
+            this.menuStartStorySkipLoop.Name = "menuStartStorySkipLoop";
+            this.menuStartStorySkipLoop.Size = new System.Drawing.Size(293, 26);
+            this.menuStartStorySkipLoop.Text = "StartStorySkipLoop";
+            this.menuStartStorySkipLoop.Click += new System.EventHandler(this.menuStartStorySkipLoop_Click);
+            // 
+            // menuStopScriptLoop
+            // 
+            this.menuStopScriptLoop.Name = "menuStopScriptLoop";
+            this.menuStopScriptLoop.Size = new System.Drawing.Size(293, 26);
+            this.menuStopScriptLoop.Text = "StopScriptLoop";
+            this.menuStopScriptLoop.Click += new System.EventHandler(this.menuStopScriptLoop_Click);
+            // 
+            // menuRegions
+            // 
+            this.menuRegions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuMainland,
+            this.menuTaiwan,
+            this.menuJapan});
+            this.menuRegions.Name = "menuRegions";
+            this.menuRegions.Size = new System.Drawing.Size(100, 24);
+            this.menuRegions.Text = "Regions(&R)";
+            // 
+            // menuMainland
+            // 
+            this.menuMainland.Name = "menuMainland";
+            this.menuMainland.Size = new System.Drawing.Size(151, 26);
+            this.menuMainland.Text = "Mainland";
+            this.menuMainland.Click += new System.EventHandler(this.menuMainland_Click);
+            // 
+            // menuTaiwan
+            // 
+            this.menuTaiwan.Name = "menuTaiwan";
+            this.menuTaiwan.Size = new System.Drawing.Size(151, 26);
+            this.menuTaiwan.Text = "Taiwan";
+            this.menuTaiwan.Click += new System.EventHandler(this.menuTaiwan_Click);
+            // 
+            // menuJapan
+            // 
+            this.menuJapan.Name = "menuJapan";
+            this.menuJapan.Size = new System.Drawing.Size(151, 26);
+            this.menuJapan.Text = "Japan";
+            this.menuJapan.Click += new System.EventHandler(this.menuJapan_Click);
             // 
             // menuClearConsole
             // 
             this.menuClearConsole.Name = "menuClearConsole";
-            this.menuClearConsole.Size = new System.Drawing.Size(97, 21);
+            this.menuClearConsole.Size = new System.Drawing.Size(117, 24);
             this.menuClearConsole.Text = "ClearConsole";
             this.menuClearConsole.Click += new System.EventHandler(this.menuClearConsole_Click);
             // 
             // menuTemp
             // 
             this.menuTemp.Name = "menuTemp";
-            this.menuTemp.Size = new System.Drawing.Size(53, 21);
+            this.menuTemp.Size = new System.Drawing.Size(63, 24);
             this.menuTemp.Text = "Temp";
             this.menuTemp.Click += new System.EventHandler(this.menuTemp_Click);
             // 
@@ -163,7 +196,7 @@
             this.label1.Location = new System.Drawing.Point(24, 34);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 17);
+            this.label1.Size = new System.Drawing.Size(52, 22);
             this.label1.TabIndex = 2;
             this.label1.Text = "名字";
             // 
@@ -173,7 +206,7 @@
             this.label2.Location = new System.Drawing.Point(24, 79);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 17);
+            this.label2.Size = new System.Drawing.Size(52, 22);
             this.label2.TabIndex = 4;
             this.label2.Text = "排名";
             // 
@@ -191,7 +224,7 @@
             this.txtConsole.Location = new System.Drawing.Point(12, 117);
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ReadOnly = true;
-            this.txtConsole.Size = new System.Drawing.Size(508, 338);
+            this.txtConsole.Size = new System.Drawing.Size(651, 343);
             this.txtConsole.TabIndex = 5;
             this.txtConsole.Text = "";
             // 
@@ -201,56 +234,42 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // menuStartStorySkipLoop
+            // menuSettings
             // 
-            this.menuStartStorySkipLoop.Name = "menuStartStorySkipLoop";
-            this.menuStartStorySkipLoop.Size = new System.Drawing.Size(239, 22);
-            this.menuStartStorySkipLoop.Text = "StartStorySkipLoop";
-            this.menuStartStorySkipLoop.Click += new System.EventHandler(this.menuStartStorySkipLoop_Click);
+            this.menuSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuSetTesseract,
+            this.menuSetAdbServer,
+            this.menuSetPCRExImgDir});
+            this.menuSettings.Name = "menuSettings";
+            this.menuSettings.Size = new System.Drawing.Size(81, 24);
+            this.menuSettings.Text = "Settings";
             // 
-            // menuStopStorySkipLoop
+            // menuSetTesseract
             // 
-            this.menuStopStorySkipLoop.Name = "menuStopStorySkipLoop";
-            this.menuStopStorySkipLoop.Size = new System.Drawing.Size(239, 22);
-            this.menuStopStorySkipLoop.Text = "StopStorySkipLoop";
-            this.menuStopStorySkipLoop.Click += new System.EventHandler(this.menuStopStorySkipLoop_Click);
+            this.menuSetTesseract.Name = "menuSetTesseract";
+            this.menuSetTesseract.Size = new System.Drawing.Size(202, 26);
+            this.menuSetTesseract.Text = "SetTesseract";
+            this.menuSetTesseract.Click += new System.EventHandler(this.menuSetTesseract_Click);
             // 
-            // menuRegions
+            // menuSetPCRExImgDir
             // 
-            this.menuRegions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuMainland,
-            this.menuTaiwan,
-            this.menuJapan});
-            this.menuRegions.Name = "menuRegions";
-            this.menuRegions.Size = new System.Drawing.Size(83, 21);
-            this.menuRegions.Text = "Regions(&R)";
+            this.menuSetPCRExImgDir.Name = "menuSetPCRExImgDir";
+            this.menuSetPCRExImgDir.Size = new System.Drawing.Size(202, 26);
+            this.menuSetPCRExImgDir.Text = "SetPCRExImgDir";
+            this.menuSetPCRExImgDir.Click += new System.EventHandler(this.menuSetPCRExImgDir_Click);
             // 
-            // menuMainland
+            // menuSetAdbServer
             // 
-            this.menuMainland.Name = "menuMainland";
-            this.menuMainland.Size = new System.Drawing.Size(152, 22);
-            this.menuMainland.Text = "Mainland";
-            this.menuMainland.Click += new System.EventHandler(this.menuMainland_Click);
-            // 
-            // menuTaiwan
-            // 
-            this.menuTaiwan.Name = "menuTaiwan";
-            this.menuTaiwan.Size = new System.Drawing.Size(152, 22);
-            this.menuTaiwan.Text = "Taiwan";
-            this.menuTaiwan.Click += new System.EventHandler(this.menuTaiwan_Click);
-            // 
-            // menuJapan
-            // 
-            this.menuJapan.Name = "menuJapan";
-            this.menuJapan.Size = new System.Drawing.Size(152, 22);
-            this.menuJapan.Text = "Japan";
-            this.menuJapan.Click += new System.EventHandler(this.menuJapan_Click);
+            this.menuSetAdbServer.Name = "menuSetAdbServer";
+            this.menuSetAdbServer.Size = new System.Drawing.Size(202, 26);
+            this.menuSetAdbServer.Text = "SetAdbServer";
+            this.menuSetAdbServer.Click += new System.EventHandler(this.menuSetAdbServer_Click);
             // 
             // Frm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(532, 472);
+            this.ClientSize = new System.Drawing.Size(675, 472);
             this.Controls.Add(this.txtConsole);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtRank);
@@ -289,16 +308,18 @@
         private System.Windows.Forms.ToolStripMenuItem menuOpenCacheDir;
         private System.Windows.Forms.ToolStripMenuItem menuScripts;
         private System.Windows.Forms.ToolStripMenuItem menuStartArenaSearchLoop;
-        private System.Windows.Forms.ToolStripMenuItem menuStopArenaSearchLoop;
         private System.Windows.Forms.ToolStripMenuItem menuStartActStageExchangeLoop;
-        private System.Windows.Forms.ToolStripMenuItem menuStopActStageExchangeLoop;
         private System.Windows.Forms.ToolStripMenuItem menuTemp;
         private System.Windows.Forms.ToolStripMenuItem menuStartStorySkipLoop;
-        private System.Windows.Forms.ToolStripMenuItem menuStopStorySkipLoop;
+        private System.Windows.Forms.ToolStripMenuItem menuStopScriptLoop;
         private System.Windows.Forms.ToolStripMenuItem menuRegions;
         private System.Windows.Forms.ToolStripMenuItem menuMainland;
         private System.Windows.Forms.ToolStripMenuItem menuTaiwan;
         private System.Windows.Forms.ToolStripMenuItem menuJapan;
+        private System.Windows.Forms.ToolStripMenuItem menuSettings;
+        private System.Windows.Forms.ToolStripMenuItem menuSetTesseract;
+        private System.Windows.Forms.ToolStripMenuItem menuSetPCRExImgDir;
+        private System.Windows.Forms.ToolStripMenuItem menuSetAdbServer;
     }
 }
 

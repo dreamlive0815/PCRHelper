@@ -65,14 +65,30 @@ namespace PCRHelper
                 FileName = tesseratPath,
                 Arguments = string.Format("{0} {1} -l {2} --psm 6", tempImgStorePath, tempResPathForTess, lans),
                 WindowStyle = ProcessWindowStyle.Hidden,
+                //RedirectStandardOutput = true,
+                //RedirectStandardError = true,
+                //UseShellExecute = false,
             };
-            var proc = Process.Start(startInfo);
-            proc.WaitForExit();
-            var s = File.ReadAllText(tempResStorePath);
-            s = FilterTesseractResult(s);
-            File.Delete(tempImgStorePath);
-            File.Delete(tempResStorePath);
-            LogTools.GetInstance().Info("OCR:" + s);
+            var s = "";
+            try
+            {
+                var proc = Process.Start(startInfo);
+                proc.WaitForExit();
+                //var output = proc.StandardOutput.ReadToEnd();
+                //var error = proc.StandardError.ReadToEnd();
+                s = File.ReadAllText(tempResStorePath);
+                s = FilterTesseractResult(s);
+                LogTools.GetInstance().Info("OCR:" + s);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                File.Delete(tempImgStorePath);
+                File.Delete(tempResStorePath);
+            }
             return s;
         }
 

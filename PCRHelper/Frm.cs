@@ -35,17 +35,8 @@ namespace PCRHelper
             RefreshRegions();
 
             var mumuState = GetMumuState();
-            viewportRect = mumuState.ViewportRect;
-            viewportCapture = mumuState.DoCapture(viewportRect);
-            var viewportMat = viewportCapture.ToOpenCvMat();
-            //var viewportMat = new Mat(configMgr.GetCacheFileFullPath("battle.png"), ImreadModes.Unchanged);
-            var mat = FilterMat(viewportMat);
-            Cv2.ImShow("viewportMat", mat);
-            var nextMat = configMgr.GetPCRExImg("battle_next_tag.png", mat, viewportRect);
-            nextMat = FilterMat(nextMat);
-            Cv2.ImShow("nextMat", nextMat);
-            var matchRes = graphicsTools.MatchImage(mat, nextMat, 0.4);
-
+            //viewportRect = mumuState.ViewportRect;
+            //viewportCapture = mumuState.DoCapture(viewportRect);
             //mumuState.ClickTab(viewportRect, PCRTab.Menu);
         }
 
@@ -115,6 +106,7 @@ namespace PCRHelper
 
         void StartStorySkipLoop()
         {
+            configMgr.FixedViewportTopBottomY = true;
             logTools.Info("StartStorySkipLoop...");
             mumuState = GetMumuState();
 
@@ -188,6 +180,7 @@ namespace PCRHelper
         void StopScriptLoop()
         {
             tokenSource?.Cancel();
+            configMgr.FixedViewportTopBottomY = false;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -276,6 +269,26 @@ namespace PCRHelper
         {
             configMgr.PCRRegion = PCRRegion.Japan;
             RefreshRegions();
+        }
+
+        private void menuSetTesseract_Click(object sender, EventArgs e)
+        {
+            configMgr.SetTesseractPath();
+        }
+
+        private void menuSetPCRExImgDir_Click(object sender, EventArgs e)
+        {
+            configMgr.SetPCRExImgsDir();
+        }
+
+        private void menuSetAdbServer_Click(object sender, EventArgs e)
+        {
+            configMgr.SetAdbServerExePath();
+        }
+
+        private void menuStopScriptLoop_Click(object sender, EventArgs e)
+        {
+            StopScriptLoop();
         }
     }
 }
