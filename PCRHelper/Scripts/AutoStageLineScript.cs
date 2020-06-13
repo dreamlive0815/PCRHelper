@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenCvSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace PCRHelper.Scripts
 {
     class AutoStageLineScript
     {
+
+        private GraphicsTools graphicsTools = GraphicsTools.GetInstance();
+
         public void F()
         {
             //var viewportMat = viewportCapture.ToOpenCvMat();
@@ -18,6 +22,11 @@ namespace PCRHelper.Scripts
             //nextMat = FilterMat(nextMat);
             //Cv2.ImShow("nextMat", nextMat);
             //var matchRes = graphicsTools.MatchImage(mat, nextMat, 0.4);
+        }
+
+        Mat FilterMat(Mat source)
+        {
+            return graphicsTools.ToGrayBinary(source, 150);
         }
     }
 }

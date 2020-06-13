@@ -40,11 +40,6 @@ namespace PCRHelper
             //mumuState.ClickTab(viewportRect, PCRTab.Menu);
         }
 
-        Mat FilterMat(Mat source)
-        {
-            return graphicsTools.ToGrayBinary(source, 150);
-        }
-
         RECT viewportRect;
         Bitmap viewportCapture;
         MumuState mumuState;
@@ -54,6 +49,7 @@ namespace PCRHelper
         Task scriptTask;
         CancellationTokenSource tokenSource;
         CancellationToken ct;
+        FrmGetRectRate getRectRateFrm;
 
         MumuState GetMumuState()
         {
@@ -119,6 +115,20 @@ namespace PCRHelper
             StopScriptLoop();
         }
 
+        void StartAutoUndergroundLoop()
+        {
+            logTools.Info("StartAutoUndergroundLoop...");
+            mumuState = GetMumuState();
+
+            script = new AutoUndergroundScript();
+            StartScriptLoop(script);
+        }
+
+        void StopAutoUndergroundLoop()
+        {
+            StopScriptLoop();
+        }
+
         void StartScriptLoop(ScriptBase script)
         {
             if (scriptTask != null && scriptTask.Status == TaskStatus.Running)
@@ -143,19 +153,23 @@ namespace PCRHelper
                     {
                         ct.ThrowIfCancellationRequested();
                     }
-                    Thread.Sleep(script.Interval);
-                    viewportRect = mumuState.ViewportRect;
-                    viewportCapture = mumuState.DoCapture(viewportRect);
-                    logTools.Info($"Script: {script.Name} Tick");
-                    script.Tick(viewportCapture, viewportRect);
-                    //try
-                    //{
-                        
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    logTools.Error(e.Message);
-                    //}
+                    try
+                    {
+                        Thread.Sleep(script.Interval);
+                        viewportRect = mumuState.ViewportRect;
+                        viewportCapture = mumuState.DoCapture(viewportRect);
+                        logTools.Info($"Script: {script.Name} Tick");
+                        script.Tick(viewportCapture, viewportRect);
+                    }
+                    catch (Exception e)
+                    {
+                        logTools.Error($"Script: {script.Name} Tick ERROR");
+                        logTools.Error(e.Message);
+                        if (!script.CanKeepOnWhenException)
+                        {
+                            throw e;
+                        }
+                    }
                 }
             }, tokenSource.Token);
             scriptTask.ContinueWith((t) =>
@@ -173,6 +187,7 @@ namespace PCRHelper
                 {
                     logTools.Error("Script Canceled");
                 }
+                ScriptBase.OnScriptEnded(script.Name, !t.IsFaulted && !t.IsCanceled);
             });
             scriptTask.Start();
         }
@@ -194,14 +209,38 @@ namespace PCRHelper
             txtConsole.Clear();
         }
 
-        private void menuGetRectRate_Click_1(object sender, EventArgs e)
+        void ShowGetRectRateForm()
         {
             var mumuState = GetMumuState();
             viewportRect = mumuState.ViewportRect;
             viewportCapture = mumuState.DoCapture(viewportRect);
-            var getRectRateFrm = new FrmGetRectRate();
-            getRectRateFrm.LoadImage(viewportCapture);
+            ShowGetRectRateForm(viewportCapture);
+        }
+
+        void ShowGetRectRateFormFlipUpDown()
+        {
+            var mumuState = GetMumuState();
+            viewportRect = mumuState.ViewportRect;
+            viewportCapture = mumuState.DoCapture(viewportRect);
+            var mat = viewportCapture.ToOpenCvMat();
+            var flip = new Mat();
+            Cv2.Flip(mat, flip, FlipMode.XY);
+            //Cv2.Circle(flip, new OpenCvSharp.Point(800, 400), 10, Scalar.Red);
+            flip.SaveImage(configMgr.GetCacheFileFullPath("flip.png"));
+            ShowGetRectRateForm(flip.ToRawBitmap());
+        }
+
+        void ShowGetRectRateForm(Bitmap bitmap)
+        {
+            getRectRateFrm?.Close();
+            getRectRateFrm = new FrmGetRectRate();
+            getRectRateFrm.LoadImage(bitmap);
             getRectRateFrm.Show();
+        }
+
+        private void menuGetRectRate_Click_1(object sender, EventArgs e)
+        {
+            ShowGetRectRateForm();
         }
 
         private void menuOpenCacheDir_Click_1(object sender, EventArgs e)
@@ -231,7 +270,7 @@ namespace PCRHelper
 
         private void menuTemp_Click(object sender, EventArgs e)
         {
-            menuGetRectRate_Click_1(sender, e);
+            ShowGetRectRateFormFlipUpDown();
         }
 
         private void menuStartStorySkipLoop_Click(object sender, EventArgs e)
@@ -289,6 +328,11 @@ namespace PCRHelper
         private void menuStopScriptLoop_Click(object sender, EventArgs e)
         {
             StopScriptLoop();
+        }
+
+        private void menuStartAutoUnderground_Click(object sender, EventArgs e)
+        {
+            StartAutoUndergroundLoop();
         }
     }
 }

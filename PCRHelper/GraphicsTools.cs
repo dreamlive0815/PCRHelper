@@ -52,6 +52,10 @@ namespace PCRHelper
 
         public Mat GetChildMatByRECT(Mat mat, RECT rect)
         {
+            if (mat.Width < 10 || mat.Height < 10)
+            {
+                return new Mat();
+            }
             var xRange = new Range(rect.x1, rect.x2);
             var yRange = new Range(rect.y1, rect.y2);
             var child = mat[yRange, xRange];
@@ -215,6 +219,20 @@ namespace PCRHelper
 
         public MatchImageResult MatchImage(Mat source, Mat search, double threshold)
         {
+            if (source.Width < 10 || source.Height < 10)
+            {
+                return new MatchImageResult()
+                {
+                    Success = false,
+                };
+            }
+            if (source.Width < search.Width || source.Height < search.Height)
+            {
+                return new MatchImageResult()
+                {
+                    Success = false,
+                };
+            }
             var res = new Mat();
             //var c1 = source.Channels();
             //var c2 = search.Channels();
@@ -243,16 +261,16 @@ namespace PCRHelper
                     y1 = maxLoc.Y,
                     x2 = maxLoc.X + search.Width,
                     y2 = maxLoc.Y + search.Height,
-                }
+                },
+                Maxval = maxVal,
             };
         }
-
-
     }
 
     struct MatchImageResult
     {
         public bool Success;
         public RECT MatchedRect;
+        public double Maxval;
     }
 }

@@ -42,6 +42,10 @@
             this.menuMainland = new System.Windows.Forms.ToolStripMenuItem();
             this.menuTaiwan = new System.Windows.Forms.ToolStripMenuItem();
             this.menuJapan = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSetTesseract = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSetAdbServer = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSetPCRExImgDir = new System.Windows.Forms.ToolStripMenuItem();
             this.menuClearConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.menuTemp = new System.Windows.Forms.ToolStripMenuItem();
             this.txtName = new System.Windows.Forms.RichTextBox();
@@ -50,10 +54,7 @@
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.menuSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuSetTesseract = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuSetPCRExImgDir = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuSetAdbServer = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartAutoUnderground = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,6 +104,7 @@
             this.menuStartArenaSearchLoop,
             this.menuStartActStageExchangeLoop,
             this.menuStartStorySkipLoop,
+            this.menuStartAutoUnderground,
             this.menuStopScriptLoop});
             this.menuScripts.Name = "menuScripts";
             this.menuScripts.Size = new System.Drawing.Size(90, 24);
@@ -166,6 +168,37 @@
             this.menuJapan.Size = new System.Drawing.Size(151, 26);
             this.menuJapan.Text = "Japan";
             this.menuJapan.Click += new System.EventHandler(this.menuJapan_Click);
+            // 
+            // menuSettings
+            // 
+            this.menuSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuSetTesseract,
+            this.menuSetAdbServer,
+            this.menuSetPCRExImgDir});
+            this.menuSettings.Name = "menuSettings";
+            this.menuSettings.Size = new System.Drawing.Size(81, 24);
+            this.menuSettings.Text = "Settings";
+            // 
+            // menuSetTesseract
+            // 
+            this.menuSetTesseract.Name = "menuSetTesseract";
+            this.menuSetTesseract.Size = new System.Drawing.Size(202, 26);
+            this.menuSetTesseract.Text = "SetTesseract";
+            this.menuSetTesseract.Click += new System.EventHandler(this.menuSetTesseract_Click);
+            // 
+            // menuSetAdbServer
+            // 
+            this.menuSetAdbServer.Name = "menuSetAdbServer";
+            this.menuSetAdbServer.Size = new System.Drawing.Size(202, 26);
+            this.menuSetAdbServer.Text = "SetAdbServer";
+            this.menuSetAdbServer.Click += new System.EventHandler(this.menuSetAdbServer_Click);
+            // 
+            // menuSetPCRExImgDir
+            // 
+            this.menuSetPCRExImgDir.Name = "menuSetPCRExImgDir";
+            this.menuSetPCRExImgDir.Size = new System.Drawing.Size(202, 26);
+            this.menuSetPCRExImgDir.Text = "SetPCRExImgDir";
+            this.menuSetPCRExImgDir.Click += new System.EventHandler(this.menuSetPCRExImgDir_Click);
             // 
             // menuClearConsole
             // 
@@ -234,36 +267,12 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // menuSettings
+            // menuStartAutoUnderground
             // 
-            this.menuSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuSetTesseract,
-            this.menuSetAdbServer,
-            this.menuSetPCRExImgDir});
-            this.menuSettings.Name = "menuSettings";
-            this.menuSettings.Size = new System.Drawing.Size(81, 24);
-            this.menuSettings.Text = "Settings";
-            // 
-            // menuSetTesseract
-            // 
-            this.menuSetTesseract.Name = "menuSetTesseract";
-            this.menuSetTesseract.Size = new System.Drawing.Size(202, 26);
-            this.menuSetTesseract.Text = "SetTesseract";
-            this.menuSetTesseract.Click += new System.EventHandler(this.menuSetTesseract_Click);
-            // 
-            // menuSetPCRExImgDir
-            // 
-            this.menuSetPCRExImgDir.Name = "menuSetPCRExImgDir";
-            this.menuSetPCRExImgDir.Size = new System.Drawing.Size(202, 26);
-            this.menuSetPCRExImgDir.Text = "SetPCRExImgDir";
-            this.menuSetPCRExImgDir.Click += new System.EventHandler(this.menuSetPCRExImgDir_Click);
-            // 
-            // menuSetAdbServer
-            // 
-            this.menuSetAdbServer.Name = "menuSetAdbServer";
-            this.menuSetAdbServer.Size = new System.Drawing.Size(202, 26);
-            this.menuSetAdbServer.Text = "SetAdbServer";
-            this.menuSetAdbServer.Click += new System.EventHandler(this.menuSetAdbServer_Click);
+            this.menuStartAutoUnderground.Name = "menuStartAutoUnderground";
+            this.menuStartAutoUnderground.Size = new System.Drawing.Size(293, 26);
+            this.menuStartAutoUnderground.Text = "StartAutoUnderground";
+            this.menuStartAutoUnderground.Click += new System.EventHandler(this.menuStartAutoUnderground_Click);
             // 
             // Frm
             // 
@@ -320,6 +329,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuSetTesseract;
         private System.Windows.Forms.ToolStripMenuItem menuSetPCRExImgDir;
         private System.Windows.Forms.ToolStripMenuItem menuSetAdbServer;
+        private System.Windows.Forms.ToolStripMenuItem menuStartAutoUnderground;
     }
 }
 
