@@ -166,6 +166,9 @@ namespace PCRHelper.Scripts
             var rectRate = new Vec4f(0.4039f, 0.8382f, 0.5968f, 0.9344f);
             return TryClickButton(viewportMat, viewportRect, "reward_confirm_ok.png", rectRate, threshold);
         }
+
+
+        ///new Vec4f(0.7074f, 0.8557f, 0.9054f, 0.9694f) goback_underground
     }
 
     enum UndergroundDifficulty

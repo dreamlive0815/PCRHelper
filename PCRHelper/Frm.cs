@@ -33,6 +33,7 @@ namespace PCRHelper
             configMgr.Init();
             logTools.SetRichTextBox(txtConsole);
             RefreshRegions();
+            RefreshFixedTopBottomY();
 
             var mumuState = GetMumuState();
             //viewportRect = mumuState.ViewportRect;
@@ -333,6 +334,18 @@ namespace PCRHelper
         private void menuStartAutoUnderground_Click(object sender, EventArgs e)
         {
             StartAutoUndergroundLoop();
+        }
+
+        void RefreshFixedTopBottomY()
+        {
+            menuSetFixedTopBottomY.Checked = configMgr.FixedViewportTopBottomY;
+        }
+
+        private void menuSetFixedTopBottomY_Click(object sender, EventArgs e)
+        {
+
+            configMgr.FixedViewportTopBottomY = !configMgr.FixedViewportTopBottomY;
+            RefreshFixedTopBottomY();
         }
     }
 }
