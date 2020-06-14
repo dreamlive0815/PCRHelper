@@ -28,6 +28,7 @@ namespace PCRHelper.Scripts
         public override void OnStart(Bitmap viewportCapture, RECT viewportRect)
         {
             CurDifficulty = UndergroundDifficulty.Veryhard;
+            //TryClickButton(viewportCapture.ToOpenCvMat(), viewportRect, "underground_special_box.png", leftPartRectRate, 0.6);
 
             MumuState.ClickTab(viewportRect, PCRTab.Battle);
             Thread.Sleep(3000);
@@ -55,6 +56,10 @@ namespace PCRHelper.Scripts
             else if (TryClickNextStepButton(viewportMat, viewportRect))
             {
                 logTools.Info("TryClickNextStepButton");
+            }
+            else if (TryClickGobackUnderGroundButton(viewportMat, viewportRect))
+            {
+                logTools.Info("TryClickGobackUnderGroundButton");
             }
             else
             {
@@ -168,7 +173,12 @@ namespace PCRHelper.Scripts
         }
 
 
-        ///new Vec4f(0.7074f, 0.8557f, 0.9054f, 0.9694f) goback_underground
+        public bool TryClickGobackUnderGroundButton(Mat viewportMat, RECT viewportRect)
+        {
+            var threshold = 0.6;
+            var rectRate = new Vec4f(0.7074f, 0.8557f, 0.9054f, 0.9694f);
+            return TryClickButton(viewportMat, viewportRect, "goback_underground.png", rectRate, threshold);
+        }
     }
 
     enum UndergroundDifficulty

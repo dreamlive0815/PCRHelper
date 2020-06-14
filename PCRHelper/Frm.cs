@@ -51,6 +51,7 @@ namespace PCRHelper
         CancellationTokenSource tokenSource;
         CancellationToken ct;
         FrmGetRectRate getRectRateFrm;
+        bool oldFixedTopBottomY;
 
         MumuState GetMumuState()
         {
@@ -103,6 +104,7 @@ namespace PCRHelper
 
         void StartStorySkipLoop()
         {
+            oldFixedTopBottomY = configMgr.FixedViewportTopBottomY;
             configMgr.FixedViewportTopBottomY = true;
             logTools.Info("StartStorySkipLoop...");
             mumuState = GetMumuState();
@@ -196,7 +198,7 @@ namespace PCRHelper
         void StopScriptLoop()
         {
             tokenSource?.Cancel();
-            configMgr.FixedViewportTopBottomY = false;
+            configMgr.FixedViewportTopBottomY = oldFixedTopBottomY;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
