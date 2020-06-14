@@ -97,44 +97,68 @@ namespace PCRHelper.Scripts
 
         public bool TryClickNormalBox(Mat viewportMat, RECT viewportRect)
         {
-            var normalBoxThreshold = 0.8;
+            var threshold = 0.8;
             var rectRate = fullPartRectRate;
-            bool f = false;
-            for (int i = 0; i < 3; i++)
+            var matchRes = MatchImage(viewportMat, viewportRect, rectRate, "underground_normal_box.png", threshold);
+            if (!matchRes.Success) return false;
+            var absoluteRect = GetMatchedAbsoluteRect(viewportRect, rectRate, matchRes.MatchedRect);
+            var left2right = absoluteRect.GetCenterPos().X < 1.0f * viewportRect.Width / 2;
+            var emulatorPoint = MumuState.GetEmulatorPoint(viewportRect, absoluteRect.GetCenterPos());
+            MumuState.DoClick(emulatorPoint);
+            Thread.Sleep(500);
+            for (int i = 1; i < 3; i++)
             {
-                var matchRes = MatchImage(viewportMat, viewportRect, rectRate, "underground_normal_box.png", normalBoxThreshold);
+                if (left2right)
+                {
+                    var newX1Rate = 1.0f * absoluteRect.x2 / viewportRect.Width;
+                    rectRate.Item0 = newX1Rate;
+                }
+                else
+                {
+                    var newX2Rate = 1.0f * absoluteRect.x1 / viewportRect.Width;
+                    rectRate.Item2 = newX2Rate;
+                }
+                matchRes = MatchImage(viewportMat, viewportRect, rectRate, "underground_normal_box.png", threshold);
                 if (!matchRes.Success) break;
-                f = true;
-                var normalBoxAbsoluteRect = GetMatchedAbsoluteRect(viewportRect, rectRate, matchRes.MatchedRect);
-                var newX1Rate = 1.0f * normalBoxAbsoluteRect.x2 / viewportRect.Width;
-                rectRate.Item0 = newX1Rate;
-                var boxCenterPos = normalBoxAbsoluteRect.GetCenterPos();
-                var emulatorPoint = MumuState.GetEmulatorPoint(viewportRect, boxCenterPos);
+                absoluteRect = GetMatchedAbsoluteRect(viewportRect, rectRate, matchRes.MatchedRect);
+                emulatorPoint = MumuState.GetEmulatorPoint(viewportRect, absoluteRect.GetCenterPos());
                 MumuState.DoClick(emulatorPoint);
                 Thread.Sleep(500);
             }
-            return f;
+            return true;
         }
 
         public bool TryClickSpecailBox(Mat viewportMat, RECT viewportRect)
         {
-            var specialBoxThreshold = 0.8;
+            var threshold = 0.8;
             var rectRate = fullPartRectRate;
-            bool f = false;
-            for (int i = 0; i < 3; i++)
+            var matchRes = MatchImage(viewportMat, viewportRect, rectRate, "underground_special_box.png", threshold);
+            if (!matchRes.Success) return false;
+            var absoluteRect = GetMatchedAbsoluteRect(viewportRect, rectRate, matchRes.MatchedRect);
+            var left2right = absoluteRect.GetCenterPos().X < 1.0f * viewportRect.Width / 2;
+            var emulatorPoint = MumuState.GetEmulatorPoint(viewportRect, absoluteRect.GetCenterPos());
+            MumuState.DoClick(emulatorPoint);
+            Thread.Sleep(500);
+            for (int i = 1; i < 3; i++)
             {
-                var matchRes = MatchImage(viewportMat, viewportRect, rectRate, "underground_special_box.png", specialBoxThreshold);
+                if (left2right)
+                {
+                    var newX1Rate = 1.0f * absoluteRect.x2 / viewportRect.Width;
+                    rectRate.Item0 = newX1Rate;
+                }
+                else
+                {
+                    var newX2Rate = 1.0f * absoluteRect.x1 / viewportRect.Width;
+                    rectRate.Item2 = newX2Rate;
+                }
+                matchRes = MatchImage(viewportMat, viewportRect, rectRate, "underground_special_box.png", threshold);
                 if (!matchRes.Success) break;
-                f = true;
-                var specialBoxAbsoluteRect = GetMatchedAbsoluteRect(viewportRect, rectRate, matchRes.MatchedRect);
-                var newX1Rate = 1.0f * specialBoxAbsoluteRect.x2 / viewportRect.Width;
-                rectRate.Item0 = newX1Rate;
-                var boxCenterPos = specialBoxAbsoluteRect.GetCenterPos();
-                var emulatorPoint = MumuState.GetEmulatorPoint(viewportRect, boxCenterPos);
+                absoluteRect = GetMatchedAbsoluteRect(viewportRect, rectRate, matchRes.MatchedRect);
+                emulatorPoint = MumuState.GetEmulatorPoint(viewportRect, absoluteRect.GetCenterPos());
                 MumuState.DoClick(emulatorPoint);
                 Thread.Sleep(500);
             }
-            return f;
+            return true;
         }
 
         public bool TryClickChallengeButton(Mat viewportMat, RECT viewportRect)
