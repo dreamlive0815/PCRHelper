@@ -132,6 +132,20 @@ namespace PCRHelper
             StopScriptLoop();
         }
 
+        void PrintException(Exception e)
+        {
+            var ex = e.InnerException ?? e;
+            logTools.Error(ex.Message);
+            if (ex is BreakException)
+            {
+                //
+            }
+            else
+            {
+                logTools.Error(ex.StackTrace);
+            }            
+        }
+
         void StartScriptLoop(ScriptBase script)
         {
             if (scriptTask != null && scriptTask.Status == TaskStatus.Running)
@@ -167,10 +181,13 @@ namespace PCRHelper
                     catch (Exception e)
                     {
                         logTools.Error($"Script: {script.Name} Tick ERROR");
-                        logTools.Error(e.Message);
                         if (!script.CanKeepOnWhenException)
                         {
                             throw e;
+                        }
+                        else
+                        {
+                            PrintException(e);
                         }
                     }
                 }
@@ -179,12 +196,7 @@ namespace PCRHelper
             {
                 if (t.IsFaulted)
                 {
-                    var msg = t.Exception.Message;
-                    if (msg.Contains("一个或多个") && t.Exception.InnerException != null)
-                    {
-                        msg = t.Exception.InnerException.Message;
-                    }
-                    logTools.Error(msg);
+                    PrintException(t.Exception);
                 }
                 else if (t.IsCanceled)
                 {

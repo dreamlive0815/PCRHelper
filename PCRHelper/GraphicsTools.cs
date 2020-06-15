@@ -248,6 +248,7 @@ namespace PCRHelper
                 return new MatchImageResult()
                 {
                     Success = false,
+                    Maxval = maxVal,
                 };
             }
             Cv2.Circle(source, maxLoc.X + search.Width / 2, maxLoc.Y + search.Height / 2, 25, Scalar.Red);

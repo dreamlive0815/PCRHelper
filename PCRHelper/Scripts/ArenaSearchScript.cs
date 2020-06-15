@@ -55,7 +55,7 @@ namespace PCRHelper.Scripts
             {
                 MumuState.ClickArenaPlayer(viewportRect, idx);
                 var res = list[idx];
-                throw new Exception($"已找到目标玩家 名字:{res.Name} 排名:{res.Rank}, 脚本终止");
+                throw new BreakException($"已找到目标玩家 名字:{res.Name} 排名:{res.Rank}, 脚本终止");
             }
             else if (!hasError)
             {
