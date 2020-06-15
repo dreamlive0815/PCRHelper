@@ -47,6 +47,7 @@
             this.menuSetTesseract = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSetAdbServer = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSetPCRExImgDir = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSetFixedTopBottomY = new System.Windows.Forms.ToolStripMenuItem();
             this.menuClearConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.menuTemp = new System.Windows.Forms.ToolStripMenuItem();
             this.txtName = new System.Windows.Forms.RichTextBox();
@@ -55,7 +56,7 @@
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.menuSetFixedTopBottomY = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,7 +69,8 @@
             this.menuRegions,
             this.menuSettings,
             this.menuClearConsole,
-            this.menuTemp});
+            this.menuTemp,
+            this.menuAbout});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 3, 0, 3);
@@ -209,6 +211,13 @@
             this.menuSetPCRExImgDir.Text = "SetPCRExImgDir";
             this.menuSetPCRExImgDir.Click += new System.EventHandler(this.menuSetPCRExImgDir_Click);
             // 
+            // menuSetFixedTopBottomY
+            // 
+            this.menuSetFixedTopBottomY.Name = "menuSetFixedTopBottomY";
+            this.menuSetFixedTopBottomY.Size = new System.Drawing.Size(197, 22);
+            this.menuSetFixedTopBottomY.Text = "SetFixedTopBottomY";
+            this.menuSetFixedTopBottomY.Click += new System.EventHandler(this.menuSetFixedTopBottomY_Click);
+            // 
             // menuClearConsole
             // 
             this.menuClearConsole.Name = "menuClearConsole";
@@ -276,12 +285,12 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // menuSetFixedTopBottomY
+            // menuAbout
             // 
-            this.menuSetFixedTopBottomY.Name = "menuSetFixedTopBottomY";
-            this.menuSetFixedTopBottomY.Size = new System.Drawing.Size(197, 22);
-            this.menuSetFixedTopBottomY.Text = "SetFixedTopBottomY";
-            this.menuSetFixedTopBottomY.Click += new System.EventHandler(this.menuSetFixedTopBottomY_Click);
+            this.menuAbout.Name = "menuAbout";
+            this.menuAbout.Size = new System.Drawing.Size(71, 21);
+            this.menuAbout.Text = "About(&A)";
+            this.menuAbout.Click += new System.EventHandler(this.menuAbout_Click);
             // 
             // Frm
             // 
@@ -340,6 +349,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuSetAdbServer;
         private System.Windows.Forms.ToolStripMenuItem menuStartAutoUnderground;
         private System.Windows.Forms.ToolStripMenuItem menuSetFixedTopBottomY;
+        private System.Windows.Forms.ToolStripMenuItem menuAbout;
     }
 }
 

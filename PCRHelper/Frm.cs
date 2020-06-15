@@ -363,5 +363,11 @@ namespace PCRHelper
             configMgr.FixedViewportTopBottomY = !configMgr.FixedViewportTopBottomY;
             RefreshFixedTopBottomY();
         }
+
+        private void menuAbout_Click(object sender, EventArgs e)
+        {
+            var frmAbout = new FrmAbout();
+            frmAbout.Show();
+        }
     }
 }
