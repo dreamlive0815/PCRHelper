@@ -36,17 +36,15 @@ namespace PCRHelper
 
         public void Init()
         {
-            if (OCRTools.UsingTesseract)
-            {
-                InitTesseractConfig();
-            }
+            //InitTesseractConfig();
             InitAdbConfig();
             InitPCRConfig();
         }
 
-        private void InitTesseractConfig()
+        public void InitTesseractConfig()
         {
-            var tesseractPath = TesseractPath;
+            if (!OCRTools.UsingTesseract) return;
+            var tesseractPath = PCRHelper.Properties.Settings.Default.TesseractPath;
             if (!File.Exists(tesseractPath))
             {
                 SetTesseractPath();

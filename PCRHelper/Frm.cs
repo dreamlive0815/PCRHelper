@@ -30,6 +30,7 @@ namespace PCRHelper
 
         private void Frm_Load(object sender, EventArgs e)
         {
+
             configMgr.Init();
             logTools.SetRichTextBox(txtConsole);
             RefreshRegions();
@@ -64,6 +65,7 @@ namespace PCRHelper
 
         void StartArenaSearchLoop()
         {
+            configMgr.InitTesseractConfig();
             name = txtName.Text;
             rank = txtRank.Text;
 
@@ -181,7 +183,7 @@ namespace PCRHelper
                     catch (Exception e)
                     {
                         logTools.Error($"Script: {script.Name} Tick ERROR");
-                        if (!script.CanKeepOnWhenException)
+                        if (!script.CanKeepOnWhenException || e is BreakException)
                         {
                             throw e;
                         }

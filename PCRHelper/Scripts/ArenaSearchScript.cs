@@ -20,6 +20,11 @@ namespace PCRHelper.Scripts
             get { return "ArenaSearchScript"; }
         }
 
+        public override bool CanKeepOnWhenException
+        {
+            get { return true; }
+        }
+
         public void SetGetPatternNameFunc(Func<string> getNameFunc)
         {
             this.getNameFunc = getNameFunc;
@@ -37,19 +42,8 @@ namespace PCRHelper.Scripts
 
         public override void Tick(Bitmap viewportCapture, RECT viewportRect)
         {
-            var idx = -1;
-            bool hasError = false;
-            List<ArenaPlayerPCRResult> list = null;
-            try
-            {
-                list = GetArenaPlayerOCRResults(viewportCapture, viewportRect);
-                idx = GetArenaPlayerIndex(list);
-            }
-            catch (Exception e)
-            {
-                hasError = true;
-                logTools.Error(e.Message);
-            }
+            var list = GetArenaPlayerOCRResults(viewportCapture, viewportRect);
+            var idx = GetArenaPlayerIndex(list);
             logTools.Info("Player Index: " + idx + (idx == -1 ? "(Not Found)" : ""));
             if (idx != -1)
             {
@@ -57,9 +51,9 @@ namespace PCRHelper.Scripts
                 var res = list[idx];
                 throw new BreakException($"已找到目标玩家 名字:{res.Name} 排名:{res.Rank}, 脚本终止");
             }
-            else if (!hasError)
+            else
             {
-                MumuState.ClickArenaRefresh(viewportRect);//不要移动到try里面
+                MumuState.ClickArenaRefresh(viewportRect);
             }
         }
 
