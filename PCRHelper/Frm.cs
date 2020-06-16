@@ -138,7 +138,7 @@ namespace PCRHelper
         {
             var ex = e.InnerException ?? e;
             logTools.Error(ex.Message);
-            if (ex is BreakException)
+            if (ex is BreakException || ex is NoTrackTraceException)
             {
                 //
             }

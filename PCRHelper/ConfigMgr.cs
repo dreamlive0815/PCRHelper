@@ -196,7 +196,7 @@ namespace PCRHelper
                     //return "chi_tra+eng";
                     return "chi_sim+eng";
                 }
-                throw new Exception("OCRLans");
+                throw new BreakException("OCRLans");
             }
         }
 

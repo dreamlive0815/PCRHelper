@@ -7,9 +7,16 @@ using System.Threading.Tasks;
 namespace PCRHelper
 {
 
-    class BreakException : Exception
+    class BreakException : NoTrackTraceException
     {
         public BreakException(string msg) : base(msg)
+        {
+        }
+    }
+
+    class NoTrackTraceException : Exception
+    {
+        public NoTrackTraceException(string msg) : base(msg)
         {
         }
     }

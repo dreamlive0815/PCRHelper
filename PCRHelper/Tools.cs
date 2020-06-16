@@ -42,7 +42,7 @@ namespace PCRHelper
                     return process;
                 }
             }
-            throw new Exception("无法找到Mumu模拟器进程");
+            throw new BreakException("无法找到Mumu模拟器进程");
         }
 
         public RECT GetWindowRect(Process proc)
@@ -54,8 +54,8 @@ namespace PCRHelper
 
         public Bitmap CaptureWindow(RECT rect)
         {
-            if (rect.x1 < 0 || rect.y1 < 0) throw new Exception("左上角坐标不合法");
-            if (rect.x2 < 0 || rect.y2 < 0) throw new Exception("右下角坐标不合法");
+            if (rect.x1 < 0 || rect.y1 < 0) throw new NoTrackTraceException("左上角坐标不合法");
+            if (rect.x2 < 0 || rect.y2 < 0) throw new NoTrackTraceException("右下角坐标不合法");
             var width = Math.Abs(rect.x1 - rect.x2);
             var height = Math.Abs(rect.y1 - rect.y2);
             var bitmap = new Bitmap(width, height);

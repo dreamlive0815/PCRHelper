@@ -98,7 +98,7 @@ namespace PCRHelper
             var validWdivhOff = 0.05;
             if (Math.Abs(wdivhCap - wdivh) > validWdivhOff)
             {
-                throw new Exception($"请使用{width}*{height}的分辨率");
+                throw new BreakException($"请使用{width}*{height}的分辨率");
             }
         }
 
@@ -221,12 +221,12 @@ namespace PCRHelper
                 var topYOff = Math.Abs(TopY - validTopY);
                 if (topYOff > validTopYOff)
                 {
-                    throw new Exception("无法检测到Mumu模拟器上边界");
+                    throw new NoTrackTraceException("无法检测到Mumu模拟器上边界");
                 }
                 var bottomYOff = Math.Abs(BottomY - validBottomY);
                 if (bottomYOff > validBottomYOff)
                 {
-                    throw new Exception("无法检测到Mumu模拟器下边界");
+                    throw new NoTrackTraceException("无法检测到Mumu模拟器下边界");
                 }
             }
         }
@@ -315,7 +315,7 @@ namespace PCRHelper
             {
                 return mainlandArenaPlayerPointRateArr[index];
             }
-            throw new Exception("GetArenaPlayerPointRateArr" + index);
+            throw new BreakException("GetArenaPlayerPointRateArr" + index);
         }
 
         public void ClickArenaPlayer(RECT viewportRect, int index)
@@ -364,7 +364,7 @@ namespace PCRHelper
             {
                 return taiwanArenaPlayerNameRectRateArr[index];
             }
-            throw new Exception("GetArenaPlayerNamePointRateArr" + index);
+            throw new BreakException("GetArenaPlayerNamePointRateArr" + index);
         }
 
         public Bitmap GetArenaPlayerNameRectCapture(Bitmap viewportCapture, RECT viewportRect, int index)
@@ -412,7 +412,7 @@ namespace PCRHelper
             {
                 return mainlandArenaPlayerRankRectRateArr[index];
             }
-            throw new Exception("GetArenaPlayerRankPointRateArr" + index);
+            throw new BreakException("GetArenaPlayerRankPointRateArr" + index);
         }
 
         public Bitmap GetArenaPlayerRankRectCapture(Bitmap viewportCapture, RECT viewportRect, int index)
