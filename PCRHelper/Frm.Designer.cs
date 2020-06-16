@@ -38,6 +38,7 @@
             this.menuStartActStageExchangeLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStartStorySkipLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStartAutoUnderground = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartReadReliabilityScript = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStopScriptLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRegions = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMainland = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,7 +58,7 @@
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.menuStartReadReliabilityScript = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartAutoStageLine = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -110,6 +111,7 @@
             this.menuStartStorySkipLoop,
             this.menuStartAutoUnderground,
             this.menuStartReadReliabilityScript,
+            this.menuStartAutoStageLine,
             this.menuStopScriptLoop});
             this.menuScripts.Name = "menuScripts";
             this.menuScripts.Size = new System.Drawing.Size(74, 21);
@@ -142,6 +144,13 @@
             this.menuStartAutoUnderground.Size = new System.Drawing.Size(239, 22);
             this.menuStartAutoUnderground.Text = "StartAutoUnderground";
             this.menuStartAutoUnderground.Click += new System.EventHandler(this.menuStartAutoUnderground_Click);
+            // 
+            // menuStartReadReliabilityScript
+            // 
+            this.menuStartReadReliabilityScript.Name = "menuStartReadReliabilityScript";
+            this.menuStartReadReliabilityScript.Size = new System.Drawing.Size(239, 22);
+            this.menuStartReadReliabilityScript.Text = "StartReadReliabilityScript";
+            this.menuStartReadReliabilityScript.Click += new System.EventHandler(this.menuStartReadReliabilityScript_Click);
             // 
             // menuStopScriptLoop
             // 
@@ -294,12 +303,12 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // menuStartReadReliabilityScript
+            // menuStartAutoStageLine
             // 
-            this.menuStartReadReliabilityScript.Name = "menuStartReadReliabilityScript";
-            this.menuStartReadReliabilityScript.Size = new System.Drawing.Size(239, 22);
-            this.menuStartReadReliabilityScript.Text = "StartReadReliabilityScript";
-            this.menuStartReadReliabilityScript.Click += new System.EventHandler(this.menuStartReadReliabilityScript_Click);
+            this.menuStartAutoStageLine.Name = "menuStartAutoStageLine";
+            this.menuStartAutoStageLine.Size = new System.Drawing.Size(239, 22);
+            this.menuStartAutoStageLine.Text = "StartAutoStageLine";
+            this.menuStartAutoStageLine.Click += new System.EventHandler(this.menuStartAutoStageLine_Click);
             // 
             // Frm
             // 
@@ -360,6 +369,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuSetFixedTopBottomY;
         private System.Windows.Forms.ToolStripMenuItem menuAbout;
         private System.Windows.Forms.ToolStripMenuItem menuStartReadReliabilityScript;
+        private System.Windows.Forms.ToolStripMenuItem menuStartAutoStageLine;
     }
 }
 

@@ -124,5 +124,33 @@ namespace PCRHelper.Scripts
             var matchRes = MatchImage(viewportMat, viewportRect, dataDownloadTitleRectRate, "data_download_title.png");
             return matchRes.Success;
         }
+
+        public bool TryClickChallengeButton(Mat viewportMat, RECT viewportRect)
+        {
+            var threshold = 0.6;
+            var rectRate = new Vec4f(0.7540f, 0.7536f, 0.9192f, 0.9242f);
+            return TryClickButton(viewportMat, viewportRect, "fight.png", rectRate, threshold);
+        }
+
+        public bool TryClickStartFightButton(Mat viewportMat, RECT viewportRect)
+        {
+            var threshold = 0.6;
+            var rectRate = new Vec4f(0.7482f, 0.7667f, 0.9221f, 0.9197f);
+            return TryClickButton(viewportMat, viewportRect, "start_fight.png", rectRate, threshold);
+        }
+
+        public bool TryClickAutoOffButton(Mat viewportMat, RECT viewportRect)
+        {
+            var threshold = 0.6;
+            var rectRate = new Vec4f(0.9163f, 0.7041f, 0.9854f, 0.8542f);
+            return TryClickButton(viewportMat, viewportRect, "battle_auto_off.png", rectRate, threshold);
+        }
+
+        public bool TryClickNextStepButton(Mat viewportMat, RECT viewportRect)
+        {
+            var threshold = 0.6;
+            var rectRate = new Vec4f(0.7460f, 0.8717f, 0.9083f, 0.9869f);
+            return TryClickButton(viewportMat, viewportRect, "next_step.png", rectRate, threshold);
+        }
     }
 }

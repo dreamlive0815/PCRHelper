@@ -143,6 +143,16 @@ namespace PCRHelper
             StartScriptLoop(script);
         }
 
+
+        void StartAutoStageLineLoop()
+        {
+            logTools.Info("StartAutoStageLineLoop...");
+            mumuState = GetMumuState();
+
+            script = new AutoStageLineScript();
+            StartScriptLoop(script);
+        }
+
         void PrintException(Exception e)
         {
             var ex = e.InnerException ?? e;
@@ -384,6 +394,11 @@ namespace PCRHelper
         private void menuStartReadReliabilityScript_Click(object sender, EventArgs e)
         {
             StartReadReliabilityLoop();
+        }
+
+        private void menuStartAutoStageLine_Click(object sender, EventArgs e)
+        {
+            StartAutoStageLineLoop();
         }
     }
 }

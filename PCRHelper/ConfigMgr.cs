@@ -242,7 +242,7 @@ namespace PCRHelper
             var heiScale = 1.0 * viewportRect.Height / viewportMatEx.Height;
             var fullPath = GetPCRExImgFullPath(name);
             var mat = new Mat(fullPath, ImreadModes.Unchanged);
-            if (viewportMat.Width >= 5 && viewportMat.Height >= 5)
+            if (viewportMat.Width >= 15 && viewportMat.Height >= 15)
             {
                 mat = mat.Resize(new CvSize(mat.Width * widScale, mat.Height * heiScale));
             }
