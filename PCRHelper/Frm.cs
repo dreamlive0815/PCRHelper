@@ -134,6 +134,15 @@ namespace PCRHelper
             StopScriptLoop();
         }
 
+        void StartReadReliabilityLoop()
+        {
+            logTools.Info("StartReadReliabilityLoop...");
+            mumuState = GetMumuState();
+
+            script = new ReadReliabilityScript();
+            StartScriptLoop(script);
+        }
+
         void PrintException(Exception e)
         {
             var ex = e.InnerException ?? e;
@@ -370,6 +379,11 @@ namespace PCRHelper
         {
             var frmAbout = new FrmAbout();
             frmAbout.Show();
+        }
+
+        private void menuStartReadReliabilityScript_Click(object sender, EventArgs e)
+        {
+            StartReadReliabilityLoop();
         }
     }
 }

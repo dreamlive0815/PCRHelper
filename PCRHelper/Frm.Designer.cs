@@ -50,13 +50,14 @@
             this.menuSetFixedTopBottomY = new System.Windows.Forms.ToolStripMenuItem();
             this.menuClearConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.menuTemp = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.txtName = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartReadReliabilityScript = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,6 +109,7 @@
             this.menuStartActStageExchangeLoop,
             this.menuStartStorySkipLoop,
             this.menuStartAutoUnderground,
+            this.menuStartReadReliabilityScript,
             this.menuStopScriptLoop});
             this.menuScripts.Name = "menuScripts";
             this.menuScripts.Size = new System.Drawing.Size(74, 21);
@@ -232,6 +234,13 @@
             this.menuTemp.Text = "Temp";
             this.menuTemp.Click += new System.EventHandler(this.menuTemp_Click);
             // 
+            // menuAbout
+            // 
+            this.menuAbout.Name = "menuAbout";
+            this.menuAbout.Size = new System.Drawing.Size(71, 21);
+            this.menuAbout.Text = "About(&A)";
+            this.menuAbout.Click += new System.EventHandler(this.menuAbout_Click);
+            // 
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(74, 31);
@@ -285,12 +294,12 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // menuAbout
+            // menuStartReadReliabilityScript
             // 
-            this.menuAbout.Name = "menuAbout";
-            this.menuAbout.Size = new System.Drawing.Size(71, 21);
-            this.menuAbout.Text = "About(&A)";
-            this.menuAbout.Click += new System.EventHandler(this.menuAbout_Click);
+            this.menuStartReadReliabilityScript.Name = "menuStartReadReliabilityScript";
+            this.menuStartReadReliabilityScript.Size = new System.Drawing.Size(239, 22);
+            this.menuStartReadReliabilityScript.Text = "StartReadReliabilityScript";
+            this.menuStartReadReliabilityScript.Click += new System.EventHandler(this.menuStartReadReliabilityScript_Click);
             // 
             // Frm
             // 
@@ -350,6 +359,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuStartAutoUnderground;
         private System.Windows.Forms.ToolStripMenuItem menuSetFixedTopBottomY;
         private System.Windows.Forms.ToolStripMenuItem menuAbout;
+        private System.Windows.Forms.ToolStripMenuItem menuStartReadReliabilityScript;
     }
 }
 

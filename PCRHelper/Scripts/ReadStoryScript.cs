@@ -187,13 +187,6 @@ namespace PCRHelper.Scripts
             return matchRes.Success;
         }
 
-        public bool IsDataDownloadWin(Mat viewportMat, RECT viewportRect)
-        {
-            var dataDownloadTitleRectRate = new Vec4f(0.4105f, 0.2172f, 0.5983f, 0.3353f);
-            var matchRes = MatchImage(viewportMat, viewportRect, dataDownloadTitleRectRate, "data_download_title.png");
-            return matchRes.Success;
-        }
-
         public bool HasMenuButton(Mat viewportMat, RECT viewportRect)
         {
             var menuButtonRectRate = new Vec4f(0.8523f, 0.0058f, 0.9636f, 0.1633f);

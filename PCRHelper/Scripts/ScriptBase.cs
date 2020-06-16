@@ -117,5 +117,12 @@ namespace PCRHelper.Scripts
             MumuState.DoClick(emulatorPoint);
             return true;
         }
+
+        public bool IsDataDownloadWin(Mat viewportMat, RECT viewportRect)
+        {
+            var dataDownloadTitleRectRate = new Vec4f(0.4105f, 0.2172f, 0.5983f, 0.3353f);
+            var matchRes = MatchImage(viewportMat, viewportRect, dataDownloadTitleRectRate, "data_download_title.png");
+            return matchRes.Success;
+        }
     }
 }
