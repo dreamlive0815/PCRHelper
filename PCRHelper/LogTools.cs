@@ -37,8 +37,27 @@ namespace PCRHelper
 
         public void Error(string msg)
         {
-            AppendIntoFile("./error.log", msg);
+            Error(msg, true);
+        }
+
+        public void Error(string msg, bool writeIntoFile)
+        {
             richText?.AppendLineThreadSafe(msg, Color.Red);
+            if (writeIntoFile)
+            {
+                AppendIntoFile(ConfigMgr.GetInstance().ErrorLogPath, msg);
+            }
+        }
+
+        public void Error(Exception ex)
+        {
+            var msg = ex.InnerException?.Message ?? ex.Message;
+            richText?.AppendLineThreadSafe(msg, Color.Red);
+            if (IsSelfOrChildrenNoTrackTraceException(ex))
+            {
+                return;
+            }
+            AppendIntoFile(ConfigMgr.GetInstance().ErrorLogPath, msg);
         }
 
         public void Info(string msg)
@@ -46,7 +65,7 @@ namespace PCRHelper
             richText?.AppendLineThreadSafe(msg, Color.Black);
         }
 
-        private void AppendIntoFile(string filePath, string s)
+        public void AppendIntoFile(string filePath, string s)
         {
             using (var file = new FileStream(filePath, FileMode.Append))
             {
@@ -56,6 +75,20 @@ namespace PCRHelper
                     writer.WriteLine($"[{time}] {s}");
                 }
             }
+        }
+
+        public bool IsSelfOrChildrenBreakException(Exception e)
+        {
+            if (e is BreakException) return true;
+            if (e.InnerException is BreakException) return true;
+            return false;
+        }
+
+        public bool IsSelfOrChildrenNoTrackTraceException(Exception e)
+        {
+            if (e is NoTrackTraceException) return true;
+            if (e.InnerException is NoTrackTraceException) return true;
+            return false;
         }
     }
 }

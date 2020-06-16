@@ -137,8 +137,8 @@ namespace PCRHelper
         void PrintException(Exception e)
         {
             var ex = e.InnerException ?? e;
-            logTools.Error(ex.Message);
-            if (ex is BreakException || ex is NoTrackTraceException)
+            logTools.Error(ex);
+            if (logTools.IsSelfOrChildrenNoTrackTraceException(ex))
             {
                 //
             }
@@ -148,11 +148,13 @@ namespace PCRHelper
             }            
         }
 
+        
+
         void StartScriptLoop(ScriptBase script)
         {
             if (scriptTask != null && scriptTask.Status == TaskStatus.Running)
             {
-                logTools.Error("Already has one running Script Task");
+                logTools.Error("Already has one running Script Task", false);
                 return;
             }
             logTools.Info("StartScriptLoop...");
@@ -182,8 +184,8 @@ namespace PCRHelper
                     }
                     catch (Exception e)
                     {
-                        logTools.Error($"Script: {script.Name} Tick ERROR");
-                        if (!script.CanKeepOnWhenException || e is BreakException)
+                        logTools.Error($"Script: {script.Name} Tick ERROR", false);
+                        if (!script.CanKeepOnWhenException || logTools.IsSelfOrChildrenBreakException(e))
                         {
                             throw e;
                         }
@@ -202,7 +204,7 @@ namespace PCRHelper
                 }
                 else if (t.IsCanceled)
                 {
-                    logTools.Error("Script Canceled");
+                    logTools.Error("Script Canceled", false);
                 }
                 ScriptBase.OnScriptEnded(script.Name, !t.IsFaulted && !t.IsCanceled);
             });

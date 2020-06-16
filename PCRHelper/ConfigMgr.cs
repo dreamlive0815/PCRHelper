@@ -206,6 +206,8 @@ namespace PCRHelper
 
         public int FixedViewportBottomY { get; set; } = 722;
 
+        public string ErrorLogPath { get; set; } = "./error.log";
+
         public string GetCacheFileFullPath(string relativePath)
         {
             var cacheDir = new DirectoryInfo(this.CacheDir).FullName;
@@ -240,7 +242,10 @@ namespace PCRHelper
             var heiScale = 1.0 * viewportRect.Height / viewportMatEx.Height;
             var fullPath = GetPCRExImgFullPath(name);
             var mat = new Mat(fullPath, ImreadModes.Unchanged);
-            mat = mat.Resize(new CvSize(mat.Width * widScale, mat.Height * heiScale));
+            if (viewportMat.Width >= 5 && viewportMat.Height >= 5)
+            {
+                mat = mat.Resize(new CvSize(mat.Width * widScale, mat.Height * heiScale));
+            }
             return mat;
         }
     }

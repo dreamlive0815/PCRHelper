@@ -58,6 +58,8 @@ namespace PCRHelper
             if (rect.x2 < 0 || rect.y2 < 0) throw new NoTrackTraceException("右下角坐标不合法");
             var width = Math.Abs(rect.x1 - rect.x2);
             var height = Math.Abs(rect.y1 - rect.y2);
+            width = Math.Max(width, 10);
+            height = Math.Max(height, 10);
             var bitmap = new Bitmap(width, height);
             var g = Graphics.FromImage(bitmap);
             g.CopyFromScreen(rect.x1, rect.y1, 0, 0, new System.Drawing.Size(width, height));
