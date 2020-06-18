@@ -39,6 +39,7 @@
             this.menuStartStorySkipLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStartAutoUnderground = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStartReadReliabilityScript = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartAutoStageLine = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStopScriptLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRegions = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMainland = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,7 +59,7 @@
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.menuStartAutoStageLine = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartReceivePresentLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,6 +113,7 @@
             this.menuStartAutoUnderground,
             this.menuStartReadReliabilityScript,
             this.menuStartAutoStageLine,
+            this.menuStartReceivePresentLoop,
             this.menuStopScriptLoop});
             this.menuScripts.Name = "menuScripts";
             this.menuScripts.Size = new System.Drawing.Size(74, 21);
@@ -152,6 +154,13 @@
             this.menuStartReadReliabilityScript.Text = "StartReadReliabilityScript";
             this.menuStartReadReliabilityScript.Click += new System.EventHandler(this.menuStartReadReliabilityScript_Click);
             // 
+            // menuStartAutoStageLine
+            // 
+            this.menuStartAutoStageLine.Name = "menuStartAutoStageLine";
+            this.menuStartAutoStageLine.Size = new System.Drawing.Size(239, 22);
+            this.menuStartAutoStageLine.Text = "StartAutoStageLine";
+            this.menuStartAutoStageLine.Click += new System.EventHandler(this.menuStartAutoStageLine_Click);
+            // 
             // menuStopScriptLoop
             // 
             this.menuStopScriptLoop.Name = "menuStopScriptLoop";
@@ -172,21 +181,21 @@
             // menuMainland
             // 
             this.menuMainland.Name = "menuMainland";
-            this.menuMainland.Size = new System.Drawing.Size(152, 22);
+            this.menuMainland.Size = new System.Drawing.Size(130, 22);
             this.menuMainland.Text = "Mainland";
             this.menuMainland.Click += new System.EventHandler(this.menuMainland_Click);
             // 
             // menuTaiwan
             // 
             this.menuTaiwan.Name = "menuTaiwan";
-            this.menuTaiwan.Size = new System.Drawing.Size(152, 22);
+            this.menuTaiwan.Size = new System.Drawing.Size(130, 22);
             this.menuTaiwan.Text = "Taiwan";
             this.menuTaiwan.Click += new System.EventHandler(this.menuTaiwan_Click);
             // 
             // menuJapan
             // 
             this.menuJapan.Name = "menuJapan";
-            this.menuJapan.Size = new System.Drawing.Size(152, 22);
+            this.menuJapan.Size = new System.Drawing.Size(130, 22);
             this.menuJapan.Text = "Japan";
             this.menuJapan.Click += new System.EventHandler(this.menuJapan_Click);
             // 
@@ -303,12 +312,12 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // menuStartAutoStageLine
+            // menuStartReceivePresentLoop
             // 
-            this.menuStartAutoStageLine.Name = "menuStartAutoStageLine";
-            this.menuStartAutoStageLine.Size = new System.Drawing.Size(239, 22);
-            this.menuStartAutoStageLine.Text = "StartAutoStageLine";
-            this.menuStartAutoStageLine.Click += new System.EventHandler(this.menuStartAutoStageLine_Click);
+            this.menuStartReceivePresentLoop.Name = "menuStartReceivePresentLoop";
+            this.menuStartReceivePresentLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStartReceivePresentLoop.Text = "StartReceivePresentLoop";
+            this.menuStartReceivePresentLoop.Click += new System.EventHandler(this.menuStartReceivePresentLoop_Click);
             // 
             // Frm
             // 
@@ -370,6 +379,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuAbout;
         private System.Windows.Forms.ToolStripMenuItem menuStartReadReliabilityScript;
         private System.Windows.Forms.ToolStripMenuItem menuStartAutoStageLine;
+        private System.Windows.Forms.ToolStripMenuItem menuStartReceivePresentLoop;
     }
 }
 

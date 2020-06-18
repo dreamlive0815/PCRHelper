@@ -153,6 +153,15 @@ namespace PCRHelper
             StartScriptLoop(script);
         }
 
+        void StartReceivePresentLoop()
+        {
+            logTools.Info("StartReceivePresentLoop...");
+            mumuState = GetMumuState();
+
+            script = new ReceivePresentScript();
+            StartScriptLoop(script);
+        }
+
         void PrintException(Exception e)
         {
             var ex = e.InnerException ?? e;
@@ -399,6 +408,11 @@ namespace PCRHelper
         private void menuStartAutoStageLine_Click(object sender, EventArgs e)
         {
             StartAutoStageLineLoop();
+        }
+
+        private void menuStartReceivePresentLoop_Click(object sender, EventArgs e)
+        {
+            StartReceivePresentLoop();
         }
     }
 }

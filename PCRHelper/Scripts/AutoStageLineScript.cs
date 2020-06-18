@@ -68,7 +68,8 @@ namespace PCRHelper.Scripts
             else
             {
                 logTools.Info("ClickBack");
-                MumuState.ClickBack(viewportRect);
+                MumuState.DoClick(viewportRect, new Vec2f(0.1f, 0.7f));
+                //MumuState.ClickBack(viewportRect);
             }
 
         }

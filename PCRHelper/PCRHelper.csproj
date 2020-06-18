@@ -114,6 +114,7 @@
     <Compile Include="Scripts\AutoUndergroundScript.cs" />
     <Compile Include="Scripts\ReadReliabilityScript.cs" />
     <Compile Include="Scripts\ReadStoryScript.cs" />
+    <Compile Include="Scripts\ReceivePresentScript.cs" />
     <Compile Include="Scripts\ScriptBase.cs" />
     <Compile Include="Tools.cs" />
     <EmbeddedResource Include="Frm.resx">

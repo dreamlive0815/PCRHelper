@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Collections.Generic;
 using RawPoint = System.Drawing.Point;
 
 namespace PCRHelper
@@ -619,11 +620,11 @@ namespace PCRHelper
             var point = GetEmulatorPoint(viewportRect, skipButtonPointRate);
             DoClick(point);
         }
+
         public Vec2f GetSkipConfirmButtonRectRate()
         {
             return new Vec2f(0.5990f, 0.6924f);
         }
-
 
         /// <summary>
         /// 注意这个按钮位置是不确定的
@@ -633,6 +634,24 @@ namespace PCRHelper
         {
             var skipConfirmButtonPointRate = GetSkipConfirmButtonRectRate();
             var point = GetEmulatorPoint(viewportRect, skipConfirmButtonPointRate);
+            DoClick(point);
+        }
+
+        Dictionary<PCRMainpageButton, Vec2f> mainpageButtonRectRateMap = new Dictionary<PCRMainpageButton, Vec2f>()
+        {
+            { PCRMainpageButton.Present, new Vec2f(0.9543f, 0.8012f) },
+        };
+
+
+        public Vec2f GetMainpageButtonRectRate(PCRMainpageButton buttonType)
+        {
+            return mainpageButtonRectRateMap[buttonType];
+        }
+
+        public void ClickMainpageButton(RECT viewportRect, PCRMainpageButton buttonType)
+        {
+            var pointRate = GetMainpageButtonRectRate(buttonType);
+            var point = GetEmulatorPoint(viewportRect, pointRate);
             DoClick(point);
         }
 
@@ -705,5 +724,10 @@ namespace PCRHelper
         Character,
         Guild,
         Extra,
+    }
+
+    enum PCRMainpageButton
+    {
+        Present,
     }
 }
