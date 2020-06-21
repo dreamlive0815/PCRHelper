@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using OpenCvSharp;
 using RawPoint = System.Drawing.Point;
+using System.Text;
 
 namespace PCRHelper
 {
@@ -150,6 +151,15 @@ namespace PCRHelper
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr GetWindowRect(IntPtr hWnd, out RECT rect);
 
+        [DllImport("user32.dll", EntryPoint = "FindWindowEx")]
+        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+        [DllImport("user32.dll")]
+        public static extern int GetWindowTextLength(IntPtr hWnd);
+
+        [DllImport("User32.dll", CharSet = CharSet.Auto)]
+        public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int nMaxCount); 
+
         public static readonly int SW_HIDE = 0;
         public static readonly int SW_SHOWNORMAL = 1;
         public static readonly int SW_SHOWMINIMIZED = 2;
@@ -185,6 +195,14 @@ namespace PCRHelper
             SetCursorPos(x, y);
             mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
             mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        }
+
+        public static string GetWindowTitle(IntPtr hWnd)
+        {
+            int length = GetWindowTextLength(hWnd);
+            StringBuilder windowName = new StringBuilder(length + 1);
+            GetWindowText(hWnd, windowName, windowName.Capacity);
+            return windowName.ToString();
         }
     }
 

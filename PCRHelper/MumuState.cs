@@ -73,20 +73,35 @@ namespace PCRHelper
         {
             get
             {
-                if (!UseCache || TopY == 0 || BottomY == 0)
+                //if (!UseCache || TopY == 0 || BottomY == 0)
+                //{
+                //    var capture = DoRealTimeCaptureAndAnalyze();
+                //    if (checkResolution)
+                //    {
+                //        CheckResolution(capture);
+                //    }
+                //    var crect = Rect;
+                //    viewportRect = new RECT() {
+                //        x1 = rect.x1,
+                //        y1 = rect.y1 + (int)TopY,
+                //        x2 = rect.x2,
+                //        y2 = rect.y1 + (int)BottomY,
+                //    };
+                //}
+                if (!UseCache || viewportRect.Width == 0)
                 {
-                    var capture = DoRealTimeCaptureAndAnalyze();
-                    if (checkResolution)
+                    var proc = Tools.GetInstance().GetMumuProcess();
+                    var hWnd = Win32ApiHelper.FindWindowEx(proc.MainWindowHandle, IntPtr.Zero, null, null);
+                    Win32ApiHelper.GetWindowRect(hWnd, out viewportRect);
+                    if (viewportRect.Width <= 15 || viewportRect.Height <= 15)
                     {
-                        CheckResolution(capture);
+                        throw new Exception("Mumu模拟器窗口尺寸不合法");
                     }
-                    var crect = Rect;
-                    viewportRect = new RECT() {
-                        x1 = rect.x1,
-                        y1 = rect.y1 + (int)TopY,
-                        x2 = rect.x2,
-                        y2 = rect.y1 + (int)BottomY,
-                    };
+                    var title = Win32ApiHelper.GetWindowTitle(hWnd);
+                    if (!title.Contains("NemuPlayer"))
+                    {
+                        throw new Exception("无法获取Mumu模拟器窗口"); 
+                    }
                 }
                 return viewportRect;
             }

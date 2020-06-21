@@ -40,6 +40,7 @@
             this.menuStartAutoUnderground = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStartReadReliabilityScript = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStartAutoStageLine = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStartReceivePresentLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStopScriptLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuRegions = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMainland = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +60,6 @@
             this.txtRank = new System.Windows.Forms.RichTextBox();
             this.txtConsole = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.menuStartReceivePresentLoop = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,7 +77,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 3, 0, 3);
-            this.menuStrip1.Size = new System.Drawing.Size(675, 27);
+            this.menuStrip1.Size = new System.Drawing.Size(675, 30);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -87,20 +87,20 @@
             this.menuGetRectRate,
             this.menuOpenCacheDir});
             this.menuTools.Name = "menuTools";
-            this.menuTools.Size = new System.Drawing.Size(67, 21);
+            this.menuTools.Size = new System.Drawing.Size(80, 24);
             this.menuTools.Text = "Tools(&T)";
             // 
             // menuGetRectRate
             // 
             this.menuGetRectRate.Name = "menuGetRectRate";
-            this.menuGetRectRate.Size = new System.Drawing.Size(160, 22);
+            this.menuGetRectRate.Size = new System.Drawing.Size(189, 26);
             this.menuGetRectRate.Text = "GetRectRate";
             this.menuGetRectRate.Click += new System.EventHandler(this.menuGetRectRate_Click_1);
             // 
             // menuOpenCacheDir
             // 
             this.menuOpenCacheDir.Name = "menuOpenCacheDir";
-            this.menuOpenCacheDir.Size = new System.Drawing.Size(160, 22);
+            this.menuOpenCacheDir.Size = new System.Drawing.Size(189, 26);
             this.menuOpenCacheDir.Text = "OpenCacheDir";
             this.menuOpenCacheDir.Click += new System.EventHandler(this.menuOpenCacheDir_Click_1);
             // 
@@ -116,55 +116,62 @@
             this.menuStartReceivePresentLoop,
             this.menuStopScriptLoop});
             this.menuScripts.Name = "menuScripts";
-            this.menuScripts.Size = new System.Drawing.Size(74, 21);
+            this.menuScripts.Size = new System.Drawing.Size(90, 24);
             this.menuScripts.Text = "Scripts(&S)";
             // 
             // menuStartArenaSearchLoop
             // 
             this.menuStartArenaSearchLoop.Name = "menuStartArenaSearchLoop";
-            this.menuStartArenaSearchLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStartArenaSearchLoop.Size = new System.Drawing.Size(293, 26);
             this.menuStartArenaSearchLoop.Text = "StartArenaSearchLoop";
             this.menuStartArenaSearchLoop.Click += new System.EventHandler(this.menuStartArenaCaptureLoop_Click);
             // 
             // menuStartActStageExchangeLoop
             // 
             this.menuStartActStageExchangeLoop.Name = "menuStartActStageExchangeLoop";
-            this.menuStartActStageExchangeLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStartActStageExchangeLoop.Size = new System.Drawing.Size(293, 26);
             this.menuStartActStageExchangeLoop.Text = "StartActStageExchangeLoop";
             this.menuStartActStageExchangeLoop.Click += new System.EventHandler(this.menuStartActStageExchangeLoop_Click);
             // 
             // menuStartStorySkipLoop
             // 
             this.menuStartStorySkipLoop.Name = "menuStartStorySkipLoop";
-            this.menuStartStorySkipLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStartStorySkipLoop.Size = new System.Drawing.Size(293, 26);
             this.menuStartStorySkipLoop.Text = "StartStorySkipLoop";
             this.menuStartStorySkipLoop.Click += new System.EventHandler(this.menuStartStorySkipLoop_Click);
             // 
             // menuStartAutoUnderground
             // 
             this.menuStartAutoUnderground.Name = "menuStartAutoUnderground";
-            this.menuStartAutoUnderground.Size = new System.Drawing.Size(239, 22);
+            this.menuStartAutoUnderground.Size = new System.Drawing.Size(293, 26);
             this.menuStartAutoUnderground.Text = "StartAutoUnderground";
             this.menuStartAutoUnderground.Click += new System.EventHandler(this.menuStartAutoUnderground_Click);
             // 
             // menuStartReadReliabilityScript
             // 
             this.menuStartReadReliabilityScript.Name = "menuStartReadReliabilityScript";
-            this.menuStartReadReliabilityScript.Size = new System.Drawing.Size(239, 22);
+            this.menuStartReadReliabilityScript.Size = new System.Drawing.Size(293, 26);
             this.menuStartReadReliabilityScript.Text = "StartReadReliabilityScript";
             this.menuStartReadReliabilityScript.Click += new System.EventHandler(this.menuStartReadReliabilityScript_Click);
             // 
             // menuStartAutoStageLine
             // 
             this.menuStartAutoStageLine.Name = "menuStartAutoStageLine";
-            this.menuStartAutoStageLine.Size = new System.Drawing.Size(239, 22);
+            this.menuStartAutoStageLine.Size = new System.Drawing.Size(293, 26);
             this.menuStartAutoStageLine.Text = "StartAutoStageLine";
             this.menuStartAutoStageLine.Click += new System.EventHandler(this.menuStartAutoStageLine_Click);
+            // 
+            // menuStartReceivePresentLoop
+            // 
+            this.menuStartReceivePresentLoop.Name = "menuStartReceivePresentLoop";
+            this.menuStartReceivePresentLoop.Size = new System.Drawing.Size(293, 26);
+            this.menuStartReceivePresentLoop.Text = "StartReceivePresentLoop";
+            this.menuStartReceivePresentLoop.Click += new System.EventHandler(this.menuStartReceivePresentLoop_Click);
             // 
             // menuStopScriptLoop
             // 
             this.menuStopScriptLoop.Name = "menuStopScriptLoop";
-            this.menuStopScriptLoop.Size = new System.Drawing.Size(239, 22);
+            this.menuStopScriptLoop.Size = new System.Drawing.Size(293, 26);
             this.menuStopScriptLoop.Text = "StopScriptLoop";
             this.menuStopScriptLoop.Click += new System.EventHandler(this.menuStopScriptLoop_Click);
             // 
@@ -175,27 +182,27 @@
             this.menuTaiwan,
             this.menuJapan});
             this.menuRegions.Name = "menuRegions";
-            this.menuRegions.Size = new System.Drawing.Size(83, 21);
+            this.menuRegions.Size = new System.Drawing.Size(100, 24);
             this.menuRegions.Text = "Regions(&R)";
             // 
             // menuMainland
             // 
             this.menuMainland.Name = "menuMainland";
-            this.menuMainland.Size = new System.Drawing.Size(130, 22);
+            this.menuMainland.Size = new System.Drawing.Size(181, 26);
             this.menuMainland.Text = "Mainland";
             this.menuMainland.Click += new System.EventHandler(this.menuMainland_Click);
             // 
             // menuTaiwan
             // 
             this.menuTaiwan.Name = "menuTaiwan";
-            this.menuTaiwan.Size = new System.Drawing.Size(130, 22);
+            this.menuTaiwan.Size = new System.Drawing.Size(181, 26);
             this.menuTaiwan.Text = "Taiwan";
             this.menuTaiwan.Click += new System.EventHandler(this.menuTaiwan_Click);
             // 
             // menuJapan
             // 
             this.menuJapan.Name = "menuJapan";
-            this.menuJapan.Size = new System.Drawing.Size(130, 22);
+            this.menuJapan.Size = new System.Drawing.Size(181, 26);
             this.menuJapan.Text = "Japan";
             this.menuJapan.Click += new System.EventHandler(this.menuJapan_Click);
             // 
@@ -207,55 +214,56 @@
             this.menuSetPCRExImgDir,
             this.menuSetFixedTopBottomY});
             this.menuSettings.Name = "menuSettings";
-            this.menuSettings.Size = new System.Drawing.Size(66, 21);
+            this.menuSettings.Size = new System.Drawing.Size(81, 24);
             this.menuSettings.Text = "Settings";
             // 
             // menuSetTesseract
             // 
             this.menuSetTesseract.Name = "menuSetTesseract";
-            this.menuSetTesseract.Size = new System.Drawing.Size(197, 22);
+            this.menuSetTesseract.Size = new System.Drawing.Size(240, 26);
             this.menuSetTesseract.Text = "SetTesseract";
             this.menuSetTesseract.Click += new System.EventHandler(this.menuSetTesseract_Click);
             // 
             // menuSetAdbServer
             // 
             this.menuSetAdbServer.Name = "menuSetAdbServer";
-            this.menuSetAdbServer.Size = new System.Drawing.Size(197, 22);
+            this.menuSetAdbServer.Size = new System.Drawing.Size(240, 26);
             this.menuSetAdbServer.Text = "SetAdbServer";
             this.menuSetAdbServer.Click += new System.EventHandler(this.menuSetAdbServer_Click);
             // 
             // menuSetPCRExImgDir
             // 
             this.menuSetPCRExImgDir.Name = "menuSetPCRExImgDir";
-            this.menuSetPCRExImgDir.Size = new System.Drawing.Size(197, 22);
+            this.menuSetPCRExImgDir.Size = new System.Drawing.Size(240, 26);
             this.menuSetPCRExImgDir.Text = "SetPCRExImgDir";
             this.menuSetPCRExImgDir.Click += new System.EventHandler(this.menuSetPCRExImgDir_Click);
             // 
             // menuSetFixedTopBottomY
             // 
             this.menuSetFixedTopBottomY.Name = "menuSetFixedTopBottomY";
-            this.menuSetFixedTopBottomY.Size = new System.Drawing.Size(197, 22);
+            this.menuSetFixedTopBottomY.Size = new System.Drawing.Size(240, 26);
             this.menuSetFixedTopBottomY.Text = "SetFixedTopBottomY";
+            this.menuSetFixedTopBottomY.Visible = false;
             this.menuSetFixedTopBottomY.Click += new System.EventHandler(this.menuSetFixedTopBottomY_Click);
             // 
             // menuClearConsole
             // 
             this.menuClearConsole.Name = "menuClearConsole";
-            this.menuClearConsole.Size = new System.Drawing.Size(97, 21);
+            this.menuClearConsole.Size = new System.Drawing.Size(117, 24);
             this.menuClearConsole.Text = "ClearConsole";
             this.menuClearConsole.Click += new System.EventHandler(this.menuClearConsole_Click);
             // 
             // menuTemp
             // 
             this.menuTemp.Name = "menuTemp";
-            this.menuTemp.Size = new System.Drawing.Size(53, 21);
+            this.menuTemp.Size = new System.Drawing.Size(63, 24);
             this.menuTemp.Text = "Temp";
             this.menuTemp.Click += new System.EventHandler(this.menuTemp_Click);
             // 
             // menuAbout
             // 
             this.menuAbout.Name = "menuAbout";
-            this.menuAbout.Size = new System.Drawing.Size(71, 21);
+            this.menuAbout.Size = new System.Drawing.Size(88, 24);
             this.menuAbout.Text = "About(&A)";
             this.menuAbout.Click += new System.EventHandler(this.menuAbout_Click);
             // 
@@ -274,7 +282,7 @@
             this.label1.Location = new System.Drawing.Point(24, 34);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 17);
+            this.label1.Size = new System.Drawing.Size(52, 22);
             this.label1.TabIndex = 2;
             this.label1.Text = "名字";
             // 
@@ -284,7 +292,7 @@
             this.label2.Location = new System.Drawing.Point(24, 79);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 17);
+            this.label2.Size = new System.Drawing.Size(52, 22);
             this.label2.TabIndex = 4;
             this.label2.Text = "排名";
             // 
@@ -312,16 +320,9 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // menuStartReceivePresentLoop
-            // 
-            this.menuStartReceivePresentLoop.Name = "menuStartReceivePresentLoop";
-            this.menuStartReceivePresentLoop.Size = new System.Drawing.Size(239, 22);
-            this.menuStartReceivePresentLoop.Text = "StartReceivePresentLoop";
-            this.menuStartReceivePresentLoop.Click += new System.EventHandler(this.menuStartReceivePresentLoop_Click);
-            // 
             // Frm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(675, 472);
             this.Controls.Add(this.txtConsole);

@@ -35,10 +35,10 @@
             // labelContact
             // 
             this.labelContact.AutoSize = true;
-            this.labelContact.Location = new System.Drawing.Point(100, 20);
+            this.labelContact.Location = new System.Drawing.Point(172, 21);
             this.labelContact.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelContact.Name = "labelContact";
-            this.labelContact.Size = new System.Drawing.Size(208, 17);
+            this.labelContact.Size = new System.Drawing.Size(260, 22);
             this.labelContact.TabIndex = 0;
             this.labelContact.Text = "Contact: 995928339@qq.com";
             this.labelContact.DoubleClick += new System.EventHandler(this.labelContact_DoubleClick);
@@ -46,24 +46,24 @@
             // labelGithub
             // 
             this.labelGithub.AutoSize = true;
-            this.labelGithub.Location = new System.Drawing.Point(13, 48);
+            this.labelGithub.Location = new System.Drawing.Point(60, 61);
             this.labelGithub.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelGithub.Name = "labelGithub";
-            this.labelGithub.Size = new System.Drawing.Size(408, 17);
+            this.labelGithub.Size = new System.Drawing.Size(510, 22);
             this.labelGithub.TabIndex = 1;
             this.labelGithub.Text = "Github: https://github.com/dreamlive0815/PCRHelper";
             this.labelGithub.DoubleClick += new System.EventHandler(this.labelGithub_DoubleClick);
             // 
             // FrmAbout
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(436, 84);
+            this.ClientSize = new System.Drawing.Size(633, 104);
             this.Controls.Add(this.labelGithub);
             this.Controls.Add(this.labelContact);
             this.Font = new System.Drawing.Font("Consolas", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmAbout";
